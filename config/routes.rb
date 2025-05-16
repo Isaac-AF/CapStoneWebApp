@@ -103,5 +103,6 @@ Rails.application.routes.draw do
   # get "/your_first_screen" => "pages#first"
 
   get("/", { :controller => "users", :action => "index"})
+  get("/create_user", { :controller => "users", :action => "new_user"})
   
 end
