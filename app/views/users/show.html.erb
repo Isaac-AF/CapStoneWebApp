@@ -1,0 +1,193 @@
+<h1>Users#show</h1>
+<p>Find me in app/views/users/show.html.erb</p>
+<div>
+  <div>
+    <h1>
+      user #<%= @the_user.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/users">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_user/<%= @the_user.id %>">
+          Delete user
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Date consumed
+      </dt>
+      <dd>
+        <%= @the_user.date_consumed %>
+      </dd>
+
+      <dt>
+        Food name
+      </dt>
+      <dd>
+        <%= @the_user.food_name %>
+      </dd>
+
+      <dt>
+        Rating
+      </dt>
+      <dd>
+        <%= @the_user.rating %>
+      </dd>
+
+      <dt>
+        Calories
+      </dt>
+      <dd>
+        <%= @the_user.calories %>
+      </dd>
+
+      <dt>
+        Protein
+      </dt>
+      <dd>
+        <%= @the_user.protein %>
+      </dd>
+
+      <dt>
+        Fats
+      </dt>
+      <dd>
+        <%= @the_user.fats %>
+      </dd>
+
+      <dt>
+        Carbs
+      </dt>
+      <dd>
+        <%= @the_user.carbs %>
+      </dd>
+
+      <dt>
+        Fiber
+      </dt>
+      <dd>
+        <%= @the_user.fiber %>
+      </dd>
+
+      <dt>
+        User
+      </dt>
+      <dd>
+        <%= @the_user.user_id %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_user.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_user.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit user
+    </h2>
+
+    <form action="/modify_user/<%= @the_user.id %>"  method="post" >
+      <div>
+        <label for="date_consumed_box">
+          Date consumed
+        </label>
+
+        <input type="date" id="date_consumed_box" name="query_date_consumed" value="<%= @the_user.date_consumed %>">
+      </div>
+
+      <div>
+        <label for="food_name_box">
+          Food name
+        </label>
+
+        <input type="text" id="food_name_box" name="query_food_name" value="<%= @the_user.food_name %>">
+      </div>
+
+      <div>
+        <label for="rating_box">
+          Rating
+        </label>
+
+        <input type="text" id="rating_box" name="query_rating" value="<%= @the_user.rating %>">
+      </div>
+
+      <div>
+        <label for="calories_box">
+          Calories
+        </label>
+
+        <input type="text" id="calories_box" name="query_calories" value="<%= @the_user.calories %>">
+      </div>
+
+      <div>
+        <label for="protein_box">
+          Protein
+        </label>
+
+        <input type="text" id="protein_box" name="query_protein" value="<%= @the_user.protein %>">
+      </div>
+
+      <div>
+        <label for="fats_box">
+          Fats
+        </label>
+
+        <input type="text" id="fats_box" name="query_fats" value="<%= @the_user.fats %>">
+      </div>
+
+      <div>
+        <label for="carbs_box">
+          Carbs
+        </label>
+
+        <input type="text" id="carbs_box" name="query_carbs" value="<%= @the_user.carbs %>">
+      </div>
+
+      <div>
+        <label for="fiber_box">
+          Fiber
+        </label>
+
+        <input type="text" id="fiber_box" name="query_fiber" value="<%= @the_user.fiber %>">
+      </div>
+
+      <div>
+        <label for="user_id_box">
+          User
+        </label>
+
+        <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_user.user_id %>">
+      </div>
+
+      <button>
+        Update user
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

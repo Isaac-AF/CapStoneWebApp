@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'users/index'
+  get 'users/show'
+  devise_for :users
   # Routes for the Workout rep resource:
 
   # CREATE
@@ -94,10 +97,11 @@ Rails.application.routes.draw do
 
   #------------------------------
 
-  devise_for :users
 
   # This is a blank app! Pick your first screen, build out the RCAV, and go from there. E.g.:
 
   # get "/your_first_screen" => "pages#first"
+
+  get("/", { :controller => "users", :action => "index"})
   
 end

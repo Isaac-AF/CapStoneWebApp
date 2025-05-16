@@ -40,6 +40,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :tertiary_goal
       t.string :dietary_restrictions
       t.string :name
+      t.float :height
+      t.float :weight
       t.integer :meals_count
       t.integer :workouts_count
 

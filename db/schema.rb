@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_05_16_042246) do
+ActiveRecord::Schema[7.1].define(version: 2025_05_16_045530) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,12 +51,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_05_16_042246) do
     t.string "tertiary_goal"
     t.string "dietary_restrictions"
     t.string "name"
+    t.float "height"
+    t.float "weight"
     t.integer "meals_count"
     t.integer "workouts_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "height"
-    t.decimal "weight"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
