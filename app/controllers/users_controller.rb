@@ -4,12 +4,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    the_id = params.fetch("path_id")
-
-    matching_users = user.where({ :id => the_id })
-
-    @the_user = matching_users.at(0)
-
     render({ :template => "users/show" })
   end
 

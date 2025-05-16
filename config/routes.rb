@@ -104,5 +104,6 @@ Rails.application.routes.draw do
 
   get("/", { :controller => "users", :action => "index"})
   get("/create_user", { :controller => "users", :action => "new_user"})
+  get("/user/:path_id", { :controller => "users", :action => "show" })
   
 end
