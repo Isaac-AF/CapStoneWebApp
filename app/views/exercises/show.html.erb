@@ -1,0 +1,116 @@
+<div>
+  <div>
+    <h1>
+      Exercise #<%= @the_exercise.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/exercises">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_exercise/<%= @the_exercise.id %>">
+          Delete exercise
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Exercise name
+      </dt>
+      <dd>
+        <%= @the_exercise.exercise_name %>
+      </dd>
+
+      <dt>
+        Primary muscle
+      </dt>
+      <dd>
+        <%= @the_exercise.primary_muscle %>
+      </dd>
+
+      <dt>
+        Secondary muscle
+      </dt>
+      <dd>
+        <%= @the_exercise.secondary_muscle %>
+      </dd>
+
+      <dt>
+        Tertiary muscle
+      </dt>
+      <dd>
+        <%= @the_exercise.tertiary_muscle %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_exercise.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_exercise.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit exercise
+    </h2>
+
+    <form action="/modify_exercise/<%= @the_exercise.id %>"  method="post" >
+      <div>
+        <label for="exercise_name_box">
+          Exercise name
+        </label>
+
+        <input type="text" id="exercise_name_box" name="query_exercise_name" value="<%= @the_exercise.exercise_name %>">
+      </div>
+
+      <div>
+        <label for="primary_muscle_box">
+          Primary muscle
+        </label>
+
+        <input type="text" id="primary_muscle_box" name="query_primary_muscle" value="<%= @the_exercise.primary_muscle %>">
+      </div>
+
+      <div>
+        <label for="secondary_muscle_box">
+          Secondary muscle
+        </label>
+
+        <input type="text" id="secondary_muscle_box" name="query_secondary_muscle" value="<%= @the_exercise.secondary_muscle %>">
+      </div>
+
+      <div>
+        <label for="tertiary_muscle_box">
+          Tertiary muscle
+        </label>
+
+        <input type="text" id="tertiary_muscle_box" name="query_tertiary_muscle" value="<%= @the_exercise.tertiary_muscle %>">
+      </div>
+
+      <button>
+        Update exercise
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

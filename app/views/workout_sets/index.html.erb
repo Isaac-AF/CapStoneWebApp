@@ -1,0 +1,134 @@
+<div>
+  <div>
+    <h1>
+      List of all workout sets
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new workout set
+    </h2>
+
+    <form action="/insert_workout_set" method="post">
+      <div>
+        <label for="set_number_box">
+          Set number
+        </label>
+
+        <input type="text" id="set_number_box" name="query_set_number">
+      </div>
+
+      <div>
+        <label for="workout_id_box">
+          Workout
+        </label>
+
+        <input type="text" id="workout_id_box" name="query_workout_id">
+      </div>
+
+      <div>
+        <label for="exercise_id_box">
+          Exercise
+        </label>
+
+        <input type="text" id="exercise_id_box" name="query_exercise_id">
+      </div>
+
+      <div>
+        <label for="workout_reps_count_box">
+          Workout reps count
+        </label>
+
+        <input type="text" id="workout_reps_count_box" name="query_workout_reps_count">
+      </div>
+
+      <button>
+        Create workout set
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table border="1">
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Set number
+        </th>
+
+        <th>
+          Workout
+        </th>
+
+        <th>
+          Exercise
+        </th>
+
+        <th>
+          Workout reps count
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_workout_sets.each do |a_workout_set| %>
+      <tr>
+        <td>
+          <%= a_workout_set.id %>
+        </td>
+
+        <td>
+          <%= a_workout_set.set_number %>
+        </td>
+
+        <td>
+          <%= a_workout_set.workout_id %>
+        </td>
+
+        <td>
+          <%= a_workout_set.exercise_id %>
+        </td>
+
+        <td>
+          <%= a_workout_set.workout_reps_count %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(a_workout_set.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(a_workout_set.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/workout_sets/<%= a_workout_set.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

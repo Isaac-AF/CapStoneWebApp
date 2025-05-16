@@ -1,0 +1,116 @@
+<div>
+  <div>
+    <h1>
+      Workout set #<%= @the_workout_set.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/workout_sets">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_workout_set/<%= @the_workout_set.id %>">
+          Delete workout set
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Set number
+      </dt>
+      <dd>
+        <%= @the_workout_set.set_number %>
+      </dd>
+
+      <dt>
+        Workout
+      </dt>
+      <dd>
+        <%= @the_workout_set.workout_id %>
+      </dd>
+
+      <dt>
+        Exercise
+      </dt>
+      <dd>
+        <%= @the_workout_set.exercise_id %>
+      </dd>
+
+      <dt>
+        Workout reps count
+      </dt>
+      <dd>
+        <%= @the_workout_set.workout_reps_count %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_workout_set.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_workout_set.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit workout set
+    </h2>
+
+    <form action="/modify_workout_set/<%= @the_workout_set.id %>"  method="post" >
+      <div>
+        <label for="set_number_box">
+          Set number
+        </label>
+
+        <input type="text" id="set_number_box" name="query_set_number" value="<%= @the_workout_set.set_number %>">
+      </div>
+
+      <div>
+        <label for="workout_id_box">
+          Workout
+        </label>
+
+        <input type="text" id="workout_id_box" name="query_workout_id" value="<%= @the_workout_set.workout_id %>">
+      </div>
+
+      <div>
+        <label for="exercise_id_box">
+          Exercise
+        </label>
+
+        <input type="text" id="exercise_id_box" name="query_exercise_id" value="<%= @the_workout_set.exercise_id %>">
+      </div>
+
+      <div>
+        <label for="workout_reps_count_box">
+          Workout reps count
+        </label>
+
+        <input type="text" id="workout_reps_count_box" name="query_workout_reps_count" value="<%= @the_workout_set.workout_reps_count %>">
+      </div>
+
+      <button>
+        Update workout set
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

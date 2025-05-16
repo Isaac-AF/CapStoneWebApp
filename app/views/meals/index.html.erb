@@ -1,0 +1,214 @@
+<div>
+  <div>
+    <h1>
+      List of all meals
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new meal
+    </h2>
+
+    <form action="/insert_meal" method="post">
+      <div>
+        <label for="date_consumed_box">
+          Date consumed
+        </label>
+
+        <input type="date" id="date_consumed_box" name="query_date_consumed">
+      </div>
+
+      <div>
+        <label for="food_name_box">
+          Food name
+        </label>
+
+        <input type="text" id="food_name_box" name="query_food_name">
+      </div>
+
+      <div>
+        <label for="rating_box">
+          Rating
+        </label>
+
+        <input type="text" id="rating_box" name="query_rating">
+      </div>
+
+      <div>
+        <label for="calories_box">
+          Calories
+        </label>
+
+        <input type="text" id="calories_box" name="query_calories">
+      </div>
+
+      <div>
+        <label for="protein_box">
+          Protein
+        </label>
+
+        <input type="text" id="protein_box" name="query_protein">
+      </div>
+
+      <div>
+        <label for="fats_box">
+          Fats
+        </label>
+
+        <input type="text" id="fats_box" name="query_fats">
+      </div>
+
+      <div>
+        <label for="carbs_box">
+          Carbs
+        </label>
+
+        <input type="text" id="carbs_box" name="query_carbs">
+      </div>
+
+      <div>
+        <label for="fiber_box">
+          Fiber
+        </label>
+
+        <input type="text" id="fiber_box" name="query_fiber">
+      </div>
+
+      <div>
+        <label for="user_id_box">
+          User
+        </label>
+
+        <input type="text" id="user_id_box" name="query_user_id">
+      </div>
+
+      <button>
+        Create meal
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table border="1">
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Date consumed
+        </th>
+
+        <th>
+          Food name
+        </th>
+
+        <th>
+          Rating
+        </th>
+
+        <th>
+          Calories
+        </th>
+
+        <th>
+          Protein
+        </th>
+
+        <th>
+          Fats
+        </th>
+
+        <th>
+          Carbs
+        </th>
+
+        <th>
+          Fiber
+        </th>
+
+        <th>
+          User
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_meals.each do |a_meal| %>
+      <tr>
+        <td>
+          <%= a_meal.id %>
+        </td>
+
+        <td>
+          <%= a_meal.date_consumed %>
+        </td>
+
+        <td>
+          <%= a_meal.food_name %>
+        </td>
+
+        <td>
+          <%= a_meal.rating %>
+        </td>
+
+        <td>
+          <%= a_meal.calories %>
+        </td>
+
+        <td>
+          <%= a_meal.protein %>
+        </td>
+
+        <td>
+          <%= a_meal.fats %>
+        </td>
+
+        <td>
+          <%= a_meal.carbs %>
+        </td>
+
+        <td>
+          <%= a_meal.fiber %>
+        </td>
+
+        <td>
+          <%= a_meal.user_id %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(a_meal.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(a_meal.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/meals/<%= a_meal.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

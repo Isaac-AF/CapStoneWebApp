@@ -1,0 +1,118 @@
+<div>
+  <div>
+    <h1>
+      List of all workouts
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new workout
+    </h2>
+
+    <form action="/insert_workout" method="post">
+      <div>
+        <label for="workout_datetime_box">
+          Workout datetime
+        </label>
+
+        <input type="datetime-local" id="workout_datetime_box" name="query_workout_datetime">
+      </div>
+
+      <div>
+        <label for="user_id_box">
+          User
+        </label>
+
+        <input type="text" id="user_id_box" name="query_user_id">
+      </div>
+
+      <div>
+        <label for="workout_sets_count_box">
+          Workout sets count
+        </label>
+
+        <input type="text" id="workout_sets_count_box" name="query_workout_sets_count">
+      </div>
+
+      <button>
+        Create workout
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table border="1">
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          Workout datetime
+        </th>
+
+        <th>
+          User
+        </th>
+
+        <th>
+          Workout sets count
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_workouts.each do |a_workout| %>
+      <tr>
+        <td>
+          <%= a_workout.id %>
+        </td>
+
+        <td>
+          <%= a_workout.workout_datetime %>
+        </td>
+
+        <td>
+          <%= a_workout.user_id %>
+        </td>
+
+        <td>
+          <%= a_workout.workout_sets_count %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(a_workout.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(a_workout.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/workouts/<%= a_workout.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

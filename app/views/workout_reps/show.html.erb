@@ -1,0 +1,101 @@
+<div>
+  <div>
+    <h1>
+      Workout rep #<%= @the_workout_rep.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/workout_reps">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_workout_rep/<%= @the_workout_rep.id %>">
+          Delete workout rep
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Weight
+      </dt>
+      <dd>
+        <%= @the_workout_rep.weight %>
+      </dd>
+
+      <dt>
+        Reps
+      </dt>
+      <dd>
+        <%= @the_workout_rep.reps %>
+      </dd>
+
+      <dt>
+        Set
+      </dt>
+      <dd>
+        <%= @the_workout_rep.set_id %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_workout_rep.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_workout_rep.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit workout rep
+    </h2>
+
+    <form action="/modify_workout_rep/<%= @the_workout_rep.id %>"  method="post" >
+      <div>
+        <label for="weight_box">
+          Weight
+        </label>
+
+        <input type="text" id="weight_box" name="query_weight" value="<%= @the_workout_rep.weight %>">
+      </div>
+
+      <div>
+        <label for="reps_box">
+          Reps
+        </label>
+
+        <input type="text" id="reps_box" name="query_reps" value="<%= @the_workout_rep.reps %>">
+      </div>
+
+      <div>
+        <label for="set_id_box">
+          Set
+        </label>
+
+        <input type="text" id="set_id_box" name="query_set_id" value="<%= @the_workout_rep.set_id %>">
+      </div>
+
+      <button>
+        Update workout rep
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
