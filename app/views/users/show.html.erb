@@ -1,6 +1,19 @@
 
 <h1>Today's date</h1>
 
+<% user = current_user %>
+
+<h2>Nutrition Targets</h2>
+<ul>
+  <li>Calories: <%= user.target_calories %> kcal</li>
+  <li>Protein: <%= user.target_protein %> g</li>
+  <li>Carbohydrates: <%= user.target_carbs %> g</li>
+  <li>Fat: <%= user.target_fat %> g</li>
+  <li>Fiber: <%= user.target_fiber %> g</li>
+</ul>
+
+<!--Will eventually remove the above portion once I can sum from the meals table and display the amount left. Though I should probably display some sort of success message with this info when they first create the account... -->
+
 <h2>Calories left</h2>
 <h2>Protein left</h2>
 <h2>Carbs left</h2>
