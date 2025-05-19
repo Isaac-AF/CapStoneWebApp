@@ -103,7 +103,16 @@ Rails.application.routes.draw do
   # get "/your_first_screen" => "pages#first"
 
   get("/", { :controller => "users", :action => "index"})
-  get("/create_user", { :controller => "users", :action => "new_user"})
+
+  # Routes for the User resource:
+
+  # READ
+  get("/new_user", { :controller => "users", :action => "new" })
   get("/user/:path_id", { :controller => "users", :action => "show" })
+
+  # CREATE
+  post("/insert_user", { :controller => "users", :action => "create" })
+
+
   
 end

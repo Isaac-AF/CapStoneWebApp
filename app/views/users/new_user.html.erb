@@ -17,7 +17,7 @@
     <form action="/insert_user" method="post">
       <div>
         <label for="name_box">
-          Name
+          First Name
         </label>
 
         <input type="text" id="name_box" name="query_name">
@@ -36,7 +36,7 @@
           Password
         </label>
 
-        <input type="text" id="password_box" name="query_password">
+        <input type="password" id="password_box" name="query_password">
       </div>
 
       <div>
@@ -48,44 +48,110 @@
       </div>
 
       <div>
-        <label for="sex_box">
+        <label for="gender_box">
           Sex
         </label>
-
-        <input type="text" id="sex_box" name="query_sex">
+        <select name="query_gender" id="gender_box">
+          <option value="" selected disabled hidden></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Non-Binary">Non-Binary</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
 
       <div>
         <label for="height_box">
           Height
         </label>
-
-        <input type="text" id="height_box" name="query_height">
+        <select name="query_height" id="height_box">
+          <option value="" selected disabled hidden></option>
+          <option value=54>4'6"</option>
+          <option value=55>4'7"</option>
+          <option value=56>4'8"</option>
+          <option value=57>4'9"</option>
+          <option value=58>4'10"</option>
+          <option value=59>4'11"</option>
+          <option value=60>5'</option>
+          <option value=61>5'1"</option>
+          <option value=62>5'2"</option>
+          <option value=63>5'3"</option>
+          <option value=64>5'4"</option>
+          <option value=65>5'5"</option>
+          <option value=66>5'6"</option>
+          <option value=67>5'7"</option>
+          <option value=68>5'8"</option>
+          <option value=69>5'9"</option>
+          <option value=70>5'10"</option>
+          <option value=71>5'11"</option>
+          <option value=72>6'</option>
+          <option value=73>6'1"</option>
+          <option value=74>6'1"</option>
+          <option value=75>6'1"</option>
+          <option value=76>6'1"</option>
+          <option value=77>6'1"</option>
+          <option value=78>6'6"</option>
+        </select>
       </div>
 
       <div>
         <label for="weight_box">
-          Weight
+          Weight (lbs)
         </label>
 
-        <input type="text" id="weight_box" name="query_weight">
+        <input type="int" id="weight_box" name="query_weight">
       </div>
 
       <div>
         <label for="activity_level_box">
           Activity Level
         </label>
-
-        <input type="text" id="activity_level_box" name="query_activity_level">
+        <select name="query_activity_level" id="activity_level_box">
+          <option value="" selected disabled hidden></option>
+          <option value="Sedentary">Sedentary</option>
+          <option value="Light">Light</option>
+          <option value="Moderate">Moderate</option>
+          <option value="Active">Very Active</option>
+        </select>
       </div>
 
+      <!-- Would love to have this be a checkbox list eventually where you pick 1/2/3 but not sure if that's possible-->
       <div>
         <label for="primary_goal_box">
           Primary Goal
         </label>
-
-        <input type="text" id="primary_goal_box" name="query_primary_goal">
+        <select name="query_primary_goal" id="primary_goal_box">
+          <option value="" selected disabled hidden></option>
+          <option value="Fat">Lose Fat/Weight</option>
+          <option value="Muscle">Gain Muscle/Weight</option>
+          <option value="Maintain">Maintain Weight</option>
+          <option value="Endurance">Improve Endurance</option>
+          <option value="Strength">Increase Strength</option>
+          <option value="Nutrition">Eat Healthier/Improve Nutrition</option>
+          <option value="Energy">Increase Energy/Well-being</option>
+          <option value="Dietary">Support Dietary Needs (e.g. diabetic, gluten free)</option>
+        </select>
       </div>
+
+      <div>
+        <label for="secondary_goal_box">
+          Secondary Goal
+        </label>
+        <select name="query_secondary_goal" id="secondary_goal_box">
+          <option value="" selected disabled hidden></option>
+          <option value="Fat">Lose Fat/Weight</option>
+          <option value="Muscle">Gain Muscle/Weight</option>
+          <option value="Maintain">Maintain Weight</option>
+          <option value="Endurance">Improve Endurance</option>
+          <option value="Strength">Increase Strength</option>
+          <option value="Nutrition">Eat Healthier/Improve Nutrition</option>
+          <option value="Energy">Increase Energy/Well-being</option>
+          <option value="Dietary">Support Dietary Needs (e.g. diabetic, gluten free)</option>
+        </select>
+      </div>
+
+    <!-- Need to add tertiary still-->
+      <!-- Need to add dietary restrictions only if option is selected-->
 
       <button>
         Create user
