@@ -108,6 +108,7 @@ Rails.application.routes.draw do
 
   # READ
   get("/new_user", { :controller => "users", :action => "new" })
+  post("/validate_user", { :controller => "users", :action => "validate" })
   get("/user/:path_id", { :controller => "users", :action => "show" })
 
   # CREATE
