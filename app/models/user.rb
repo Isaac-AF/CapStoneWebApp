@@ -17,6 +17,11 @@
 #  reset_password_token   :string
 #  secondary_goal         :string
 #  sex                    :string
+#  target_calories        :integer
+#  target_carbs           :integer
+#  target_fat             :integer
+#  target_fiber           :integer
+#  target_protein         :integer
 #  tertiary_goal          :string
 #  weight                 :float
 #  workouts_count         :integer
