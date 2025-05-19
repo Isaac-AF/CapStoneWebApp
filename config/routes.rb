@@ -107,7 +107,6 @@ Rails.application.routes.draw do
   # Routes for the User resource:
 
   # READ
-  get("/users/new_user", { :controller => "users", :action => "new" })
   get("/users/:id", { :controller => "users", :action => "show" })
 
   # CREATE

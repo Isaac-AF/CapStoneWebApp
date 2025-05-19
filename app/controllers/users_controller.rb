@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :index, :update, :destroy]
+  before_action :authenticate_user!, only: [:show, :update, :destroy]
   def index
     render({ :template => "users/index" })
   end
@@ -10,30 +10,6 @@ class UsersController < ApplicationController
 
   def new
     render({ :template => "users/new_user" })
-  end
-
-  def create
-    the_user = User.new
-    the_user.name = params.fetch("query_name")
-    the_user.email = params.fetch("query_email")
-    #Need to hash the password eventually
-    the_user.password = params.fetch("query_password")
-    the_user.password_confirmation = params.fetch("query_password")
-    the_user.birthday = params.fetch("query_birthday")
-    the_user.sex = params.fetch("query_gender")
-    the_user.height = params.fetch("query_height")
-    the_user.weight = params.fetch("query_weight")
-    the_user.activity_level = params.fetch("query_activity_level")
-    the_user.primary_goal = params.fetch("query_primary_goal")
-    the_user.secondary_goal = params.fetch("query_secondary_goal")
-
-    if the_user.valid?
-      the_user.save
-      sign_in(the_user)
-      redirect_to("/users/#{the_user.id}", notice: "User created successfully.")
-    else
-      redirect_to("/new_user", { :alert => the_user.errors.full_messages.to_sentence })
-    end
   end
 
   def update

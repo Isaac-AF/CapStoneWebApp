@@ -1,25 +1,109 @@
 <h2>Sign up</h2>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+  <div>
+    <%= f.label :name, "First Name" %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :email %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div>
+    <%= f.label :password %>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= f.label :birthday, "Birthdate" %>
+    <%= f.date_field :birthday %>
+  </div>
+
+  <div>
+    <%= f.label :sex, "Sex" %>
+    <%= f.select :sex, ["Male", "Female", "Non-Binary", "Other"], include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :height, "Height" %>
+    <%= f.select :height, (54..78).map { |inches| [height_label(inches), inches] }, include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :weight, "Weight (lbs)" %>
+    <%= f.number_field :weight %>
+  </div>
+
+  <div>
+    <%= f.label :activity_level, "Activity Level" %>
+    <%= f.select :activity_level, ["Sedentary", "Light", "Moderate", "Active"], include_blank: true %>
+  </div>
+
+<fieldset>
+  <legend>Set Your Top 3 Goals</legend>
+
+  <div>
+    <%= f.label :primary_goal, "Primary Goal" %>
+    <%= f.select :primary_goal, goal_options, { include_blank: true }, { id: "primary_goal" } %>
+  </div>
+
+  <div>
+    <%= f.label :secondary_goal, "Secondary Goal (Optional)" %>
+    <%= f.select :secondary_goal, goal_options, { include_blank: true }, { id: "secondary_goal" } %>
+  </div>
+
+  <div>
+    <%= f.label :tertiary_goal, "Tertiary Goal (Optional)" %>
+    <%= f.select :tertiary_goal, goal_options, { include_blank: true }, { id: "tertiary_goal" } %>
+  </div>
+</fieldset>
+
+<!--This is javascript that doesn't allow you to select the same option in multiple dropdowns-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const selects = [
+      document.getElementById("primary_goal"),
+      document.getElementById("secondary_goal"),
+      document.getElementById("tertiary_goal")
+    ];
+
+    function updateOptions() {
+      const selectedValues = selects.map(select => select.value);
+      selects.forEach(select => {
+        const options = Array.from(select.options);
+        options.forEach(option => {
+          if (option.value && selectedValues.includes(option.value) && option.value !== select.value) {
+            option.disabled = true;
+          } else {
+            option.disabled = false;
+          }
+        });
+      });
+    }
+
+    selects.forEach(select => {
+      select.addEventListener("change", updateOptions);
+    });
+
+    updateOptions();
+  });
+</script>
+
+  <div>
+    <%= f.label :dietary_restrictions, "Dietary Restrictions (Optional)" %>
+    <%= f.text_field :dietary_restrictions %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
+    <%= f.submit "Sign up" %>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>
