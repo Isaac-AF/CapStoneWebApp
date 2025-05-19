@@ -107,9 +107,8 @@ Rails.application.routes.draw do
   # Routes for the User resource:
 
   # READ
-  get("/new_user", { :controller => "users", :action => "new" })
-  post("/validate_user", { :controller => "users", :action => "validate" })
-  get("/user/:path_id", { :controller => "users", :action => "show" })
+  get("/users/new_user", { :controller => "users", :action => "new" })
+  get("/users/:id", { :controller => "users", :action => "show" })
 
   # CREATE
   post("/insert_user", { :controller => "users", :action => "create" })

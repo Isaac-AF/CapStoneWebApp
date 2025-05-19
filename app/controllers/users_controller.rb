@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!, only: [:show, :index, :update, :destroy]
   def index
     render({ :template => "users/index" })
   end
@@ -9,15 +10,6 @@ class UsersController < ApplicationController
 
   def new
     render({ :template => "users/new_user" })
-  end
-
-  def validate
-    the_user = User.find_by(email: params.fetch("query_email"))
-    if the_user&.valid_password?(params.fetch("query_password"))
-      redirect_to("/user/:path_id", { :notice => "Login success." })
-    else
-      redirect_to("/", { :alert => the_user.errors.full_messages.to_sentence })
-    end
   end
 
   def create
@@ -37,7 +29,8 @@ class UsersController < ApplicationController
 
     if the_user.valid?
       the_user.save
-      redirect_to("/user/:path_id", { :notice => "User created successfully." })
+      sign_in(the_user)
+      redirect_to("/users/#{the_user.id}", notice: "User created successfully.")
     else
       redirect_to("/new_user", { :alert => the_user.errors.full_messages.to_sentence })
     end
@@ -46,16 +39,6 @@ class UsersController < ApplicationController
   def update
     the_id = params.fetch("path_id")
     the_user = user.where({ :id => the_id }).at(0)
-
-    the_user.date_consumed = params.fetch("query_date_consumed")
-    the_user.food_name = params.fetch("query_food_name")
-    the_user.rating = params.fetch("query_rating")
-    the_user.calories = params.fetch("query_calories")
-    the_user.protein = params.fetch("query_protein")
-    the_user.fats = params.fetch("query_fats")
-    the_user.carbs = params.fetch("query_carbs")
-    the_user.fiber = params.fetch("query_fiber")
-    the_user.user_id = params.fetch("query_user_id")
 
     if the_user.valid?
       the_user.save
