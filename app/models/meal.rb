@@ -9,6 +9,7 @@
 #  fats          :float
 #  fiber         :float
 #  food_name     :string
+#  meal_type     :string
 #  protein       :float
 #  rating        :string
 #  created_at    :datetime         not null

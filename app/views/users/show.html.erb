@@ -1,5 +1,5 @@
 
-<h1>Today's date</h1>
+<h1><%= Date.current.strftime('%B %e, %Y') %></h1>
 
 <% user = current_user %>
 
@@ -8,20 +8,48 @@
   <li>Calories: <%= user.target_calories %> kcal</li>
   <li>Protein: <%= user.target_protein %> g</li>
   <li>Carbohydrates: <%= user.target_carbs %> g</li>
-  <li>Fat: <%= user.target_fat %> g</li>
+  <li>Fats: <%= user.target_fat %> g</li>
   <li>Fiber: <%= user.target_fiber %> g</li>
 </ul>
 
-<!--Will eventually remove the above portion once I can sum from the meals table and display the amount left. Though I should probably display some sort of success message with this info when they first create the account... -->
+<% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
 
-<h2>Calories left</h2>
-<h2>Protein left</h2>
-<h2>Carbs left</h2>
-<h2>Fiber left</h2>
-<h2>Fats left</h2>
+<% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
 
+<% grouped_meals = today_meals.group_by(&:meal_type) %>
 
-<button>Log Food</button>
+<h2>Today's Nutrition</h2>
+<ul>
+  <li>Calories Left: <%= (user.target_calories - totals[:calories]).to_i %> kcal</li>
+  <li>Protein Left: <%= (user.target_protein-totals[:protein]).to_i %> g</li>
+  <li>Carbs Left: <%= (user.target_carbs-totals[:carbs]).to_i %> g</li>
+  <li>Fats Left: <%= (user.target_fat-totals[:fats]).to_i %> g</li>
+  <li>Fiber Left: <%= (user.target_fiber-totals[:fiber]).to_i %> g</li>
+</ul>
+
+<hr>
+
+<h2>Meals by Type</h2>
+<% grouped_meals.each do |type, meals| %>
+  <h3><%= type.capitalize %></h3>
+  <ul>
+    <% meals.each do |meal| %>
+      <li>
+        <strong><%= meal.name %></strong>
+        <%= meal.calories %> kcal,
+        Protein: <%= meal.protein %>g,
+        Carbs: <%= meal.carbs %>g,
+        Fat: <%= meal.fats %>g,
+        Fiber: <%= meal.fiber %>g
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<form action="/meals">
+    <input type="submit" value="Log Food" />
+</form>
+
 <button>Log Activity</button>
 <button>Log Workout</button>
 <hr>
@@ -30,6 +58,43 @@
 
 
 <h1>Table showing past week daily macro totals</h1>
+<% grouped_meals = current_user.meals.where(date_consumed: 7.days.ago.to_date..Date.today).group_by(&:date_consumed) %>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Total Calories</th>
+      <th>Total Protein (g)</th>
+      <th>Total Fats (g)</th>
+      <th>Total Carbs (g)</th>
+      <th>Total Fiber (g)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% grouped_meals.sort_by { |date, _| -date.to_time.to_i }.each do |date, meals| %>
+      <% daily_totals = {
+        calories: meals.sum(&:calories),
+        protein:  meals.sum(&:protein),
+        fats:     meals.sum(&:fats),
+        carbs:    meals.sum(&:carbs),
+        fiber:    meals.sum(&:fiber)
+      } %>
+
+      <tr>
+        <td><%= date.strftime("%B %d, %Y") %></td>
+        <td><%= daily_totals[:calories] %></td>
+        <td><%= daily_totals[:protein] %></td>
+        <td><%= daily_totals[:fats] %></td>
+        <td><%= daily_totals[:carbs] %></td>
+        <td><%= daily_totals[:fiber] %></td>
+        <td>
+          <%= link_to "Edit Day", edit_day_meals_path(date: date), class: "btn" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <h1>Table showing past week workout summary</h1>
 

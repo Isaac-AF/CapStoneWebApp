@@ -38,4 +38,10 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  has_many  :meals, class_name: "Meal", foreign_key: "user_id", dependent: :destroy
+  has_many  :workouts, class_name: "Workout", foreign_key: "user_id", dependent: :destroy
+
+  has_many :workout_sets, through: :workouts, source: :workout_sets
+  has_many :workout_reps, through: :workout_sets, source: :workout_reps
 end
