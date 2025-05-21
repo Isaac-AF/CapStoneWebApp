@@ -8,10 +8,6 @@ class UsersController < ApplicationController
     render({ :template => "users/show" })
   end
 
-  def new
-    render({ :template => "users/new_user" })
-  end
-
   def update
     the_id = params.fetch("path_id")
     the_user = user.where({ :id => the_id }).at(0)

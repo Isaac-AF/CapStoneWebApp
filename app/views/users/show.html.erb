@@ -35,7 +35,7 @@
   <ul>
     <% meals.each do |meal| %>
       <li>
-        <strong><%= meal.name %></strong>
+        <strong><%= meal.food_name %></strong>
         <%= meal.calories %> kcal,
         Protein: <%= meal.protein %>g,
         Carbs: <%= meal.carbs %>g,
@@ -89,7 +89,7 @@
         <td><%= daily_totals[:carbs] %></td>
         <td><%= daily_totals[:fiber] %></td>
         <td>
-          <%= link_to "Edit Day", edit_day_meals_path(date: date), class: "btn" %>
+          Link to edit goes here
         </td>
       </tr>
     <% end %>

@@ -58,6 +58,7 @@ class MealsController < ApplicationController
           "carbohydrates",
           "protein",
           "fat",
+          "fiber",
           "total_calories",
           "rating"
         ],
@@ -78,7 +79,7 @@ class MealsController < ApplicationController
       chat.user("Here's the description of the meal: #{the_description}")
     end
 
-    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calores} kcal, #{current_user.target_protein} g protein, #{current_user.target_fats} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.")
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calories} kcal, #{current_user.target_protein} g protein, #{current_user.target_fat} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.")
 
     result = chat.assistant!
 
@@ -132,27 +133,7 @@ class MealsController < ApplicationController
       "schema": {
         "type": "object",
         "properties": {
-          "carbohydrates": {
-            "type": "number",
-            "description": "Amount of carbohydrates in grams."
-          },
-          "protein": {
-            "type": "number",
-            "description": "Amount of protein in grams."
-          },
-          "fat": {
-            "type": "number",
-            "description": "Amount of fat in grams."
-          },
-          "total_calories": {
-            "type": "number",
-            "description": "Total calories in kcal."
-          },
-          "fiber": {
-            "type": "number",
-            "description": "Amount of fiber in grams."
-          },
-          "rating": {
+            "rating": {
             "type": "integer",
             "description": "A rating on a scale of 1-10 how healthy the meal is."
           }

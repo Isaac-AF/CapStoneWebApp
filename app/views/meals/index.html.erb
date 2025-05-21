@@ -4,13 +4,26 @@
 <p>You can also send pictures of barcodes, recipes or menu items (just make sure you include in the description about how much you ate).</p>
 
 <div>
-  <form action="/process_inputs" method="post" enctype="multipart/form-data">
+  <form action="/process_meal" method="post" enctype="multipart/form-data">
     <div>
       <label for="food_name_box">
-        Food name
+        Food Name
       </label>
 
       <input type="text" id="food_name_box" name="query_food_name">
+    </div>
+        <div>
+      <label for="meal_type_box">
+        Meal Type
+      </label>
+
+      <select name="query_meal_type" id="meal_type_box">
+        <option value="" selected disabled hidden></option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Snack">Snack</option>
+      </select>
     </div>
     <div>
       <label for="image_field">Images</label>
@@ -44,10 +57,22 @@
 
       <div>
         <label for="food_name_box">
-          Food name
+          Food Name
         </label>
 
         <input type="text" id="food_name_box" name="query_food_name">
+      </div>
+      <div>
+      <label for="meal_type_box">
+        Meal Type
+      </label>
+            <select name="query_meal_type" id="meal_type_box">
+              <option value="" selected disabled hidden></option>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Snack">Snack</option>
+            </select>
       </div>
       <div>
         <label for="calories_box">
