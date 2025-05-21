@@ -1,9 +1,9 @@
 
-<h1><%= Date.current.strftime('%B %e, %Y') %></h1>
+<h1><%= Date.current.strftime("%B %e, %Y") %></h1>
 
 <% user = current_user %>
 
-<h2>Nutrition Targets</h2>
+<h2>Daily Nutrition Targets</h2>
 <ul>
   <li>Calories: <%= user.target_calories %> kcal</li>
   <li>Protein: <%= user.target_protein %> g</li>
@@ -18,9 +18,9 @@
 
 <% grouped_meals = today_meals.group_by(&:meal_type) %>
 
-<h2>Today's Nutrition</h2>
+<h2>Today's Macros</h2>
 <ul>
-  <li>Calories Left: <%= (user.target_calories - totals[:calories]).to_i %> kcal</li>
+  <li>Calories Left: <%= (user.target_calories-totals[:calories]).to_i %> kcal</li>
   <li>Protein Left: <%= (user.target_protein-totals[:protein]).to_i %> g</li>
   <li>Carbs Left: <%= (user.target_carbs-totals[:carbs]).to_i %> g</li>
   <li>Fats Left: <%= (user.target_fat-totals[:fats]).to_i %> g</li>
@@ -82,7 +82,7 @@
       } %>
 
       <tr>
-        <td><%= date.strftime("%B %d, %Y") %></td>
+        <td><%= date.strftime("%B %e, %Y") %></td>
         <td><%= daily_totals[:calories] %></td>
         <td><%= daily_totals[:protein] %></td>
         <td><%= daily_totals[:fats] %></td>
