@@ -17,7 +17,7 @@ class MealsController < ApplicationController
     render({ :template => "meals/show" })
   end
 
-  def interpret
+  def ai_process
     the_images = params[:image_param]
     the_description = params.fetch("description_param", "")
 
@@ -78,6 +78,8 @@ class MealsController < ApplicationController
       chat.user("Here's the description of the meal: #{the_description}")
     end
 
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calores} kcal, #{current_user.target_protein} g protein, #{current_user.target_fats} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.")
+
     result = chat.assistant!
 
     g_carbs = result.fetch("carbohydrates")
@@ -108,7 +110,7 @@ class MealsController < ApplicationController
     end
   end
 
-  def insert
+  def manual_insert
     the_meal = Meal.new
     the_meal.date_consumed = params.fetch("query_date_consumed")
     the_meal.food_name = params.fetch("query_food_name")
@@ -119,7 +121,61 @@ class MealsController < ApplicationController
     the_meal.fiber = params.fetch("query_fiber")
     the_meal.user_id = params.fetch("query_user_id")
 
-    the_meal.rating = params.fetch("query_rating")
+        the_images = params[:image_param]
+    the_description = params.fetch("description_param", "")
+
+    chat = OpenAI::Chat.new
+    chat.model = 'o3'
+    chat.system("You are an expert nutritionist. Please give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
+    chat.schema = '{
+      "name": "nutrition_info",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "carbohydrates": {
+            "type": "number",
+            "description": "Amount of carbohydrates in grams."
+          },
+          "protein": {
+            "type": "number",
+            "description": "Amount of protein in grams."
+          },
+          "fat": {
+            "type": "number",
+            "description": "Amount of fat in grams."
+          },
+          "total_calories": {
+            "type": "number",
+            "description": "Total calories in kcal."
+          },
+          "fiber": {
+            "type": "number",
+            "description": "Amount of fiber in grams."
+          },
+          "rating": {
+            "type": "integer",
+            "description": "A rating on a scale of 1-10 how healthy the meal is."
+          }
+        },
+        "required": [
+          "carbohydrates",
+          "protein",
+          "fat",
+          "total_calories",
+          "rating"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }'
+
+    chat.user("The meal #{the_meal.food_name} had #{the_meal.calores} kcal, #{the_meal.protein} g protein, #{the_meal.fats} g fats, #{the_meal.carbs} g carbohydrates, and #{the_meal.fiber} g fiber.") 
+
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calores} kcal, #{current_user.target_protein} g protein, #{current_user.target_fats} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.") 
+
+    result = chat.assistant!
+
+    the_meal.rating = result.fetch("rating")
 
     if the_meal.valid?
       the_meal.save

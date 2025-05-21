@@ -83,8 +83,8 @@ Rails.application.routes.draw do
   # Routes for the Meal resource:
 
   # CREATE
-  post("/process_meal", { :controller => "meals", :action => "interpret" })
-  post("/insert_meal", { :controller => "meals", :action => "insert" })
+  post("/process_meal", { :controller => "meals", :action => "ai_process" })
+  post("/insert_meal", { :controller => "meals", :action => "manual_insert" })
           
   # READ
   get("/meals", { :controller => "meals", :action => "index" })
