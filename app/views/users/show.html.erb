@@ -16,8 +16,6 @@
 
 <% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
 
-<% grouped_meals = today_meals.group_by(&:meal_type) %>
-
 <h2>Today's Macros</h2>
 <ul>
   <li>Calories Left: <%= (user.target_calories-totals[:calories]).to_i %> kcal</li>
@@ -29,21 +27,28 @@
 
 <hr>
 
-<h2>Meals by Type</h2>
-<% grouped_meals.each do |type, meals| %>
-  <h3><%= type.capitalize %></h3>
-  <ul>
-    <% meals.each do |meal| %>
-      <li>
-        <strong><%= meal.food_name %></strong>
-        <%= meal.calories %> kcal,
-        Protein: <%= meal.protein %>g,
-        Carbs: <%= meal.carbs %>g,
-        Fat: <%= meal.fats %>g,
-        Fiber: <%= meal.fiber %>g
-      </li>
-    <% end %>
-  </ul>
+<% grouped_meals = today_meals.group_by(&:meal_type) %>
+<% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
+
+<h2>Today's Meals</h2>
+<% desired_order.each do |type| %>
+  <% meals = grouped_meals[type] %>
+  <% if meals.present? %>
+    <h3><%= type.capitalize %></h3>
+    <ul>
+      <% meals.each do |meal| %>
+        <li>
+          <strong><%= meal.food_name.titleize %></strong>
+          <%= meal.calories %> kcal,
+          Protein: <%= meal.protein %>g,
+          Carbs: <%= meal.carbs %>g,
+          Fat: <%= meal.fats %>g,
+          Fiber: <%= meal.fiber %>g
+          <strong> <br> Rating: <%= meal.rating %></strong>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 <% end %>
 
 <form action="/meals">
@@ -57,7 +62,7 @@
 <button>Rate my plan</button>
 
 
-<h1>Table showing past week daily macro totals</h1>
+<h1>Weekly Summary</h1>
 <% grouped_meals = current_user.meals.where(date_consumed: 7.days.ago.to_date..Date.today).group_by(&:date_consumed) %>
 
 <table border="1">
@@ -96,7 +101,7 @@
   </tbody>
 </table>
 
-<h1>Table showing past week workout summary</h1>
+<h1>Table showing past week workout summary goes here</h1>
 
 
 <hr>

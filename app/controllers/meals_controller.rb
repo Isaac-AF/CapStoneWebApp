@@ -94,6 +94,7 @@ class MealsController < ApplicationController
     the_meal = Meal.new
     the_meal.date_consumed = Date.current
     the_meal.food_name = params.fetch("query_food_name")
+    the_meal.meal_type = params.fetch("query_meal_type")
     the_meal.calories = kcal
     the_meal.protein = g_protein
     the_meal.fats = g_fat
@@ -105,7 +106,7 @@ class MealsController < ApplicationController
 
     if the_meal.valid?
       the_meal.save
-      redirect_to("/meals", { :notice => "Meal created successfully." })
+      redirect_to("/users/#{current_user.id}", { :notice => "Meal created successfully." })
     else
       redirect_to("/meals", { :alert => the_meal.errors.full_messages.to_sentence })
     end
@@ -115,6 +116,7 @@ class MealsController < ApplicationController
     the_meal = Meal.new
     the_meal.date_consumed = params.fetch("query_date_consumed")
     the_meal.food_name = params.fetch("query_food_name")
+    the_meal.meal_type = params.fetch("query_meal_type")
     the_meal.calories = params.fetch("query_calories")
     the_meal.protein = params.fetch("query_protein")
     the_meal.fats = params.fetch("query_fats")
@@ -139,10 +141,6 @@ class MealsController < ApplicationController
           }
         },
         "required": [
-          "carbohydrates",
-          "protein",
-          "fat",
-          "total_calories",
           "rating"
         ],
         "additionalProperties": false
@@ -150,9 +148,9 @@ class MealsController < ApplicationController
       "strict": true
     }'
 
-    chat.user("The meal #{the_meal.food_name} had #{the_meal.calores} kcal, #{the_meal.protein} g protein, #{the_meal.fats} g fats, #{the_meal.carbs} g carbohydrates, and #{the_meal.fiber} g fiber.") 
+    chat.user("The meal #{the_meal.food_name} had #{the_meal.calories} kcal, #{the_meal.protein} g protein, #{the_meal.fats} g fats, #{the_meal.carbs} g carbohydrates, and #{the_meal.fiber} g fiber.") 
 
-    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calores} kcal, #{current_user.target_protein} g protein, #{current_user.target_fats} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.") 
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their target macros are #{current_user.target_calories} kcal, #{current_user.target_protein} g protein, #{current_user.target_fat} g fats, #{current_user.target_carbs} g carbohydrates, and #{current_user.target_fiber} g fiber.") 
 
     result = chat.assistant!
 
@@ -160,7 +158,7 @@ class MealsController < ApplicationController
 
     if the_meal.valid?
       the_meal.save
-      redirect_to("/meals", { :notice => "Meal created successfully." })
+      redirect_to("/users/#{current_user.id}", { :notice => "Meal created successfully." })
     else
       redirect_to("/meals", { :alert => the_meal.errors.full_messages.to_sentence })
     end
