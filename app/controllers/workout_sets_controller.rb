@@ -1,6 +1,6 @@
 class WorkoutSetsController < ApplicationController
   def index
-    matching_workout_sets = WorkoutSet.all
+    matching_workout_sets = WorkoutSet.where(workout_id: params.fetch("workout_id"))
 
     @list_of_workout_sets = matching_workout_sets.order({ :created_at => :desc })
 

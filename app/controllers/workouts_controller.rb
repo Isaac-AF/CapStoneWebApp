@@ -190,15 +190,12 @@ def finish
 
     result = chat.assistant!
 
-    the_workout.rating = result.fetch("calories")
+    the_workout.calories_burned = result.fetch("calories")
     the_workout.rating = result.fetch("rating")
 
-    if new_activity.valid?
-      new_activity.save
-      redirect_to("/users/#{current_user.id}", { :notice => "Workout created successfully." })
-    else
-      redirect_to("/workout_sets/#{workout_id}", { :alert => the_meal.errors.full_messages.to_sentence })
-    end
+    the_workout.save
+
+    redirect_to("/users/#{current_user.id}", { :notice => "Workout completed successfully." })
   end
 
   def destroy

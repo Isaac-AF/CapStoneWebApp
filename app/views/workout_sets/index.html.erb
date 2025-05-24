@@ -88,29 +88,17 @@
       </tr>
 
       <% @list_of_workout_sets.each do |a_workout_set| %>
-      <tr>
-        <td>
-          <%= a_workout_set.exercise.exercise_name %>
-        </td>
-
-        <td>
-          <%= a_workout_set.set_number %>
-        </td>
-
-        <td>
-          <%= a_workout_set.workout_reps_count %>
-        </td>
-
-        <td>
-          <%= a_workout_set.weight %>
-        </td>
-
-        <td>
-          <a href="/workout_sets/<%= params.fetch("workout_id") %>/<%= a_workout_set.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
+        <tr>
+          <td><%= a_workout_set.exercise.exercise_name %></td>
+          <td><%= a_workout_set.set_number %></td>
+          <td><%= a_workout_set.workout_reps_count %></td>
+          <td><%= a_workout_set.weight %></td>
+          <td>
+            <a href="/workout_sets/<%= params.fetch("workout_id") %>/<%= a_workout_set.id %>">
+              Show details
+            </a>
+          </td>
+        </tr>
       <% end %>
     </table>
   </div>
