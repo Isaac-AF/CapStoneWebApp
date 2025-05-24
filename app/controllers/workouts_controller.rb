@@ -1,21 +1,16 @@
 class WorkoutsController < ApplicationController
   def index
-    matching_workouts = Workout.all
-
-    @list_of_workouts = matching_workouts.order({ :created_at => :desc })
-
     render({ :template => "workouts/index" })
   end
 
-  def show
-    the_id = params.fetch("path_id")
+def show
+  user_id = params.fetch("user_id")
+  date = Date.parse(params.fetch("date"))
 
-    matching_workouts = Workout.where({ :id => the_id })
+  @matching_workouts = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
 
-    @the_workout = matching_workouts.at(0)
-
-    render({ :template => "workouts/show" })
-  end
+  render({ template: "workouts/show" })
+end
 
   def ai_process
     the_activity = params.fetch("query_activity_type", "")
@@ -123,27 +118,39 @@ class WorkoutsController < ApplicationController
 
 
   def update
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("workout_id")
     the_workout = Workout.where({ :id => the_id }).at(0)
 
-    the_workout.workout_datetime = params.fetch("query_workout_datetime")
-    the_workout.user_id = params.fetch("query_user_id")
-    the_workout.workout_sets_count = params.fetch("query_workout_sets_count")
+    the_workout.workout_datetime = params.fetch("query_date_time")
+    the_workout.workout_type = params.fetch("query_workout_type")
+    the_workout.calories_burned = params.fetch("query_calories")
+    the_workout.rating = params.fetch("query_rating")
+    
+    user_id = current_user.id
+    date = the_workout.workout_datetime.to_date
 
     if the_workout.valid?
       the_workout.save
-      redirect_to("/workouts/#{the_workout.id}", { :notice => "Workout updated successfully."} )
+      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Workout updated successfully."} )
     else
-      redirect_to("/workouts/#{the_workout.id}", { :alert => the_workout.errors.full_messages.to_sentence })
+      redirect_to("/workouts/#{date}/#{user_id}", { :alert => the_workout.errors.full_messages.to_sentence })
     end
   end
 
   def destroy
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("workout_id")
     the_workout = Workout.where({ :id => the_id }).at(0)
+
+    user_id = current_user.id
+    date = the_workout.workout_datetime.to_date
 
     the_workout.destroy
 
-    redirect_to("/workouts", { :notice => "Workout deleted successfully."} )
+    remaining = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
+    if remaining.exists?
+      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Workout deleted successfully."} )
+    else
+      redirect_to "/workouts"
+    end
   end
 end

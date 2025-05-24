@@ -1,9 +1,5 @@
 class MealsController < ApplicationController
   def index
-    matching_meals = Meal.all
-
-    @list_of_meals = matching_meals.order({ :created_at => :desc })
-
     render({ :template => "meals/index" })
   end
 
@@ -175,7 +171,6 @@ class MealsController < ApplicationController
     the_meal.fats = params.fetch("query_fats")
     the_meal.carbs = params.fetch("query_carbs")
     the_meal.fiber = params.fetch("query_fiber")
-    the_meal.user_id = params.fetch("query_user_id")
 
     user_id = current_user.id
     date = the_meal.date_consumed
@@ -189,11 +184,11 @@ class MealsController < ApplicationController
   end
 
   def destroy
-    user_id = current_user.id
-    date = the_meal.date_consumed
-    
     the_id = params.fetch("meal_id")
     the_meal = Meal.where({ :id => the_id }).at(0)
+
+    user_id = current_user.id
+    date = the_meal.date_consumed
 
     the_meal.destroy
 

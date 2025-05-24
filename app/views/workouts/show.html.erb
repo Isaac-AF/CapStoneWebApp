@@ -1,102 +1,52 @@
-<div>
-  <div>
-    <h1>
-      Workout #<%= @the_workout.id %> details
-    </h1>
+  <a href="/users/<%= current_user.id %>">
+    Back
+  </a>
 
-    <div>
-      <div>
-        <a href="/workouts">
-          Go back
-        </a>
-      </div>
+<div style="margin-bottom: 1rem;">
+  <a href="/workouts/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>">
+    ⬅️ Previous Day
+  </a>
 
-      <div>
-        <a href="/delete_workout/<%= @the_workout.id %>">
-          Delete workout
-        </a>
-      </div>
-    </div>
+  <strong style="margin: 0 1rem;"><%= params.fetch("date") %></strong>
 
-    <dl>
-      <dt>
-        Workout datetime
-      </dt>
-      <dd>
-        <%= @the_workout.workout_datetime %>
-      </dd>
-
-      <dt>
-        User
-      </dt>
-      <dd>
-        <%= @the_workout.user_id %>
-      </dd>
-
-      <dt>
-        Workout sets count
-      </dt>
-      <dd>
-        <%= @the_workout.workout_sets_count %>
-      </dd>
-
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_workout.created_at) %> ago
-      </dd>
-
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_workout.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
+  <a href="/workouts/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>">
+    Next Day ➡️
+  </a>
 </div>
 
-<hr>
-
-
-<div>
-  <div>
-    <h2>
-      Edit workout
-    </h2>
-
-    <form action="/modify_workout/<%= @the_workout.id %>"  method="post" >
-      <div>
-        <label for="workout_datetime_box">
-          Workout datetime
-        </label>
-
-        <input type="datetime-local" id="workout_datetime_box" name="query_workout_datetime"
-         value="<%= @the_workout.workout_datetime %>">
-      </div>
-
-      <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_workout.user_id %>">
-      </div>
-
-      <div>
-        <label for="workout_sets_count_box">
-          Workout sets count
-        </label>
-
-        <input type="text" id="workout_sets_count_box" name="query_workout_sets_count" value="<%= @the_workout.workout_sets_count %>">
-      </div>
-
-      <button>
-        Update workout
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
+<table>
+  <thead>
+    <tr>
+      <th>Date and Time</th>
+      <th>Workout Type</th>
+      <th>Calories Burned</th>
+      <th>Rating</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @matching_workouts.each do |a_workout| %>
+      <tr>
+        <form action="/modify_workout/<%= a_workout.id %>" method="post">
+          <td>
+            <input type="datetime" name="query_date_time" value="<%= a_workout.workout_datetime %>">
+          </td>
+          <td>
+            <input type="text" name="query_workout_type" value="<%= a_workout.workout_type %>">
+          </td>
+          <td>
+            <input type="text" name="query_calories" value="<%= a_workout.calories_burned %>">
+          </td>
+          <td>
+            <input type="text" name="query_rating" value="<%= a_workout.rating %>">
+          </td>
+          <td>
+            <input type="hidden" name="user_id" value="<%= a_workout.user_id %>">
+            <button type="submit">Save</button>
+            <a href="/delete_workout/<%= a_workout.id %>">Delete</a>
+          </td>
+        </form>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
