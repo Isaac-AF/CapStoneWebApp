@@ -3,14 +3,25 @@ class WorkoutsController < ApplicationController
     render({ :template => "workouts/index" })
   end
 
-def show
-  user_id = params.fetch("user_id")
-  date = Date.parse(params.fetch("date"))
+  def show
+    user_id = params.fetch("user_id")
+    date = Date.parse(params.fetch("date"))
 
-  @matching_workouts = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
+    @matching_workouts = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
 
-  render({ template: "workouts/show" })
-end
+    render({ template: "workouts/show" })
+  end
+
+  def create
+    new_activity = Workout.new
+    new_activity.workout_datetime = Time.current
+    new_activity.user_id = current_user.id
+    new_activity.workout_type = "Strength Training"
+
+    new_activity.save
+
+    redirect_to("/workouts/#{new_activity.id}", { :notice => "Workout created successfully." })
+  end
 
   def ai_process
     the_activity = params.fetch("query_activity_type", "")
@@ -53,8 +64,7 @@ end
 
     calories = result.fetch("calories")
     rating = result.fetch("rating")
-    
-        
+            
     new_activity = Workout.new
     new_activity.workout_datetime = params.fetch("query_activity_date")
     new_activity.user_id = current_user.id

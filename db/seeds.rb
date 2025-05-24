@@ -5,3 +5,36 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+exercises = [
+  { exercise_name: "Barbell Squat", primary_muscle: "Quadriceps", secondary_muscle: "Glutes", tertiary_muscle: "Hamstrings" },
+  { exercise_name: "Deadlift", primary_muscle: "Hamstrings", secondary_muscle: "Glutes", tertiary_muscle: "Lower Back" },
+  { exercise_name: "Bench Press", primary_muscle: "Pectorals", secondary_muscle: "Triceps", tertiary_muscle: "Deltoids" },
+  { exercise_name: "Overhead Press", primary_muscle: "Deltoids", secondary_muscle: "Triceps", tertiary_muscle: "Upper Chest" },
+  { exercise_name: "Bent-Over Row", primary_muscle: "Lats", secondary_muscle: "Rhomboids", tertiary_muscle: "Biceps" },
+  { exercise_name: "Pull-Up", primary_muscle: "Lats", secondary_muscle: "Biceps", tertiary_muscle: "Rhomboids" },
+  { exercise_name: "Barbell Curl", primary_muscle: "Biceps", secondary_muscle: "Forearms" },
+  { exercise_name: "Tricep Pushdown", primary_muscle: "Triceps", secondary_muscle: "Forearms" },
+  { exercise_name: "Leg Press", primary_muscle: "Quadriceps", secondary_muscle: "Glutes", tertiary_muscle: "Hamstrings" },
+  { exercise_name: "Romanian Deadlift", primary_muscle: "Hamstrings", secondary_muscle: "Glutes", tertiary_muscle: "Lower Back" },
+  { exercise_name: "Lateral Raise", primary_muscle: "Deltoids", secondary_muscle: "Trapezius" },
+  { exercise_name: "Face Pull", primary_muscle: "Rear Deltoids", secondary_muscle: "Trapezius", tertiary_muscle: "Rhomboids" },
+  { exercise_name: "Chest Fly", primary_muscle: "Pectorals", secondary_muscle: "Deltoids" },
+  { exercise_name: "Seated Row", primary_muscle: "Lats", secondary_muscle: "Rhomboids", tertiary_muscle: "Biceps" },
+  { exercise_name: "Calf Raise", primary_muscle: "Calves" },
+  { exercise_name: "Hip Thrust", primary_muscle: "Glutes", secondary_muscle: "Hamstrings" },
+  { exercise_name: "Incline Bench Press", primary_muscle: "Upper Chest", secondary_muscle: "Deltoids", tertiary_muscle: "Triceps" },
+  { exercise_name: "Cable Crossover", primary_muscle: "Pectorals", secondary_muscle: "Deltoids" },
+  { exercise_name: "Dumbbell Shrug", primary_muscle: "Trapezius" },
+  { exercise_name: "Ab Wheel Rollout", primary_muscle: "Abdominals", secondary_muscle: "Hip Flexors" }
+]
+
+exercises.each do |attrs|
+  Exercise.find_or_create_by(exercise_name: attrs[:exercise_name]) do |exercise|
+    exercise.primary_muscle = attrs[:primary_muscle]
+    exercise.secondary_muscle = attrs[:secondary_muscle]
+    exercise.tertiary_muscle = attrs[:tertiary_muscle]
+  end
+end
+
+puts "Seeded #{Exercise.count} exercises."

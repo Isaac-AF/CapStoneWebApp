@@ -1,20 +1,44 @@
 <div>
   <div>
-    <h1>
-      List of all exercises
-    </h1>
-  </div>
-</div>
-
-<hr>
-
-<div>
-  <div>
     <h2>
       Add a new exercise
     </h2>
 
     <form action="/insert_exercise" method="post">
+    <input type="hidden" name="workout_id" value="<%= params.fetch("workout_id")%>">
+      <div>
+        <label for="exercise_name_box">
+          Exercise name
+        </label>
+
+        <input type="text" id="exercise_name_box" name="query_exercise_name">
+      </div>
+
+      <div>
+        <label for="image_field">Image</label>
+        <input type="file" id="image_field" name="image_param">
+      </div>
+
+      <div>
+        <label for="description_field">Description</label>
+        <textarea id="description_field" name="description_param"></textarea>
+      </div>
+
+      <button>
+        Create exercise
+      </button>
+    </form>
+  </div>
+</div>
+
+<div>
+  <div>
+    <h2>
+      Add an exercise manually
+    </h2>
+
+    <form action="/insert_exercise" method="post">
+    <input type="hidden" name="workout_id" value="<%= params.fetch("workout_id")%>">
       <div>
         <label for="exercise_name_box">
           Exercise name
@@ -54,81 +78,49 @@
   </div>
 </div>
 
+
 <hr>
 <div>
   <div>
     <table border="1">
       <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          Exercise name
-        </th>
-
-        <th>
-          Primary muscle
-        </th>
-
-        <th>
-          Secondary muscle
-        </th>
-
-        <th>
-          Tertiary muscle
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
+        <th>Exercise name</th>
+        <th>Primary muscle</th>
+        <th>Secondary muscle</th>
+        <th>Tertiary muscle</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Add Set</th>
       </tr>
 
       <% @list_of_exercises.each do |an_exercise| %>
-      <tr>
-        <td>
-          <%= an_exercise.id %>
-        </td>
+        <tr>
+          <td><%= an_exercise.exercise_name %></td>
+          <td><%= an_exercise.primary_muscle %></td>
+          <td><%= an_exercise.secondary_muscle %></td>
+          <td><%= an_exercise.tertiary_muscle %></td>
 
-        <td>
-          <%= an_exercise.exercise_name %>
-        </td>
+          <td>
+            <form action="/exercises/<%= an_exercise.id %>/edit" method="get">
+              <button type="submit">Edit</button>
+            </form>
+          </td>
 
-        <td>
-          <%= an_exercise.primary_muscle %>
-        </td>
+          <td>
+            <form action="/delete_exercise/<%= an_exercise.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this exercise?');">
+              <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
 
-        <td>
-          <%= an_exercise.secondary_muscle %>
-        </td>
-
-        <td>
-          <%= an_exercise.tertiary_muscle %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(an_exercise.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(an_exercise.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/exercises/<%= an_exercise.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
+          <td>
+            <form action="/workout_sets/new" method="get">
+              <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
+              <button type="submit">View Sets</button>
+            </form>
+          </td>
+        </tr>
       <% end %>
     </table>
   </div>
 </div>
-
-<hr>

@@ -48,9 +48,9 @@ Rails.application.routes.draw do
   post("/insert_exercise", { :controller => "exercises", :action => "create" })
           
   # READ
-  get("/exercises", { :controller => "exercises", :action => "index" })
+  get("/exercises/:workout_id/", { :controller => "exercises", :action => "index" })
   
-  get("/exercises/:path_id", { :controller => "exercises", :action => "show" })
+  get("/exercises/:workout_id/:exercise_id", { :controller => "exercises", :action => "show" })
   
   # UPDATE
   
@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   # CREATE
   post("/process_activity", { :controller => "workouts", :action => "ai_process" })
   post("/insert_activity", { :controller => "workouts", :action => "manual_insert" })
+  post("/new_workout", { :controller => "workouts", :action => "create" })
           
   # READ
   get("/workouts", { :controller => "workouts", :action => "index" })

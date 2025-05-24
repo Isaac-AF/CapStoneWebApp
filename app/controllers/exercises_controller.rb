@@ -26,9 +26,9 @@ class ExercisesController < ApplicationController
 
     if the_exercise.valid?
       the_exercise.save
-      redirect_to("/exercises", { :notice => "Exercise created successfully." })
+      redirect_to("/exercises/#{params.fetch("workout_id")}", { :notice => "Exercise created successfully." })
     else
-      redirect_to("/exercises", { :alert => the_exercise.errors.full_messages.to_sentence })
+      redirect_to("/exercises/#{params.fetch("workout_id")}", { :alert => the_exercise.errors.full_messages.to_sentence })
     end
   end
 
