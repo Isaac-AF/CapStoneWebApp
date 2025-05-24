@@ -1,3 +1,7 @@
+  <a href="/users/<%= current_user.id %>">
+    Back
+  </a>
+
 <div style="margin-bottom: 1rem;">
   <a href="/meals/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>">
     ⬅️ Previous Day

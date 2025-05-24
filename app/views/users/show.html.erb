@@ -31,6 +31,9 @@
 <% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
 
 <h2>Today's Meals</h2>
+  <td>
+    <a href="/meals/<%= Time.zone.now.to_date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
+  </td>
 <% desired_order.each do |type| %>
   <% meals = grouped_meals[type] %>
   <% if meals.present? %>
