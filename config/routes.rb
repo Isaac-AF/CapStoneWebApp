@@ -4,41 +4,22 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
-  # Routes for the Workout rep resource:
-
-  # CREATE
-  post("/insert_workout_rep", { :controller => "workout_reps", :action => "create" })
-          
-  # READ
-  get("/workout_reps", { :controller => "workout_reps", :action => "index" })
-  
-  get("/workout_reps/:path_id", { :controller => "workout_reps", :action => "show" })
-  
-  # UPDATE
-  
-  post("/modify_workout_rep/:path_id", { :controller => "workout_reps", :action => "update" })
-  
-  # DELETE
-  get("/delete_workout_rep/:path_id", { :controller => "workout_reps", :action => "destroy" })
-
-  #------------------------------
-
-  # Routes for the Workout set resource:
+    # Routes for the Workout set resource:
 
   # CREATE
   post("/insert_workout_set", { :controller => "workout_sets", :action => "create" })
           
   # READ
-  get("/workout_sets", { :controller => "workout_sets", :action => "index" })
+  get("/workout_sets/:workout_id", { :controller => "workout_sets", :action => "index" })
   
-  get("/workout_sets/:path_id", { :controller => "workout_sets", :action => "show" })
+  get("/workout_sets/:workout_id/:set_id", { :controller => "workout_sets", :action => "show" })
   
   # UPDATE
   
-  post("/modify_workout_set/:path_id", { :controller => "workout_sets", :action => "update" })
+  post("/modify_workout_set/:set_id", { :controller => "workout_sets", :action => "update" })
   
   # DELETE
-  get("/delete_workout_set/:path_id", { :controller => "workout_sets", :action => "destroy" })
+  get("/delete_workout_set/:set_id", { :controller => "workout_sets", :action => "destroy" })
 
   #------------------------------
 
@@ -48,9 +29,9 @@ Rails.application.routes.draw do
   post("/insert_exercise", { :controller => "exercises", :action => "create" })
           
   # READ
-  get("/exercises/:workout_id/", { :controller => "exercises", :action => "index" })
+  get("/exercises/", { :controller => "exercises", :action => "index" })
   
-  get("/exercises/:workout_id/:exercise_id", { :controller => "exercises", :action => "show" })
+  get("/exercises/:exercise_id", { :controller => "exercises", :action => "show" })
   
   # UPDATE
   
@@ -76,7 +57,8 @@ Rails.application.routes.draw do
   # UPDATE
   
   post("/modify_workout/:workout_id", { :controller => "workouts", :action => "update" })
-  
+  post("/finish_workout", { :controller => "workouts", :action => "finish" })
+
   # DELETE
   get("/delete_workout/:workout_id", { :controller => "workouts", :action => "destroy" })
 

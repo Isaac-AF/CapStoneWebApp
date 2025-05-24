@@ -20,7 +20,7 @@ class WorkoutsController < ApplicationController
 
     new_activity.save
 
-    redirect_to("/workouts/#{new_activity.id}", { :notice => "Workout created successfully." })
+    redirect_to("/workout_sets/#{new_activity.id}", { :notice => "Workout created successfully." })
   end
 
   def ai_process
@@ -42,7 +42,7 @@ class WorkoutsController < ApplicationController
           },
           "rating": {
             "type": "integer",
-            "description": "A rating on a scale of 1-10 how healthy the meal is."
+            "description": "A rating on a scale of 1-10 how good the activity was."
           }
         },
         "required": [
@@ -97,7 +97,7 @@ class WorkoutsController < ApplicationController
         "properties": {
             "rating": {
             "type": "integer",
-            "description": "A rating on a scale of 1-10 of good the activity was."
+            "description": "A rating on a scale of 1-10 of how good the activity was."
           }
         },
         "required": [
@@ -144,6 +144,60 @@ class WorkoutsController < ApplicationController
       redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Workout updated successfully."} )
     else
       redirect_to("/workouts/#{date}/#{user_id}", { :alert => the_workout.errors.full_messages.to_sentence })
+    end
+  end
+
+def finish
+    workout_id = params.fetch("query_workout_id")
+    the_workout = Workout.where({ :id => workout_id }).at(0)
+
+    chat = OpenAI::Chat.new
+    chat.model = 'o3'
+    chat.system("You are an expert personal trainer. Your job is to estimate the calories that the user burned based on the workout they completed, the duration, and information about the user such as their height and weight. Please also give a rating on a scale of 1-10 how good the activity was at helping the user accomplish their goals.")
+    chat.schema = '{
+      "name": "activity_info",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "calories": {
+            "type": "integer",
+            "description": "Estimated calories in kcal."
+          },
+            "rating": {
+            "type": "integer",
+            "description": "A rating on a scale of 1-10 of how good the activity was."
+          }
+        },
+        "required": [
+          "calories",
+          "rating"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }'
+
+    workout_sets = WorkoutSet.includes(:exercise).where(workout_id: workout_id)
+
+    formatted_data = workout_sets.map do |set|
+      "#{set.exercise.exercise_name}: #{set.workout_reps_count} reps at #{set.weight} lbs"
+    end.join("\n")
+
+    chat.user("Here is a log of the user's workout: #{formatted_data}")
+    chat.user("The duration of the workout was: #{the_workout.workout_datetime - Time.current}")
+
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their height is #{current_user.height} inches, their weight is #{current_user.weight} pounds, their sex is #{current_user.sex}, their birthday is #{current_user.birthday}, and their self-described activity level is #{current_user.activity_level}.")
+
+    result = chat.assistant!
+
+    the_workout.rating = result.fetch("calories")
+    the_workout.rating = result.fetch("rating")
+
+    if new_activity.valid?
+      new_activity.save
+      redirect_to("/users/#{current_user.id}", { :notice => "Workout created successfully." })
+    else
+      redirect_to("/workout_sets/#{workout_id}", { :alert => the_meal.errors.full_messages.to_sentence })
     end
   end
 
