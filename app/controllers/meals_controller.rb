@@ -8,11 +8,10 @@ class MealsController < ApplicationController
   end
 
   def show
-    the_id = params.fetch("path_id")
+    user_id = params.fetch("user_id")
+    date = params.fetch("date")
 
-    matching_meals = Meal.where({ :id => the_id })
-
-    @the_meal = matching_meals.at(0)
+    @matching_meals = Meal.where({ :user_id => user_id, :date_consumed => date})
 
     render({ :template => "meals/show" })
   end
@@ -23,7 +22,7 @@ class MealsController < ApplicationController
 
     chat = OpenAI::Chat.new
     chat.model = 'o3'
-    chat.system("You are an expert nutritionist. Your job is to estimate how many grams of carbohydrates, grams of protein, grams of fat, grams of fiber, and total calories are in a meal. The user will provide either a photo or two, a description, or both. The photo may be an image of the food itself, a recipe that was used to prepare the food, a picture of a menu, or a barcode that should be used to look up the nutrition facts of the item. Please also give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
+    chat.system("You are an expert nutritionist. Your job is to estimate how many grams of carbohydrates, grams of protein, grams of fat, grams of fiber, and total calories are in a meal. The user will provide either a photo or two, a description, or both. The photo may be an image of the food itself, a recipe that was used to prepare the food, a picture of a menu, or a barcode that should be used to look up the nutrition facts of the item. If necessary, search the web for nutrition information for specific menu items (like a McDonald's cheeseburger or the barcode from a granola bar). Please also give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
     chat.schema = '{
       "name": "nutrition_info",
       "schema": {
@@ -165,7 +164,7 @@ class MealsController < ApplicationController
   end
 
   def update
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("meal_id")
     the_meal = Meal.where({ :id => the_id }).at(0)
 
     the_meal.date_consumed = params.fetch("query_date_consumed")
@@ -178,20 +177,31 @@ class MealsController < ApplicationController
     the_meal.fiber = params.fetch("query_fiber")
     the_meal.user_id = params.fetch("query_user_id")
 
+    user_id = current_user.id
+    date = the_meal.date_consumed
+
     if the_meal.valid?
       the_meal.save
-      redirect_to("/meals/#{the_meal.id}", { :notice => "Meal updated successfully."} )
+      redirect_to("/meals/#{date}/#{user_id}", { :notice => "Meal updated successfully."} )
     else
-      redirect_to("/meals/#{the_meal.id}", { :alert => the_meal.errors.full_messages.to_sentence })
+      redirect_to("/meals/#{date}/#{user_id}", { :alert => the_meal.errors.full_messages.to_sentence })
     end
   end
 
   def destroy
-    the_id = params.fetch("path_id")
+    user_id = current_user.id
+    date = the_meal.date_consumed
+    
+    the_id = params.fetch("meal_id")
     the_meal = Meal.where({ :id => the_id }).at(0)
 
     the_meal.destroy
 
-    redirect_to("/meals", { :notice => "Meal deleted successfully."} )
+    remaining = Meal.where({ :user_id => user_id, :date_consumed => date})
+    if remaining.exists?
+      redirect_to("/meals/#{date}/#{user_id}", { :notice => "Meal deleted successfully."} )
+    else
+      redirect_to "/meals"
+    end
   end
 end

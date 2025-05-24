@@ -1,5 +1,5 @@
 
-<h1><%= Date.current.strftime("%B %e, %Y") %></h1>
+<h1><%= Time.zone.now.to_date.strftime("%B %e, %Y") %></h1>
 
 <% user = current_user %>
 
@@ -12,7 +12,7 @@
   <li>Fiber: <%= user.target_fiber %> g</li>
 </ul>
 
-<% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
+<% today_meals = current_user.meals.where(date_consumed: Time.zone.now.to_date.all_day) %>
 
 <% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
 
@@ -51,19 +51,23 @@
   <% end %>
 <% end %>
 
+<hr>
+
 <form action="/meals">
     <input type="submit" value="Log Food" />
 </form>
 
-<button>Log Activity</button>
-<button>Log Workout</button>
+<form action="/workout">
+    <input type="submit" value="Log Activity or Workout" />
+</form>
+
 <hr>
 <button>Recommend for the rest of the day</button>
 <button>Rate my plan</button>
 
 
 <h1>Weekly Summary</h1>
-<% grouped_meals = current_user.meals.where(date_consumed: 7.days.ago.to_date..Date.today).group_by(&:date_consumed) %>
+<% grouped_meals = current_user.meals.where(date_consumed: 7.days.ago.to_date..Time.zone.now.to_date).group_by(&:date_consumed) %>
 
 <table border="1">
   <thead>
@@ -94,7 +98,7 @@
         <td><%= daily_totals[:carbs] %></td>
         <td><%= daily_totals[:fiber] %></td>
         <td>
-          Link to edit goes here
+          <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
         </td>
       </tr>
     <% end %>

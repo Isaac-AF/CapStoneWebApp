@@ -1,191 +1,66 @@
-<div>
-  <div>
-    <h1>
-      Meal #<%= @the_meal.id %> details
-    </h1>
+<div style="margin-bottom: 1rem;">
+  <a href="/meals/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>">
+    ⬅️ Previous Day
+  </a>
 
-    <div>
-      <div>
-        <a href="/meals">
-          Go back
-        </a>
-      </div>
+  <strong style="margin: 0 1rem;"><%= params.fetch("date") %></strong>
 
-      <div>
-        <a href="/delete_meal/<%= @the_meal.id %>">
-          Delete meal
-        </a>
-      </div>
-    </div>
-
-    <dl>
-      <dt>
-        Date consumed
-      </dt>
-      <dd>
-        <%= @the_meal.date_consumed %>
-      </dd>
-
-      <dt>
-        Food name
-      </dt>
-      <dd>
-        <%= @the_meal.food_name %>
-      </dd>
-
-      <dt>
-        Rating
-      </dt>
-      <dd>
-        <%= @the_meal.rating %>
-      </dd>
-
-      <dt>
-        Calories
-      </dt>
-      <dd>
-        <%= @the_meal.calories %>
-      </dd>
-
-      <dt>
-        Protein
-      </dt>
-      <dd>
-        <%= @the_meal.protein %>
-      </dd>
-
-      <dt>
-        Fats
-      </dt>
-      <dd>
-        <%= @the_meal.fats %>
-      </dd>
-
-      <dt>
-        Carbs
-      </dt>
-      <dd>
-        <%= @the_meal.carbs %>
-      </dd>
-
-      <dt>
-        Fiber
-      </dt>
-      <dd>
-        <%= @the_meal.fiber %>
-      </dd>
-
-      <dt>
-        User
-      </dt>
-      <dd>
-        <%= @the_meal.user_id %>
-      </dd>
-
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_meal.created_at) %> ago
-      </dd>
-
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_meal.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
+  <a href="/meals/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>">
+    Next Day ➡️
+  </a>
 </div>
 
-<hr>
-
-
-<div>
-  <div>
-    <h2>
-      Edit meal
-    </h2>
-
-    <form action="/modify_meal/<%= @the_meal.id %>"  method="post" >
-      <div>
-        <label for="date_consumed_box">
-          Date consumed
-        </label>
-
-        <input type="date" id="date_consumed_box" name="query_date_consumed" value="<%= @the_meal.date_consumed %>">
-      </div>
-
-      <div>
-        <label for="food_name_box">
-          Food name
-        </label>
-
-        <input type="text" id="food_name_box" name="query_food_name" value="<%= @the_meal.food_name %>">
-      </div>
-
-      <div>
-        <label for="rating_box">
-          Rating
-        </label>
-
-        <input type="text" id="rating_box" name="query_rating" value="<%= @the_meal.rating %>">
-      </div>
-
-      <div>
-        <label for="calories_box">
-          Calories
-        </label>
-
-        <input type="text" id="calories_box" name="query_calories" value="<%= @the_meal.calories %>">
-      </div>
-
-      <div>
-        <label for="protein_box">
-          Protein
-        </label>
-
-        <input type="text" id="protein_box" name="query_protein" value="<%= @the_meal.protein %>">
-      </div>
-
-      <div>
-        <label for="fats_box">
-          Fats
-        </label>
-
-        <input type="text" id="fats_box" name="query_fats" value="<%= @the_meal.fats %>">
-      </div>
-
-      <div>
-        <label for="carbs_box">
-          Carbs
-        </label>
-
-        <input type="text" id="carbs_box" name="query_carbs" value="<%= @the_meal.carbs %>">
-      </div>
-
-      <div>
-        <label for="fiber_box">
-          Fiber
-        </label>
-
-        <input type="text" id="fiber_box" name="query_fiber" value="<%= @the_meal.fiber %>">
-      </div>
-
-      <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_meal.user_id %>">
-      </div>
-
-      <button>
-        Update meal
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Food</th>
+      <th>Rating</th>
+      <th>Calories</th>
+      <th>Protein</th>
+      <th>Fats</th>
+      <th>Carbs</th>
+      <th>Fiber</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @matching_meals.each do |a_meal| %>
+      <tr>
+        <form action="/modify_meal/<%= a_meal.id %>" method="post">
+          <td>
+            <input type="date" name="query_date_consumed" value="<%= a_meal.date_consumed %>">
+          </td>
+          <td>
+            <input type="text" name="query_food_name" value="<%= a_meal.food_name %>">
+          </td>
+          <td>
+            <input type="text" name="query_rating" value="<%= a_meal.rating %>">
+          </td>
+          <td>
+            <input type="text" name="query_calories" value="<%= a_meal.calories %>">
+          </td>
+          <td>
+            <input type="text" name="query_protein" value="<%= a_meal.protein %>">
+          </td>
+          <td>
+            <input type="text" name="query_fats" value="<%= a_meal.fats %>">
+          </td>
+          <td>
+            <input type="text" name="query_carbs" value="<%= a_meal.carbs %>">
+          </td>
+          <td>
+            <input type="text" name="query_fiber" value="<%= a_meal.fiber %>">
+          </td>
+          <td>
+            <input type="hidden" name="query_user_id" value="<%= a_meal.user_id %>">
+            <input type="hidden" name="date" value="<%= a_meal.date_consumed.to_time.to_i %>">
+            <input type="hidden" name="user_id" value="<%= a_meal.user_id %>">
+            <button type="submit">Save</button>
+            <a href="/delete_meal/<%= a_meal.id %>">Delete</a>
+          </td>
+        </form>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

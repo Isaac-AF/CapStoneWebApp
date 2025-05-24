@@ -89,14 +89,14 @@ Rails.application.routes.draw do
   # READ
   get("/meals", { :controller => "meals", :action => "index" })
   
-  get("/meals/:path_id", { :controller => "meals", :action => "show" })
+  get("/meals/:date/:user_id", { :controller => "meals", :action => "show" })
   
   # UPDATE
   
-  post("/modify_meal/:path_id", { :controller => "meals", :action => "update" })
+  post("/modify_meal/:meal_id", { :controller => "meals", :action => "update" })
   
   # DELETE
-  get("/delete_meal/:path_id", { :controller => "meals", :action => "destroy" })
+  get("/delete_meal/:meal_id", { :controller => "meals", :action => "destroy" })
 
   #------------------------------
 
