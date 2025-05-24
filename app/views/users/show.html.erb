@@ -58,7 +58,7 @@
 
 <h2>Today's Activity</h2>
   <td>
-    <a href="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts (haven't configured this yet)</a>
+    <a href="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
   </td>
 
 <% today_workouts = current_user.workouts.where(workout_datetime: Date.current.all_day) %>
@@ -127,7 +127,11 @@
 
 <h2>Activity</h2>
 
-<% past_week_activity = current_user.workouts.where(workout_datetime: 8.days.ago.to_date..(Date.current - 1)) %>
+
+
+<% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
+  .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
+
 
 <hr>
 <div>
@@ -135,22 +139,30 @@
     <table border="1">
       <tr>
         <th>Date</th>
-        <th>Workout Type</th>
-        <th>Calories Burned</th>
+        <th>Primary Workout Type</th>
+        <th>Total Calories Burned</th>
       </tr>
 
-      <% past_week_activity.each do |a_workout| %>
+      <% past_week_activity.each do |date, workouts| %>
+        <% total_calories = workouts.sum(&:calories_burned) %>
+        
+        <% workout_type_by_calories = workouts
+          .group_by(&:workout_type)
+          .transform_values { |w| w.sum(&:calories_burned) }
+          .max_by { |_, calories| calories }
+          &.first%>
+
         <tr>
-          <td><%= a_workout.workout_datetime.to_date %></td>
-          <td><%= a_workout.workout_type %></td>
-          <td><%= number_with_precision(a_workout.calories_burned, precision: 2) %></td>
+          <td><%= date %></td>
+          <td><%= workout_type_by_calories %></td>
+          <td><%= number_with_precision(total_calories, precision: 2) %></td>
+          <td>
+          <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
+          </td>
         </tr>
       <% end %>
     </table>
   </div>
 </div>
-
-<hr>
-
 
 <hr>
