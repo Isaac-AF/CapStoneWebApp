@@ -42,7 +42,7 @@
       <% meals.each do |meal| %>
         <li>
           <strong><%= meal.food_name.titleize %></strong>
-          <%= meal.calories %> kcal,
+          Calories: <%= meal.calories %> kcal,
           Protein: <%= meal.protein %>g,
           Carbs: <%= meal.carbs %>g,
           Fat: <%= meal.fats %>g,
@@ -56,12 +56,28 @@
 
 <hr>
 
+<h2>Today's Activity</h2>
+  <td>
+    <a href="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts (haven't configured this yet)</a>
+  </td>
+
+<% today_workouts = current_user.workouts.where(workout_datetime: Date.current.all_day) %>
+  <% if today_workouts.present? %>
+      <% today_workouts.each do |workout| %>
+        <h3><%= workout.workout_type.capitalize %></h3>
+          Calories: <%= workout.calories_burned %> kcal,
+          Rating: <%= workout.rating %>
+      <% end %>
+  <% end %>
+
+<hr>
+
 <form action="/meals">
     <input type="submit" value="Log Food" />
 </form>
 
 <form action="/workouts">
-    <input type="submit" value="Log Activity or Workout" />
+    <input type="submit" value="Log Activity" />
 </form>
 
 <hr>

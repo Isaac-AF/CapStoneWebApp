@@ -64,7 +64,8 @@ Rails.application.routes.draw do
   # Routes for the Workout resource:
 
   # CREATE
-  post("/insert_workout", { :controller => "workouts", :action => "create" })
+  post("/process_activity", { :controller => "workouts", :action => "ai_process" })
+  post("/insert_activity", { :controller => "workouts", :action => "manual_insert" })
           
   # READ
   get("/workouts", { :controller => "workouts", :action => "index" })

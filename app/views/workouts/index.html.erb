@@ -5,14 +5,34 @@
 <div>
   <form action="/process_activity" method="post" enctype="multipart/form-data">
     <div>
-      <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Date.current %>">
+      <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Time.current %>">
     </div>
     <div>
-      <label for="activity_name_box">
-        Activity Name
+      <label for="activity_type_box">
+        Activity Type
       </label>
-
-      <input type="text" id="activity_name_box" name="query_activity_name">
+            <select name="query_activity_type" id="activity_type_box">
+            <option value="" selected disabled hidden></option>
+            <option value="Outdoor Run">Outdoor Run</option>
+            <option value="Indoor Run">Indoor Run</option>
+            <option value="Outdoor Cycle">Outdoor Cycle</option>
+            <option value="Indoor Cycle">Indoor Cycle</option>
+            <option value="Elliptical">Elliptical</option>
+            <option value="Stair Stepper">Stair Stepper</option>
+            <option value="Strength Training">Strength Training</option>
+            <option value="Hiking">Hiking</option>
+            <option value="Walking">Walking</option>
+            <option value="Pool Swim">Pool Swim</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Golf (walking)">Golf (walking)</option>
+            <option value="Pickleball">Pickleball</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Yoga">Yoga</option>
+            <option value="Dance">Dance</option>
+            <option value="Pilates">Pilates</option>
+            </select>
     </div>
     <div>
       <label for="activity_time_box">
@@ -21,29 +41,13 @@
 
       <input type="text" id="activity_time_box" name="query_activity_time">
     </div>
-
-        <div>
-      <label for="meal_type_box">
-        Meal Type
-      </label>
-
-      <select name="query_meal_type" id="meal_type_box">
-        <option value="" selected disabled hidden></option>
-        <option value="Breakfast">Breakfast</option>
-        <option value="Lunch">Lunch</option>
-        <option value="Dinner">Dinner</option>
-        <option value="Snack">Snack</option>
-      </select>
-    </div>
-
     <div>
       <label for="description_field">Description</label>
       <textarea id="description_field" name="description_param"></textarea>
     </div>
-
     <div>
       <button>
-        Estimate!
+        Add Activity
       </button>
     </div>
   </form>
@@ -53,17 +57,18 @@
 <div>
   <div>
     <h2>
-      Add a new workout manually
+      Add a new activity manually
     </h2>
-    <form action="/insert_workout" method="post">
+    <form action="/insert_activity" method="post">
       <div>
-        <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Date.current %>">
+        <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Time.current %>">
       </div>
       <div>
       <label for="activity_type_box">
-        Meal Type
+        Activity Type
       </label>
             <select name="query_activity_type" id="activity_type_box">
+            <option value="" selected disabled hidden></option>
             <option value="Outdoor Run">Outdoor Run</option>
             <option value="Indoor Run">Indoor Run</option>
             <option value="Outdoor Cycle">Outdoor Cycle</option>
@@ -86,6 +91,13 @@
             </select>
       </div>
       <div>
+      <label for="activity_time_box">
+        Activity Duration
+      </label>
+
+      <input type="text" id="activity_time_box" name="query_activity_time">
+    </div>
+      <div>
         <label for="calories_box">
           Calories
         </label>
@@ -94,6 +106,11 @@
       </div>
 
       <div>
+      <div>
+      <button>
+        Add Activity
+      </button>
+    </div>
     </form>
   </div>
 </div>
