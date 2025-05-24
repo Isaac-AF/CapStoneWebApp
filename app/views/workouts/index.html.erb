@@ -1,118 +1,99 @@
+<h1>Add an activity</h1>
+
+<p>Describe the activity you did, how long you did it for, how far (if applicable), and how hard you feel you worked.</p>
+
 <div>
-  <div>
-    <h1>
-      List of all workouts
-    </h1>
-  </div>
+  <form action="/process_activity" method="post" enctype="multipart/form-data">
+    <div>
+      <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Date.current %>">
+    </div>
+    <div>
+      <label for="activity_name_box">
+        Activity Name
+      </label>
+
+      <input type="text" id="activity_name_box" name="query_activity_name">
+    </div>
+    <div>
+      <label for="activity_time_box">
+        Activity Duration
+      </label>
+
+      <input type="text" id="activity_time_box" name="query_activity_time">
+    </div>
+
+        <div>
+      <label for="meal_type_box">
+        Meal Type
+      </label>
+
+      <select name="query_meal_type" id="meal_type_box">
+        <option value="" selected disabled hidden></option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Snack">Snack</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="description_field">Description</label>
+      <textarea id="description_field" name="description_param"></textarea>
+    </div>
+
+    <div>
+      <button>
+        Estimate!
+      </button>
+    </div>
+  </form>
 </div>
 
-<hr>
 
 <div>
   <div>
     <h2>
-      Add a new workout
+      Add a new workout manually
     </h2>
-
     <form action="/insert_workout" method="post">
       <div>
-        <label for="workout_datetime_box">
-          Workout datetime
+        <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Date.current %>">
+      </div>
+      <div>
+      <label for="activity_type_box">
+        Meal Type
+      </label>
+            <select name="query_activity_type" id="activity_type_box">
+            <option value="Outdoor Run">Outdoor Run</option>
+            <option value="Indoor Run">Indoor Run</option>
+            <option value="Outdoor Cycle">Outdoor Cycle</option>
+            <option value="Indoor Cycle">Indoor Cycle</option>
+            <option value="Elliptical">Elliptical</option>
+            <option value="Stair Stepper">Stair Stepper</option>
+            <option value="Strength Training">Strength Training</option>
+            <option value="Hiking">Hiking</option>
+            <option value="Walking">Walking</option>
+            <option value="Pool Swim">Pool Swim</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Golf (walking)">Golf (walking)</option>
+            <option value="Pickleball">Pickleball</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Yoga">Yoga</option>
+            <option value="Dance">Dance</option>
+            <option value="Pilates">Pilates</option>
+            </select>
+      </div>
+      <div>
+        <label for="calories_box">
+          Calories
         </label>
 
-        <input type="datetime-local" id="workout_datetime_box" name="query_workout_datetime">
+        <input type="text" id="calories_box" name="query_calories">
       </div>
 
       <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id">
-      </div>
-
-      <div>
-        <label for="workout_sets_count_box">
-          Workout sets count
-        </label>
-
-        <input type="text" id="workout_sets_count_box" name="query_workout_sets_count">
-      </div>
-
-      <button>
-        Create workout
-      </button>
     </form>
   </div>
 </div>
-
-<hr>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          Workout datetime
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
-          Workout sets count
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
-      <% @list_of_workouts.each do |a_workout| %>
-      <tr>
-        <td>
-          <%= a_workout.id %>
-        </td>
-
-        <td>
-          <%= a_workout.workout_datetime %>
-        </td>
-
-        <td>
-          <%= a_workout.user_id %>
-        </td>
-
-        <td>
-          <%= a_workout.workout_sets_count %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(a_workout.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(a_workout.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/workouts/<%= a_workout.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
-      <% end %>
-    </table>
-  </div>
-</div>
-
-<hr>

@@ -3,8 +3,10 @@
 # Table name: workouts
 #
 #  id                 :bigint           not null, primary key
+#  calories_burned    :decimal(, )
 #  workout_datetime   :datetime
 #  workout_sets_count :integer
+#  workout_type       :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :integer

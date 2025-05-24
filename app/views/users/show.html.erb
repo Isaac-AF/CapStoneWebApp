@@ -1,5 +1,5 @@
 
-<h1><%= Time.zone.now.to_date.strftime("%B %e, %Y") %></h1>
+<h1><%= Date.current.strftime("%B %e, %Y") %></h1>
 
 <% user = current_user %>
 
@@ -12,7 +12,7 @@
   <li>Fiber: <%= user.target_fiber %> g</li>
 </ul>
 
-<% today_meals = current_user.meals.where(date_consumed: Time.zone.now.to_date.all_day) %>
+<% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
 
 <% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
 
@@ -32,7 +32,7 @@
 
 <h2>Today's Meals</h2>
   <td>
-    <a href="/meals/<%= Time.zone.now.to_date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
+    <a href="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Meals</a>
   </td>
 <% desired_order.each do |type| %>
   <% meals = grouped_meals[type] %>
@@ -60,7 +60,7 @@
     <input type="submit" value="Log Food" />
 </form>
 
-<form action="/workout">
+<form action="/workouts">
     <input type="submit" value="Log Activity or Workout" />
 </form>
 
@@ -69,8 +69,9 @@
 <button>Rate my plan</button>
 
 
-<h1>Weekly Summary</h1>
-<% grouped_meals = current_user.meals.where(date_consumed: 7.days.ago.to_date..Time.zone.now.to_date).group_by(&:date_consumed) %>
+<h1>Past Week Summary</h1>
+<h2>Macros</h2>
+<% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
 
 <table border="1">
   <thead>
@@ -108,7 +109,32 @@
   </tbody>
 </table>
 
-<h1>Table showing past week workout summary goes here</h1>
+<h2>Activity</h2>
+
+<% past_week_activity = current_user.workouts.where(workout_datetime: 8.days.ago.to_date..(Date.current - 1)) %>
+
+<hr>
+<div>
+  <div>
+    <table border="1">
+      <tr>
+        <th>Date</th>
+        <th>Workout Type</th>
+        <th>Calories Burned</th>
+      </tr>
+
+      <% past_week_activity.each do |a_workout| %>
+        <tr>
+          <td><%= a_workout.workout_datetime.to_date %></td>
+          <td><%= a_workout.workout_type %></td>
+          <td><%= number_with_precision(a_workout.calories_burned, precision: 2) %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>
 
 
 <hr>

@@ -114,7 +114,5 @@ Rails.application.routes.draw do
 
   # CREATE
   post("/insert_user", { :controller => "users", :action => "create" })
-
-
   
 end
