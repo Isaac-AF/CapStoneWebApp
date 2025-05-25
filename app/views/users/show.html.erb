@@ -1,4 +1,4 @@
-<div class="container mt-2">
+<div class="container mt-3">
   <% if params[:rec_key].present? %>
     <% recommendation = Rails.cache.read(params[:rec_key]) %>
     <% if recommendation.present? %>
@@ -27,25 +27,36 @@
     <% end %>
   <% end %>
 
-<div class="text-center mb-3">
-  <div class="btn-group mb-3 gap-2" role="group">
-    <form action="/meals" class="d-inline">
-      <button class="btn btn-primary mb-2" type="submit">Log Food</button>
-    </form>
+<div class="position-relative mb-3">
 
-    <form action="/workouts" class="d-inline">
-      <button class="btn btn-primary mb-2" type="submit">Log Activity</button>
-    </form>
-
-    <form action="/new_workout" method="post" class="d-inline">
-      <button class="btn btn-primary mb-2" type="submit">New Gym Workout</button>
-    </form>
-
-    <form action="/day_recommend" method="post" class="d-inline">
-      <button class="btn btn-primary mb-2" type="submit">Recommend Rest of Day</button>
-    </form>
+  <!-- Logout button absolutely positioned top-right -->
+  <div class="position-absolute top-0 end-0">
+    <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
   </div>
-  
+
+  <!-- Centered buttons -->
+  <div class="text-center">
+    <div class="btn-group gap-2" role="group">
+      <form action="/meals" class="d-inline">
+        <button class="btn btn-primary mb-2" type="submit">Log Food</button>
+      </form>
+
+      <form action="/workouts" class="d-inline">
+        <button class="btn btn-primary mb-2" type="submit">Log Activity</button>
+      </form>
+
+      <form action="/new_workout" method="post" class="d-inline">
+        <button class="btn btn-primary mb-2" type="submit">New Gym Workout</button>
+      </form>
+
+      <form action="/day_recommend" method="post" class="d-inline">
+        <button class="btn btn-primary mb-2" type="submit">Recommend Rest of Day</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mb-3">
   <h1 class="mb-4"><strong><%= Date.current.strftime("%B %e, %Y") %></strong></h1>
 
   <% user = current_user %>

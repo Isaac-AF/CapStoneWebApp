@@ -13,6 +13,8 @@
 #
 class Workout < ApplicationRecord
   validates(:user_id, presence: true)
+  validates(:workout_type, presence: true)
+  validates(:workout_datetime, presence: true)
 
   belongs_to :user, required: true, class_name: "User", foreign_key: "user_id", counter_cache: true
   has_many  :workout_sets, class_name: "WorkoutSet", foreign_key: "workout_id", dependent: :destroy

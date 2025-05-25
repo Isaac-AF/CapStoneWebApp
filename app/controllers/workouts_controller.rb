@@ -23,7 +23,7 @@ class WorkoutsController < ApplicationController
 
     new_activity.save
 
-    redirect_to("/workout_sets/#{new_activity.id}", { :notice => "Workout created successfully." })
+    redirect_to("/workout_sets/#{new_activity.id}", { :notice => "Activity created successfully." })
   end
 
   def ai_process
@@ -77,7 +77,7 @@ class WorkoutsController < ApplicationController
 
     if new_activity.valid?
       new_activity.save
-      redirect_to("/users/#{current_user.id}", { :notice => "Workout created successfully." })
+      redirect_to("/users/#{current_user.id}", { :notice => "Activity created successfully." })
     else
       redirect_to("/workouts", { :alert => the_meal.errors.full_messages.to_sentence })
     end
@@ -123,7 +123,7 @@ class WorkoutsController < ApplicationController
 
     if new_activity.valid?
       new_activity.save
-      redirect_to("/users/#{current_user.id}", { :notice => "Workout created successfully." })
+      redirect_to("/users/#{current_user.id}", { :notice => "Activity created successfully." })
     else
       redirect_to("/workouts", { :alert => new_activity.errors.full_messages.to_sentence })
     end
@@ -144,7 +144,7 @@ class WorkoutsController < ApplicationController
 
     if the_workout.valid?
       the_workout.save
-      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Workout updated successfully."} )
+      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Activity updated successfully."} )
     else
       redirect_to("/workouts/#{date}/#{user_id}", { :alert => the_workout.errors.full_messages.to_sentence })
     end
@@ -212,7 +212,7 @@ def finish
 
     remaining = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
     if remaining.exists?
-      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Workout deleted successfully."} )
+      redirect_to("/workouts/#{date}/#{user_id}", { :notice => "Activity deleted successfully."} )
     else
       redirect_to "/workouts"
     end
