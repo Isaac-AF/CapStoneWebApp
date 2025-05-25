@@ -1,115 +1,92 @@
-<% if @list_of_workout_sets.empty? %>
-  <form action="/delete_if_empty_and_back" method="post">
-    <input type="hidden" name="workout_id" value="<%= params.fetch("workout_id") %>">
-    <input type="submit" value="Go back">
-  </form>
-<% else %>
-  <div>
-    <a href="/users/<%= current_user.id %>">Go back</a>
-  </div>
-<% end %>
+<div class="container" style="max-width: 700px;">
 
-<form action="/finish_workout" method="post">
-    <input type="hidden" name="query_workout_id" value="<%= params.fetch("workout_id") %>">
-    <input type="submit" value="Finish Workout" />
-</form>
+  <% if @list_of_workout_sets.empty? %>
+    <form action="/delete_if_empty_and_back" method="post" class="text-center my-4">
+      <input type="hidden" name="workout_id" value="<%= params.fetch("workout_id") %>">
+      <input type="submit" value="Go Back" class="btn btn-outline-secondary">
+    </form>
+  <% else %>
 
-<form action="/exercises">
-    <input type="submit" value="Manage Exercises" />
-</form>
+  <% end %>
 
-<hr>
+  <div class="d-flex justify-content-center gap-2 mb-4">
+    <form action="/finish_workout" method="post">
+      <input type="hidden" name="query_workout_id" value="<%= params.fetch("workout_id") %>">
+      <input type="submit" value="Finish Workout" class="btn btn-success" />
+    </form>
 
-<div>
-  <div>
-    <h2>
-      Add a new workout set
-    </h2>
-
-    <form action="/insert_workout_set" method="post">
-  <div>
-    <input type="hidden" name="query_workout_id" value="<%= params.fetch("workout_id") %>">
+    <form action="/exercises" method="get">
+      <input type="hidden" name="return_to" value="<%= request.fullpath %>">
+      <input type="submit" value="Manage Exercises" class="btn btn-outline-primary" />
+    </form>
   </div>
 
-  <div>
-    <label for="exercise_id_box">
-      Exercise
-    </label>
-    <select id="exercise_id_box" name="query_exercise_id">
-      <% Exercise.all.each do |exercise| %>
-        <option value="<%= exercise.id %>"><%= exercise.exercise_name %></option>
-      <% end %>
-    </select>
+  <div class="card mb-5">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Add a New Workout Set</h2>
+      <form action="/insert_workout_set" method="post">
+        <input type="hidden" name="query_workout_id" value="<%= params.fetch("workout_id") %>">
+
+        <div class="mb-3">
+          <label for="exercise_id_box" class="form-label">Exercise</label>
+          <select class="form-select" id="exercise_id_box" name="query_exercise_id">
+            <% Exercise.all.each do |exercise| %>
+              <option value="<%= exercise.id %>"><%= exercise.exercise_name %></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="workout_set_number" class="form-label">Set Number</label>
+          <input type="text" class="form-control" id="workout_set_number" name="query_workout_set_number">
+        </div>
+
+        <div class="mb-3">
+          <label for="workout_reps_count_box" class="form-label">Reps</label>
+          <input type="text" class="form-control" id="workout_reps_count_box" name="query_workout_reps_count">
+        </div>
+
+        <div class="mb-4">
+          <label for="weight_box" class="form-label">Weight</label>
+          <input type="text" class="form-control" id="weight_box" name="query_weight">
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Create Workout Set</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    <label for="workout_set_number">
-      Set Number
-    </label>
-    <input type="text" id="workout_set_number" name="query_workout_set_number">
-  </div>
 
-  <div>
-    <label for="workout_reps_count_box">
-      Reps
-    </label>
-    <input type="text" id="workout_reps_count_box" name="query_workout_reps_count">
-  </div>
+  <h2 class="text-center mb-3">Workout Sets</h2>
 
-  <div>
-    <label for="weight_box">
-      Weight
-    </label>
-    <input type="text" id="weight_box" name="query_weight">
-  </div>
-
-  <button>
-    Create workout set
-  </button>
-  </form>
-  </div>
-</div>
-
-<hr>
-<h2>Workout Sets</h2>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>
-          Exercise
-        </th>
-
-        <th>
-          Set Number
-        </th>
-
-        <th>
-          Reps
-        </th>
-
-        <th>
-          Weight
-        </th>
-       
-        <th>
-        </th>
-      </tr>
-
-      <% @list_of_workout_sets.each do |a_workout_set| %>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-light">
         <tr>
-          <td><%= a_workout_set.exercise.exercise_name %></td>
-          <td><%= a_workout_set.set_number %></td>
-          <td><%= a_workout_set.workout_reps_count %></td>
-          <td><%= a_workout_set.weight %></td>
-          <td>
-            <a href="/workout_sets/<%= params.fetch("workout_id") %>/<%= a_workout_set.id %>">
-              Show details
-            </a>
-          </td>
+          <th>Exercise</th>
+          <th>Set Number</th>
+          <th>Reps</th>
+          <th>Weight</th>
+          <th></th>
         </tr>
-      <% end %>
+      </thead>
+      <tbody>
+        <% @list_of_workout_sets.each do |a_workout_set| %>
+          <tr>
+            <td><%= a_workout_set.exercise.exercise_name %></td>
+            <td><%= a_workout_set.set_number %></td>
+            <td><%= a_workout_set.workout_reps_count %></td>
+            <td><%= a_workout_set.weight %></td>
+            <td>
+              <a href="/workout_sets/<%= params.fetch("workout_id") %>/<%= a_workout_set.id %>" class="btn btn-sm btn-outline-secondary">
+                Show Details
+              </a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
     </table>
   </div>
-</div>
 
-<hr>
+</div>

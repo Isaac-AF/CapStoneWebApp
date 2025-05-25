@@ -27,6 +27,10 @@ class WorkoutSetsController < ApplicationController
 
     if the_workout_set.valid?
       the_workout_set.save
+
+      matching_workout_sets = WorkoutSet.where(workout_id: params.fetch("query_workout_id"))
+      @list_of_workout_sets = matching_workout_sets.order({ :created_at => :desc })
+
       redirect_to("/workout_sets/#{the_workout_set.workout_id}", { :notice => "Workout set created successfully." })
     else
       redirect_to("/workout_sets/#{the_workout_set.workout_id}", { :alert => the_workout_set.errors.full_messages.to_sentence })
@@ -44,9 +48,9 @@ class WorkoutSetsController < ApplicationController
 
     if the_workout_set.valid?
       the_workout_set.save
-      redirect_to("/workout_sets/#{the_workout_set.id}", { :notice => "Workout set updated successfully."} )
+      redirect_to("/workout_sets/#{the_workout_set.workout_id}", { :notice => "Workout set updated successfully."} )
     else
-      redirect_to("/workout_sets/#{the_workout_set.id}", { :alert => the_workout_set.errors.full_messages.to_sentence })
+      redirect_to("/workout_sets/#{the_workout_set.workout_id}", { :alert => the_workout_set.errors.full_messages.to_sentence })
     end
   end
 

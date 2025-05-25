@@ -4,7 +4,7 @@ class ExercisesController < ApplicationController
 
     @list_of_exercises = matching_exercises.order({ :created_at => :desc })
 
-    session[:return_to_workout_sets] = request.referer
+    session[:return_to_workout_sets] = params[:return_to] if params[:return_to].present?
 
     render({ :template => "exercises/index" })
   end

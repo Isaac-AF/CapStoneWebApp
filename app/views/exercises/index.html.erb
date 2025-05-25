@@ -1,132 +1,126 @@
-<% if session[:return_to_workout_sets] %>
-  <a href="<%= session[:return_to_workout_sets] %>">Go back</a>
-<% end %>
 
-<div>
-  <div>
-    <h1>
-      Add a new exercise
-    </h1>
-
-<p>Send us an image and/or a description of an exercise or machine and we'll determine what muscles the exercise works.</p>
-
-    <form action="/process_exercise" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="user_id" value="<%= current_user.id%>">
-      <div>
-        <label for="exercise_name_box">
-          Exercise name
-        </label>
-
-        <input type="text" id="exercise_name_box" name="query_exercise_name">
-      </div>
-
-      <div>
-        <label for="image_field">Image</label>
-        <input type="file" id="image_field" name="image_param">
-      </div>
-
-      <div>
-        <label for="description_field">Description</label>
-        <textarea id="description_field" name="description_param"></textarea>
-      </div>
-
-      <button>
-        Create exercise
-      </button>
-    </form>
-  </div>
-</div>
-
-<div>
-  <div>
-    <h2>
-      Add an exercise manually
-    </h2>
-
-    <form action="/insert_exercise" method="post">
-    <input type="hidden" name="user_id" value="<%= current_user.id%>">
-      <div>
-        <label for="exercise_name_box">
-          Exercise name
-        </label>
-
-        <input type="text" id="exercise_name_box" name="query_exercise_name">
-      </div>
-
-      <div>
-        <label for="primary_muscle_box">
-          Primary muscle
-        </label>
-
-        <input type="text" id="primary_muscle_box" name="query_primary_muscle">
-      </div>
-
-      <div>
-        <label for="secondary_muscle_box">
-          Secondary muscle
-        </label>
-
-        <input type="text" id="secondary_muscle_box" name="query_secondary_muscle">
-      </div>
-
-      <div>
-        <label for="tertiary_muscle_box">
-          Tertiary muscle
-        </label>
-
-        <input type="text" id="tertiary_muscle_box" name="query_tertiary_muscle">
-      </div>
-
-      <button>
-        Create exercise
-      </button>
-    </form>
-  </div>
-</div>
-
-
-<hr>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>Exercise name</th>
-        <th>Primary muscle</th>
-        <th>Secondary muscle</th>
-        <th>Tertiary muscle</th>
-        <th></th>
-        <th></th>
-      </tr>
-
-      <% @list_of_exercises.each do |an_exercise| %>
-        <tr>
-        <% if an_exercise.user_id == 0 || an_exercise.user_id == current_user.id %>
-            <td><%= an_exercise.exercise_name %></td>
-            <td><%= an_exercise.primary_muscle %></td>
-            <td><%= an_exercise.secondary_muscle %></td>
-            <td><%= an_exercise.tertiary_muscle %></td>
-
-            <td>
-              <form action="/exercises/<%= an_exercise.id %>" method="get">
-                <button type="submit">Edit</button>
-              </form>
-            </td>
-
-            <% if an_exercise.user_id == current_user.id %>
-              <td>
-                <form action="/delete_exercise/<%= an_exercise.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this exercise?');">
-                  <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
-                  <button type="submit">Delete</button>
-                </form>
-              </td>
-            <% else %>
-              <td></td>
-            <% end %>
-          <% else %>
-            <td></td>
-          <% end %>
-        </tr>
+<div class="container py-4">
+  <div class="container my-4">
+    <div class="d-flex align-items-center justify-content-between">
+      <% if session[:return_to_workout_sets] %>
+        <a href="<%= session[:return_to_workout_sets] %>" class="btn btn-secondary">← Go Back</a>
+      <% else %>
+        <div></div>
       <% end %>
-    </table>
+      <h1 class="text-center flex-grow-1 m-0">Add an Exercise</h1>
+      <div style="width: 100px;"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 mb-3">Add a New Exercise (Smart Detection)</h2>
+            <p class="text-muted">Send us an image and/or a description of an exercise or machine and we'll determine what muscles the exercise works.</p>
+
+            <form action="/process_exercise" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+              <div class="mb-3">
+                <label for="exercise_name_box" class="form-label">Exercise Name</label>
+                <input type="text" class="form-control" id="exercise_name_box" name="query_exercise_name">
+              </div>
+
+              <div class="mb-3">
+                <label for="image_field" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image_field" name="image_param">
+              </div>
+
+              <div class="mb-3">
+                <label for="description_field" class="form-label">Description</label>
+                <textarea class="form-control" id="description_field" name="description_param" rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Create Exercise</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 mb-3">Add an Exercise Manually</h2>
+
+            <form action="/insert_exercise" method="post">
+              <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+              <div class="mb-3">
+                <label for="exercise_name_box" class="form-label">Exercise Name</label>
+                <input type="text" class="form-control" id="exercise_name_box" name="query_exercise_name">
+              </div>
+
+              <div class="mb-3">
+                <label for="primary_muscle_box" class="form-label">Primary Muscle</label>
+                <input type="text" class="form-control" id="primary_muscle_box" name="query_primary_muscle">
+              </div>
+
+              <div class="mb-3">
+                <label for="secondary_muscle_box" class="form-label">Secondary Muscle</label>
+                <input type="text" class="form-control" id="secondary_muscle_box" name="query_secondary_muscle">
+              </div>
+
+              <div class="mb-3">
+                <label for="tertiary_muscle_box" class="form-label">Tertiary Muscle</label>
+                <input type="text" class="form-control" id="tertiary_muscle_box" name="query_tertiary_muscle">
+              </div>
+
+              <button type="submit" class="btn btn-primary">Create Exercise</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mb-4">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Exercise Name</th>
+            <th>Primary Muscle</th>
+            <th>Secondary Muscle</th>
+            <th>Tertiary Muscle</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @list_of_exercises.each do |an_exercise| %>
+            <% if an_exercise.user_id == 0 || an_exercise.user_id == current_user.id %>
+              <tr>
+                <td><%= an_exercise.exercise_name %></td>
+                <td><%= an_exercise.primary_muscle %></td>
+                <td><%= an_exercise.secondary_muscle %></td>
+                <td><%= an_exercise.tertiary_muscle %></td>
+
+                <td>
+                  <form action="/exercises/<%= an_exercise.id %>" method="get">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Edit</button>
+                  </form>
+                </td>
+
+                <td>
+                  <% if an_exercise.user_id == current_user.id %>
+                    <form action="/delete_exercise/<%= an_exercise.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this exercise?');">
+                      <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
+                      <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
