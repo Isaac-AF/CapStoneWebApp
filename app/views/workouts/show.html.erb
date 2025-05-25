@@ -1,52 +1,59 @@
-  <a href="/users/<%= current_user.id %>">
-    Back
-  </a>
+<div class="container my-5">
+  <div class="position-relative text-center mb-4">
+    <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary position-absolute start-0 top-0">&larr; Back</a>
+    <h1 class="mb-0">Daily Workout Log</h1>
+  </div>
 
-<div style="margin-bottom: 1rem;">
-  <a href="/workouts/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>">
-    ⬅️ Previous Day
-  </a>
+  <div class="d-flex justify-content-center align-items-center mb-4">
+    <a href="/workouts/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>" class="btn btn-outline-primary me-3">
+      ⬅️ Previous Day
+    </a>
 
-  <strong style="margin: 0 1rem;"><%= params.fetch("date") %></strong>
+    <strong class="fs-5"><%= params.fetch("date") %></strong>
 
-  <a href="/workouts/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>">
-    Next Day ➡️
-  </a>
+    <a href="/workouts/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>" class="btn btn-outline-primary ms-3">
+      Next Day ➡️
+    </a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Date & Time</th>
+          <th scope="col">Workout Type</th>
+          <th scope="col">Calories Burned</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @matching_workouts.each do |a_workout| %>
+          <tr>
+            <form action="/modify_workout/<%= a_workout.id %>" method="post">
+              <td>
+                <input type="datetime-local" class="form-control" name="query_date_time" value="<%= a_workout.workout_datetime.strftime('%Y-%m-%dT%H:%M') %>">
+              </td>
+              <td>
+                <input type="text" class="form-control" name="query_workout_type" value="<%= a_workout.workout_type %>">
+              </td>
+              <td>
+                <input type="text" class="form-control" name="query_calories" value="<%= a_workout.calories_burned %>">
+              </td>
+              <td>
+                <input type="text" class="form-control" name="query_rating" value="<%= a_workout.rating %>">
+              </td>
+              <td>
+                <input type="hidden" name="user_id" value="<%= a_workout.user_id %>">
+                <div class="d-flex flex-column gap-2">
+                  <button type="submit" class="btn btn-success btn-sm w-100">Save</button>
+                  <a href="/delete_workout/<%= a_workout.id %>" class="btn btn-danger btn-sm w-100">Delete</a>
+                </div>
+              </td>
+            </form>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Date and Time</th>
-      <th>Workout Type</th>
-      <th>Calories Burned</th>
-      <th>Rating</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @matching_workouts.each do |a_workout| %>
-      <tr>
-        <form action="/modify_workout/<%= a_workout.id %>" method="post">
-          <td>
-            <input type="datetime" name="query_date_time" value="<%= a_workout.workout_datetime %>">
-          </td>
-          <td>
-            <input type="text" name="query_workout_type" value="<%= a_workout.workout_type %>">
-          </td>
-          <td>
-            <input type="text" name="query_calories" value="<%= a_workout.calories_burned %>">
-          </td>
-          <td>
-            <input type="text" name="query_rating" value="<%= a_workout.rating %>">
-          </td>
-          <td>
-            <input type="hidden" name="user_id" value="<%= a_workout.user_id %>">
-            <button type="submit">Save</button>
-            <a href="/delete_workout/<%= a_workout.id %>">Delete</a>
-          </td>
-        </form>
-      </tr>
-    <% end %>
-  </tbody>
-</table>

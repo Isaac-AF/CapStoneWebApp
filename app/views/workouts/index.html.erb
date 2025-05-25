@@ -1,116 +1,68 @@
-<h1>Add an activity</h1>
+<div class="container my-5">
+  <div class="position-relative text-center mb-4">
+    <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary position-absolute start-0 top-0">&larr; Back</a>
+    <h1 class="mb-0">Add an Activity</h1>
+  </div>
 
-<p>Describe the activity you did, how long you did it for, how far (if applicable), and how hard you feel you worked.</p>
+  <p class="text-center mb-4">Describe the activity you did, how long you did it for, how far (if applicable), and how hard you feel you worked.</p>
 
-<div>
-  <form action="/process_activity" method="post" enctype="multipart/form-data">
-    <div>
-      <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Time.current %>">
-    </div>
-    <div>
-      <label for="activity_type_box">
-        Activity Type
-      </label>
-            <select name="query_activity_type" id="activity_type_box">
-            <option value="" selected disabled hidden></option>
-            <option value="Outdoor Run">Outdoor Run</option>
-            <option value="Indoor Run">Indoor Run</option>
-            <option value="Outdoor Cycle">Outdoor Cycle</option>
-            <option value="Indoor Cycle">Indoor Cycle</option>
-            <option value="Elliptical">Elliptical</option>
-            <option value="Stair Stepper">Stair Stepper</option>
-            <option value="Strength Training">Strength Training</option>
-            <option value="Hiking">Hiking</option>
-            <option value="Walking">Walking</option>
-            <option value="Pool Swim">Pool Swim</option>
-            <option value="Tennis">Tennis</option>
-            <option value="Golf (walking)">Golf (walking)</option>
-            <option value="Pickleball">Pickleball</option>
-            <option value="Basketball">Basketball</option>
-            <option value="Volleyball">Volleyball</option>
-            <option value="Badminton">Badminton</option>
-            <option value="Yoga">Yoga</option>
-            <option value="Dance">Dance</option>
-            <option value="Pilates">Pilates</option>
-            </select>
-    </div>
-    <div>
-      <label for="activity_time_box">
-        Activity Duration
-      </label>
+  <div class="container" style="max-width: 600px;">
+    <form action="/process_activity" method="post" enctype="multipart/form-data" class="border rounded p-4 shadow-sm my-4 bg-light">
+      <h4 class="mb-3">Estimate with AI</h4>
+      <input type="hidden" name="query_activity_date" value="<%= Time.current %>">
 
-      <input type="text" id="activity_time_box" name="query_activity_time">
-    </div>
-    <div>
-      <label for="description_field">Description</label>
-      <textarea id="description_field" name="description_param"></textarea>
-    </div>
-    <div>
-      <button>
-        Add Activity
-      </button>
-    </div>
-  </form>
-</div>
-
-
-<div>
-  <div>
-    <h2>
-      Add a new activity manually
-    </h2>
-    <form action="/insert_activity" method="post">
-      <div>
-        <input type="hidden" id="workout_datetime_box" name="query_activity_date" value="<%= Time.current %>">
-      </div>
-      <div>
-      <label for="activity_type_box">
-        Activity Type
-      </label>
-            <select name="query_activity_type" id="activity_type_box">
-            <option value="" selected disabled hidden></option>
-            <option value="Outdoor Run">Outdoor Run</option>
-            <option value="Indoor Run">Indoor Run</option>
-            <option value="Outdoor Cycle">Outdoor Cycle</option>
-            <option value="Indoor Cycle">Indoor Cycle</option>
-            <option value="Elliptical">Elliptical</option>
-            <option value="Stair Stepper">Stair Stepper</option>
-            <option value="Strength Training">Strength Training</option>
-            <option value="Hiking">Hiking</option>
-            <option value="Walking">Walking</option>
-            <option value="Pool Swim">Pool Swim</option>
-            <option value="Tennis">Tennis</option>
-            <option value="Golf (walking)">Golf (walking)</option>
-            <option value="Pickleball">Pickleball</option>
-            <option value="Basketball">Basketball</option>
-            <option value="Volleyball">Volleyball</option>
-            <option value="Badminton">Badminton</option>
-            <option value="Yoga">Yoga</option>
-            <option value="Dance">Dance</option>
-            <option value="Pilates">Pilates</option>
-            </select>
-      </div>
-      <div>
-      <label for="activity_time_box">
-        Activity Duration
-      </label>
-
-      <input type="text" id="activity_time_box" name="query_activity_time">
-    </div>
-      <div>
-        <label for="calories_box">
-          Calories
-        </label>
-
-        <input type="text" id="calories_box" name="query_calories">
+      <div class="mb-3">
+        <label for="activity_type_box" class="form-label">Activity Type</label>
+        <select class="form-select" name="query_activity_type" id="activity_type_box" required>
+          <option value="" selected disabled hidden>Choose...</option>
+          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates"].each do |activity| %>
+            <option value="<%= activity %>"><%= activity %></option>
+          <% end %>
+        </select>
       </div>
 
-      <div>
-      <div>
-      <button>
-        Add Activity
-      </button>
-    </div>
+      <div class="mb-3">
+        <label for="activity_time_box" class="form-label">Activity Duration</label>
+        <input type="text" class="form-control" id="activity_time_box" name="query_activity_time">
+      </div>
+
+      <div class="mb-3">
+        <label for="description_field" class="form-label">Description</label>
+        <textarea class="form-control" id="description_field" name="description_param" rows="3"></textarea>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Add Activity</button>
+      </div>
+    </form>
+
+    <form action="/insert_activity" method="post" class="border rounded p-4 shadow-sm my-4 bg-light">
+      <input type="hidden" name="query_activity_date" value="<%= Time.current %>">
+      <h4 class="mb-3">Add Manually</h4>
+
+      <div class="mb-3">
+        <label for="manual_activity_type" class="form-label">Activity Type</label>
+        <select class="form-select" name="query_activity_type" id="manual_activity_type" required>
+          <option value="" selected disabled hidden>Choose...</option>
+          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates"].each do |activity| %>
+            <option value="<%= activity %>"><%= activity %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="manual_duration" class="form-label">Activity Duration</label>
+        <input type="text" class="form-control" id="manual_duration" name="query_activity_time">
+      </div>
+
+      <div class="mb-3">
+        <label for="calories_box" class="form-label">Calories</label>
+        <input type="text" class="form-control" id="calories_box" name="query_calories">
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Add Activity</button>
+      </div>
     </form>
   </div>
 </div>

@@ -1,126 +1,101 @@
-<h1>Add a meal</h1>
+<div class="container my-5">
 
-<p>Send us an image and/or a description of a meal and we'll ask AI to estimate how many calories and macronutrients it contains.</p>
-<p>You can also send pictures of barcodes, recipes or menu items (just make sure you include in the description about how much you ate).</p>
+<div class="position-relative text-center mb-4">
+  <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary position-absolute start-0">&larr; Back</a>
+  <h1 class="mb-0">Add a Meal</h1>
+</div>
+  
+  <p class="lead text-center">Send us an image and/or a description of a meal and we'll ask AI to estimate its calories and macronutrients.</p>
+  <p class="text-center">You can also send pictures of barcodes, recipes or menu items—just make sure you include how much you ate in the description.</p>
 
-<div>
-  <form action="/process_meal" method="post" enctype="multipart/form-data">
-    <div>
-      <label for="food_name_box">
-        Food Name
-      </label>
+  <!-- AI Estimation Form -->
+  <form action="/process_meal" method="post" enctype="multipart/form-data" class="border rounded p-4 shadow-sm my-4 bg-light">
+    <h4 class="mb-3">Estimate with AI</h4>
 
-      <input type="text" id="food_name_box" name="query_food_name">
+    <div class="mb-3">
+      <label for="food_name_box" class="form-label">Food Name</label>
+      <input type="text" id="food_name_box" name="query_food_name" class="form-control">
     </div>
-        <div>
-      <label for="meal_type_box">
-        Meal Type
-      </label>
 
-      <select name="query_meal_type" id="meal_type_box">
-        <option value="" selected disabled hidden></option>
+    <div class="mb-3">
+      <label for="meal_type_box" class="form-label">Meal Type</label>
+      <select name="query_meal_type" id="meal_type_box" class="form-select">
+        <option value="" selected disabled hidden>Select a meal type</option>
         <option value="Breakfast">Breakfast</option>
         <option value="Lunch">Lunch</option>
         <option value="Dinner">Dinner</option>
         <option value="Snack">Snack</option>
       </select>
     </div>
-    <div>
-      <label for="image_field">Images</label>
-      <input type="file" id="image_field" name="image_param[]" multiple>
+
+    <div class="mb-3">
+      <label for="image_field" class="form-label">Upload Images</label>
+      <input type="file" id="image_field" name="image_param[]" multiple class="form-control">
     </div>
 
-    <div>
-      <label for="description_field">Description</label>
-      <textarea id="description_field" name="description_param"></textarea>
+    <div class="mb-3">
+      <label for="description_field" class="form-label">Description</label>
+      <textarea id="description_field" name="description_param" class="form-control" rows="3"></textarea>
     </div>
 
-    <div>
-      <button>
-        Estimate!
-      </button>
+    <div class="text-end">
+      <button class="btn btn-primary">Estimate!</button>
     </div>
   </form>
-</div>
 
+  <!-- Manual Entry Form -->
+  <form action="/insert_meal" method="post" class="border rounded p-4 shadow-sm bg-light">
+    <h4 class="mb-3">Add a New Meal Manually</h4>
 
-<div>
-  <div>
-    <h2>
-      Add a new meal manually
-    </h2>
+    <input type="hidden" id="date_consumed_box" name="query_date_consumed" value="<%= Date.current %>">
 
-    <form action="/insert_meal" method="post">
-      <div>
-        <input type="hidden" id="date_consumed_box" name="query_date_consumed" value="<%= Date.current %>">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="food_name_box" class="form-label">Food Name</label>
+        <input type="text" id="food_name_box" name="query_food_name" class="form-control">
       </div>
 
-      <div>
-        <label for="food_name_box">
-          Food Name
-        </label>
-
-        <input type="text" id="food_name_box" name="query_food_name">
-      </div>
-      <div>
-      <label for="meal_type_box">
-        Meal Type
-      </label>
-            <select name="query_meal_type" id="meal_type_box">
-              <option value="" selected disabled hidden></option>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Lunch">Lunch</option>
-              <option value="Dinner">Dinner</option>
-              <option value="Snack">Snack</option>
-            </select>
-      </div>
-      <div>
-        <label for="calories_box">
-          Calories
-        </label>
-
-        <input type="text" id="calories_box" name="query_calories">
+      <div class="col-md-6">
+        <label for="meal_type_box" class="form-label">Meal Type</label>
+        <select name="query_meal_type" id="meal_type_box" class="form-select">
+          <option value="" selected disabled hidden>Select a meal type</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+          <option value="Snack">Snack</option>
+        </select>
       </div>
 
-      <div>
-        <label for="protein_box">
-          Protein
-        </label>
-
-        <input type="text" id="protein_box" name="query_protein">
+      <div class="col-md-4">
+        <label for="calories_box" class="form-label">Calories</label>
+        <input type="text" id="calories_box" name="query_calories" class="form-control">
       </div>
 
-      <div>
-        <label for="fats_box">
-          Fats
-        </label>
-
-        <input type="text" id="fats_box" name="query_fats">
+      <div class="col-md-4">
+        <label for="protein_box" class="form-label">Protein (g)</label>
+        <input type="text" id="protein_box" name="query_protein" class="form-control">
       </div>
 
-      <div>
-        <label for="carbs_box">
-          Carbs
-        </label>
-
-        <input type="text" id="carbs_box" name="query_carbs">
+      <div class="col-md-4">
+        <label for="fats_box" class="form-label">Fats (g)</label>
+        <input type="text" id="fats_box" name="query_fats" class="form-control">
       </div>
 
-      <div>
-        <label for="fiber_box">
-          Fiber
-        </label>
-
-        <input type="text" id="fiber_box" name="query_fiber">
+      <div class="col-md-6">
+        <label for="carbs_box" class="form-label">Carbs (g)</label>
+        <input type="text" id="carbs_box" name="query_carbs" class="form-control">
       </div>
 
-      <div>
-        <input type="hidden" id="user_id_box" name="query_user_id" value = <%= current_user.id %>>
+      <div class="col-md-6">
+        <label for="fiber_box" class="form-label">Fiber (g)</label>
+        <input type="text" id="fiber_box" name="query_fiber" class="form-control">
       </div>
+    </div>
 
-      <button>
-        Create meal
-      </button>
-    </form>
-  </div>
+    <input type="hidden" id="user_id_box" name="query_user_id" value="<%= current_user.id %>">
+
+    <div class="text-end mt-4">
+      <button class="btn btn-success">Create Meal</button>
+    </div>
+  </form>
 </div>
