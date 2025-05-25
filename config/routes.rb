@@ -105,5 +105,6 @@ Rails.application.routes.draw do
 
   # UPDATE
   post("/day_recommend", { :controller => "users", :action => "recommend" })
+  post("/week_rating", { :controller => "users", :action => "rate" })
   
 end

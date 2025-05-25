@@ -1,3 +1,12 @@
+<% if params[:rec_key].present? %>
+  <% recommendation = Rails.cache.read(params[:rec_key]) %>
+  <% if recommendation.present? %>
+    <div class="alert alert-info">
+      <%= simple_format(recommendation) %>
+    </div>
+  <% end %>
+<% end %>
+
 
 <form action="/meals">
     <input type="submit" value="Log Food" />
