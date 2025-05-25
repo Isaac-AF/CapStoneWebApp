@@ -1,4 +1,40 @@
 <div class="container mt-3">
+
+  <!-- Display pop-up showing Target macros if this is the user's first time logging in -->
+  <% if Time.current - current_user.created_at < 1.minute %>
+    <div class="modal fade" id="macrosModal" tabindex="-1" aria-labelledby="macrosModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header flex-column align-items-start">
+            <h4 class="modal-title" id="macrosModalLabel">Welcome, <%= current_user.name %>!</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h5>Your Target Macros Are:</h5>
+            <ul>
+              <li>Calories: <%= current_user.target_calories %> kcal</li>
+              <li>Protein: <%= current_user.target_protein %> g</li>
+              <li>Carbs: <%= current_user.target_carbs %> g</li>
+              <li>Fats: <%= current_user.target_fat %> g</li>
+              <li>Fiber: <%= current_user.target_fiber %> g</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var macrosModal = new bootstrap.Modal(document.getElementById('macrosModal'));
+        macrosModal.show();
+      });
+    </script>
+  <% end %>
+
+  <!-- Display OpenAI recommendation in a pop-up if present, have to use cache due to size of output -->
   <% if params[:rec_key].present? %>
     <% recommendation = Rails.cache.read(params[:rec_key]) %>
     <% if recommendation.present? %>
@@ -29,12 +65,12 @@
 
 <div class="position-relative mb-3">
 
-  <!-- Logout button absolutely positioned top-right -->
+  <!-- Logout button -->
   <div class="position-absolute top-0 end-0">
     <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
   </div>
 
-  <!-- Centered buttons -->
+  <!-- Navigation buttons -->
   <div class="text-center">
     <div class="btn-group gap-2" role="group">
       <form action="/meals" class="d-inline">
@@ -63,7 +99,7 @@
   <% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
   <% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
 
-
+  <!-- Display Targets and Amount Left -->
   <div class="row justify-content-center">
     <div class="col-md-5">
       <h2>Daily Nutrition Targets</h2>
@@ -92,6 +128,7 @@
   <% grouped_meals = today_meals.group_by(&:meal_type) %>
   <% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
 
+  <!-- Display meals from current day -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Meals</h2>
     <form action="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
@@ -120,6 +157,7 @@
 
   <hr class="my-4">
 
+  <!-- Display activity from current day -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Activity</h2>
     <form action="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
@@ -145,6 +183,7 @@
     <h1>Past Week Summary</h1>
   </div>
 
+  <!-- Display meals from past week (excluding today) -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Macros</h2>
     <form action="/week_nutrition_rating" method="post">
@@ -190,6 +229,7 @@
     </tbody>
   </table>
 
+  <!-- Display activity from past week (excluding today) -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Activity</h2>
     <form action="/week_activity_rating" method="post">
