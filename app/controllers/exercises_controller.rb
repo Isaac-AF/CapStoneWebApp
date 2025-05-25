@@ -8,7 +8,7 @@ class ExercisesController < ApplicationController
   end
 
   def show
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("exercise_id")
 
     matching_exercises = Exercise.where({ :id => the_id })
 
@@ -23,17 +23,18 @@ class ExercisesController < ApplicationController
     the_exercise.primary_muscle = params.fetch("query_primary_muscle")
     the_exercise.secondary_muscle = params.fetch("query_secondary_muscle")
     the_exercise.tertiary_muscle = params.fetch("query_tertiary_muscle")
+    the_exercise.user_id = current_user.id
 
     if the_exercise.valid?
       the_exercise.save
-      redirect_to("/exercises/#{params.fetch("workout_id")}", { :notice => "Exercise created successfully." })
+      redirect_to("/exercises", { :notice => "Exercise created successfully." })
     else
-      redirect_to("/exercises/#{params.fetch("workout_id")}", { :alert => the_exercise.errors.full_messages.to_sentence })
+      redirect_to("/exercises", { :alert => the_exercise.errors.full_messages.to_sentence })
     end
   end
 
   def update
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("exercise_id")
     the_exercise = Exercise.where({ :id => the_id }).at(0)
 
     the_exercise.exercise_name = params.fetch("query_exercise_name")
@@ -50,7 +51,7 @@ class ExercisesController < ApplicationController
   end
 
   def destroy
-    the_id = params.fetch("path_id")
+    the_id = params.fetch("exercise_id")
     the_exercise = Exercise.where({ :id => the_id }).at(0)
 
     the_exercise.destroy

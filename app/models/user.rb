@@ -41,6 +41,7 @@ class User < ApplicationRecord
 
   has_many  :meals, class_name: "Meal", foreign_key: "user_id", dependent: :destroy
   has_many  :workouts, class_name: "Workout", foreign_key: "user_id", dependent: :destroy
+  has_many  :exercises, class_name: "Exercise", foreign_key: "user_id", dependent: :destroy
 
   has_many :workout_sets, through: :workouts, source: :workout_sets
   has_many :workout_reps, through: :workout_sets, source: :workout_reps

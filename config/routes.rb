@@ -29,16 +29,16 @@ Rails.application.routes.draw do
   post("/insert_exercise", { :controller => "exercises", :action => "create" })
           
   # READ
-  get("/exercises/", { :controller => "exercises", :action => "index" })
+  get("/exercises", { :controller => "exercises", :action => "index" })
   
   get("/exercises/:exercise_id", { :controller => "exercises", :action => "show" })
   
   # UPDATE
   
-  post("/modify_exercise/:path_id", { :controller => "exercises", :action => "update" })
+  post("/modify_exercise/:exercise_id", { :controller => "exercises", :action => "update" })
   
   # DELETE
-  get("/delete_exercise/:path_id", { :controller => "exercises", :action => "destroy" })
+  post("/delete_exercise/:exercise_id", { :controller => "exercises", :action => "destroy" })
 
   #------------------------------
 
