@@ -6,8 +6,11 @@ class WorkoutsController < ApplicationController
   def show
     user_id = params.fetch("user_id")
     date = Date.parse(params.fetch("date"))
+    
+    start_of_day = date.beginning_of_day
+    end_of_day = date.end_of_day
 
-    @matching_workouts = Workout.where(user_id: user_id).where("DATE(workout_datetime) = ?", date)
+    @matching_workouts = Workout.where(user_id: user_id).where(workout_datetime: start_of_day..end_of_day)
 
     render({ template: "workouts/show" })
   end
@@ -214,4 +217,13 @@ def finish
       redirect_to "/workouts"
     end
   end
+
+  def delete_if_empty_and_back
+    workout_id = params.fetch("workout_id")
+    workout = Workout.find_by(id: workout_id)
+
+    workout.destroy
+
+    redirect_to "/users/#{current_user.id}"
+  end 
 end

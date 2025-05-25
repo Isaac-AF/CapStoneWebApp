@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   # DELETE
   get("/delete_workout/:workout_id", { :controller => "workouts", :action => "destroy" })
 
+  # Navigation
+  post("/delete_if_empty_and_back", { :controller => "workouts", :action => "delete_if_empty_and_back" })
+
   #------------------------------
 
   # Routes for the Meal resource:

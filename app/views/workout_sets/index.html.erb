@@ -1,3 +1,14 @@
+<% if @list_of_workout_sets.empty? %>
+  <form action="/delete_if_empty_and_back" method="post">
+    <input type="hidden" name="workout_id" value="<%= params.fetch("workout_id") %>">
+    <input type="submit" value="Go back">
+  </form>
+<% else %>
+  <div>
+    <a href="/users/<%= current_user.id %>">Go back</a>
+  </div>
+<% end %>
+
 <form action="/finish_workout" method="post">
     <input type="hidden" name="query_workout_id" value="<%= params.fetch("workout_id") %>">
     <input type="submit" value="Finish Workout" />
