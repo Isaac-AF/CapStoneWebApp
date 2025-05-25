@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     redirect_to("/users/#{current_user.id}?rec_key=#{key}")
   end
 
-  def rate
+  def rate_nutrition
     chat = OpenAI::Chat.new
     chat.model = 'o3'
     chat.system("You are an expert nutritionist. Given a list of meals a user has eaten over the past week and their personal goals, give some encouragement for what they're doing well, and provide some recommendations for how they can improve.")
@@ -91,6 +91,56 @@ class UsersController < ApplicationController
     end.join("\n")
 
     chat.user("Here is a log of the user's meals from the past week: #{formatted_data}")
+
+    chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their height is #{current_user.height} inches, their weight is #{current_user.weight} pounds, their sex is #{current_user.sex}, their birthday is #{current_user.birthday}, and their self-described activity level is #{current_user.activity_level}. Their daily nutrition targets are #{current_user.target_calories} kcal calories, #{current_user.target_protein} g protein, #{current_user.target_carbs} g carbohydrates, #{current_user.target_fat} g fats, and #{current_user.target_fiber} g fiber.")
+
+    result = chat.assistant!
+
+    recommendation = result.fetch("recommendation")
+
+    key = "rec_#{current_user.id}_#{SecureRandom.hex(4)}"
+    Rails.cache.write(key, recommendation, expires_in: 15.minutes)
+
+    redirect_to("/users/#{current_user.id}?rec_key=#{key}")
+  end
+
+def rate_activity
+    chat = OpenAI::Chat.new
+    chat.model = 'o3'
+    chat.system("You are an expert personal trainer. Given a list of activities a user has completed over the past week and specifics of their workouts, give some encouragement for what they're doing well, and provide some recommendations for how they can improve. For strength training workouts, recommend changes to the workouts themselves (such as different exercises) if needed.")
+    chat.schema = '{
+      "name": "activity_recommend",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "recommendation": {
+            "type": "string",
+            "description": "Recommend how user can improve workouts to meet their goals."
+          }
+        },
+        "required": [
+          "recommendation"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }'
+
+    activities = Workout.where(user_id: current_user.id, workout_datetime: 8.days.ago.beginning_of_day..1.day.ago.end_of_day)
+
+    formatted_data = activities.map do |set|
+      "Date and time of activity: #{set.workout_datetime}, Type of activity: #{set.workout_type}, Estimated Calories Burned: #{set.calories_burned} kcal"
+    end.join("\n")
+
+    chat.user("Here is a log of the user's activity from the past week: #{formatted_data}")
+
+    workout_sets = WorkoutSet.joins(:workout).where(workouts:{ user_id: current_user.id}).where(created_at: 8.days.ago.beginning_of_day..1.day.ago.end_of_day)
+
+    formatted_data = workout_sets.map do |set|
+      "Date and time of workout set: #{set.created_at}, Exercise Name: #{set.exercise.exercise_name}, Number of reps: #{set.workout_reps_count}, Weight: #{set.weight} lbs."
+    end.join("\n")
+
+    chat.user("Here is a log of the user's workout sets from the past week: #{formatted_data}")
 
     chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their height is #{current_user.height} inches, their weight is #{current_user.weight} pounds, their sex is #{current_user.sex}, their birthday is #{current_user.birthday}, and their self-described activity level is #{current_user.activity_level}. Their daily nutrition targets are #{current_user.target_calories} kcal calories, #{current_user.target_protein} g protein, #{current_user.target_carbs} g carbohydrates, #{current_user.target_fat} g fats, and #{current_user.target_fiber} g fiber.")
 

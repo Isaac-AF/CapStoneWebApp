@@ -24,10 +24,6 @@
     <input type="submit" value="Recommend Rest of Day" />
 </form>
 
-<form action="/week_rating" method="post">
-    <input type="submit" value="Review Past Week" />
-</form>
-
 <h1><%= Date.current.strftime("%B %e, %Y") %></h1>
 
 <% user = current_user %>
@@ -103,6 +99,9 @@
 
 <h1>Past Week Summary</h1>
 <h2>Macros</h2>
+<form action="/week_nutrition_rating" method="post">
+    <input type="submit" value="Review Past Week" />
+</form>
 <% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
 
 <table border="1">
@@ -142,11 +141,13 @@
 </table>
 
 <h2>Activity</h2>
+<form action="/week_activity_rating" method="post">
+    <input type="submit" value="Review Past Week" />
+</form>
 
 <% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
   .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
 
-<hr>
 <div>
   <div>
     <table border="1">

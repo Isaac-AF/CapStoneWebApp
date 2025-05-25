@@ -10,7 +10,7 @@ class WorkoutsController < ApplicationController
     start_of_day = date.beginning_of_day
     end_of_day = date.end_of_day
 
-    @matching_workouts = Workout.where(user_id: user_id).where(workout_datetime: start_of_day..end_of_day)
+    @matching_workouts = Workout.where(user_id: user_id).where(workout_datetime: start_of_day..end_of_day).order(:workout_datetime)
 
     render({ template: "workouts/show" })
   end
