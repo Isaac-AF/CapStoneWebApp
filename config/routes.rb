@@ -102,5 +102,8 @@ Rails.application.routes.draw do
 
   # CREATE
   post("/insert_user", { :controller => "users", :action => "create" })
+
+  # UPDATE
+  post("/day_recommend", { :controller => "users", :action => "recommend" })
   
 end

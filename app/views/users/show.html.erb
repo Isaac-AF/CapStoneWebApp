@@ -1,4 +1,24 @@
 
+<form action="/meals">
+    <input type="submit" value="Log Food" />
+</form>
+
+<form action="/workouts">
+    <input type="submit" value="Log Activity" />
+</form>
+
+<form action="/new_workout" method="post">
+    <input type="submit" value="New Gym Workout" />
+</form>
+
+<form action="/day_recommend" method="post">
+    <input type="submit" value="Recommend Rest of Day" />
+</form>
+
+<form action="/week_rating" method="post">
+    <input type="submit" value="Review Past Week" />
+</form>
+
 <h1><%= Date.current.strftime("%B %e, %Y") %></h1>
 
 <% user = current_user %>
@@ -42,7 +62,7 @@
       <% meals.each do |meal| %>
         <li>
           <strong><%= meal.food_name.titleize %></strong>
-          Calories: <%= meal.calories %> kcal,
+          Calories: <%= meal.calories %>kcal,
           Protein: <%= meal.protein %>g,
           Carbs: <%= meal.carbs %>g,
           Fat: <%= meal.fats %>g,
@@ -72,23 +92,6 @@
 
 <hr>
 
-<form action="/meals">
-    <input type="submit" value="Log Food" />
-</form>
-
-<form action="/workouts">
-    <input type="submit" value="Log Activity" />
-</form>
-
-<form action="/new_workout" method="post">
-    <input type="submit" value="New Gym Workout" />
-</form>
-
-<hr>
-<button>Recommend for the rest of the day</button>
-<button>Rate my past week</button>
-
-
 <h1>Past Week Summary</h1>
 <h2>Macros</h2>
 <% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
@@ -97,7 +100,7 @@
   <thead>
     <tr>
       <th>Date</th>
-      <th>Total Calories</th>
+      <th>Total Calories (kcal)</th>
       <th>Total Protein (g)</th>
       <th>Total Fats (g)</th>
       <th>Total Carbs (g)</th>
@@ -131,11 +134,8 @@
 
 <h2>Activity</h2>
 
-
-
 <% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
   .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
-
 
 <hr>
 <div>
@@ -157,7 +157,7 @@
           &.first%>
 
         <tr>
-          <td><%= date %></td>
+          <td><%= date.strftime("%B %e, %Y") %></td>
           <td><%= workout_type_by_calories %></td>
           <td><%= number_with_precision(total_calories, precision: 2) %></td>
           <td>
