@@ -33,6 +33,84 @@ class ExercisesController < ApplicationController
     end
   end
 
+def ai_process
+  the_name = params.fetch("query_exercise_name")
+  the_image = params.fetch("image_param")
+  the_description = params.fetch("description_param")
+  
+  chat = OpenAI::Chat.new
+    chat.model = 'o3'
+    chat.system("You are an expert personal trainer. Your job is to determine the common name and muscles worked of an exercise given a description and images from the user. Provide primary, secondary, and tertiary muscle groups worked. If no secondary or tertiary muscle groups are relevant for a given exercise, return a blank value.")
+    chat.schema = '{
+      "name": "exercise_info",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name exercise is commonly referred to."
+          },
+            "primary_muscle_group": {
+            "type": "string",
+            "description": "Primary muscle group the exercise works."
+          },
+            "secondary_muscle_group": {
+            "type": "string",
+            "description": "Secondary muscle group the exercise works, if applicable."
+          },
+            "tertiary_muscle_group": {
+            "type": "string",
+            "description": "Tertiary muscle group the exercise works, if applicable."
+          },
+        },
+        "required": [
+          "name",
+          "primary_muscle_group",
+          "secondary_muscle_group",
+          "tertiary_muscle_group"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }'
+
+    chat.user("Here is what the user called the exercise: #{the_name}")
+
+    # Add images to content
+    if the_image.present?
+      chat.user("Here's an image of the equipment used:", image: the_image)
+    end
+
+    # Add description text
+    if the_description.present?
+      chat.user("Here's a description of the exercise: #{the_description}")
+    end
+
+    result = chat.assistant!
+
+    the_exercise = Exercise.new
+    the_exercise.exercise_name = result.fetch("name")
+    the_exercise.primary_muscle = result.fetch("primary_muscle_group")
+    the_exercise.secondary_muscle = result.fetch("secondary_muscle_group")
+    the_exercise.tertiary_muscle = result.fetch("tertiary_muscle_group")
+    the_exercise.user_id = current_user.id
+
+    if the_exercise.valid?
+          if the_exercise.valid?.save
+      redirect_to("/exercises", { :notice => "Exercise created successfully." })
+    else
+      redirect_to("/exercises", { :alert => the_exercise.errors.full_messages.to_sentence })
+    end
+  end
+
+    the_workout.calories_burned = result.fetch("calories")
+    the_workout.rating = result.fetch("rating")
+
+    the_workout.save
+
+    redirect_to("/users/#{current_user.id}", { :notice => "Workout completed successfully." })
+  end
+
   def update
     the_id = params.fetch("exercise_id")
     the_exercise = Exercise.where({ :id => the_id }).at(0)

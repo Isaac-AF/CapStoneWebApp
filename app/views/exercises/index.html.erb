@@ -6,7 +6,7 @@
 
 <p>Send us an image and/or a description of an exercise or machine and we'll determine what muscles the exercise works.</p>
 
-    <form action="/insert_exercise" method="post">
+    <form action="/process_exercise" method="post">
     <input type="hidden" name="user_id" value="<%= current_user.id%>">
       <div>
         <label for="exercise_name_box">
@@ -96,24 +96,28 @@
 
       <% @list_of_exercises.each do |an_exercise| %>
         <tr>
-          <td><%= an_exercise.exercise_name %></td>
-          <td><%= an_exercise.primary_muscle %></td>
-          <td><%= an_exercise.secondary_muscle %></td>
-          <td><%= an_exercise.tertiary_muscle %></td>
+        <% if an_exercise.user_id == 0 || an_exercise.user_id == current_user.id %>
+            <td><%= an_exercise.exercise_name %></td>
+            <td><%= an_exercise.primary_muscle %></td>
+            <td><%= an_exercise.secondary_muscle %></td>
+            <td><%= an_exercise.tertiary_muscle %></td>
 
-          <td>
-            <form action="/exercises/<%= an_exercise.id %>" method="get">
-              <button type="submit">Edit</button>
-            </form>
-          </td>
-
-          <% if an_exercise.user_id == 0 || an_exercise.user_id == current_user.id %>
             <td>
-              <form action="/delete_exercise/<%= an_exercise.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this exercise?');">
-                <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
-                <button type="submit">Delete</button>
+              <form action="/exercises/<%= an_exercise.id %>" method="get">
+                <button type="submit">Edit</button>
               </form>
             </td>
+
+            <% if an_exercise.user_id == current_user.id %>
+              <td>
+                <form action="/delete_exercise/<%= an_exercise.id %>" method="post" onsubmit="return confirm('Are you sure you want to delete this exercise?');">
+                  <input type="hidden" name="exercise_id" value="<%= an_exercise.id %>">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            <% else %>
+              <td></td>
+            <% end %>
           <% else %>
             <td></td>
           <% end %>

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
   # CREATE
   post("/insert_exercise", { :controller => "exercises", :action => "create" })
+  post("/process_exercise", { :controller => "exercises", :action => "ai_process" })
           
   # READ
   get("/exercises", { :controller => "exercises", :action => "index" })

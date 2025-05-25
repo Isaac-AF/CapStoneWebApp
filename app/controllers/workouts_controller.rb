@@ -122,7 +122,7 @@ class WorkoutsController < ApplicationController
       new_activity.save
       redirect_to("/users/#{current_user.id}", { :notice => "Workout created successfully." })
     else
-      redirect_to("/workouts", { :alert => the_meal.errors.full_messages.to_sentence })
+      redirect_to("/workouts", { :alert => new_activity.errors.full_messages.to_sentence })
     end
   end
 
