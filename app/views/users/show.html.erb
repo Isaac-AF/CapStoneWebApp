@@ -1,182 +1,218 @@
-<% if params[:rec_key].present? %>
-  <% recommendation = Rails.cache.read(params[:rec_key]) %>
-  <% if recommendation.present? %>
-    <div class="alert alert-info">
-      <%= simple_format(recommendation) %>
-    </div>
-  <% end %>
-<% end %>
+<div class="container mt-2">
+  <% if params[:rec_key].present? %>
+    <% recommendation = Rails.cache.read(params[:rec_key]) %>
+    <% if recommendation.present? %>
+      <!-- Modal Trigger -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          var recModal = new bootstrap.Modal(document.getElementById('recommendationModal'));
+          recModal.show();
+        });
+      </script>
 
-
-<form action="/meals">
-    <input type="submit" value="Log Food" />
-</form>
-
-<form action="/workouts">
-    <input type="submit" value="Log Activity" />
-</form>
-
-<form action="/new_workout" method="post">
-    <input type="submit" value="New Gym Workout" />
-</form>
-
-<form action="/day_recommend" method="post">
-    <input type="submit" value="Recommend Rest of Day" />
-</form>
-
-<h1><%= Date.current.strftime("%B %e, %Y") %></h1>
-
-<% user = current_user %>
-
-<h2>Daily Nutrition Targets</h2>
-<ul>
-  <li>Calories: <%= user.target_calories %> kcal</li>
-  <li>Protein: <%= user.target_protein %> g</li>
-  <li>Carbohydrates: <%= user.target_carbs %> g</li>
-  <li>Fats: <%= user.target_fat %> g</li>
-  <li>Fiber: <%= user.target_fiber %> g</li>
-</ul>
-
-<% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
-
-<% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
-
-<h2>Today's Macros</h2>
-<ul>
-  <li>Calories Left: <%= (user.target_calories-totals[:calories]).to_i %> kcal</li>
-  <li>Protein Left: <%= (user.target_protein-totals[:protein]).to_i %> g</li>
-  <li>Carbs Left: <%= (user.target_carbs-totals[:carbs]).to_i %> g</li>
-  <li>Fats Left: <%= (user.target_fat-totals[:fats]).to_i %> g</li>
-  <li>Fiber Left: <%= (user.target_fiber-totals[:fiber]).to_i %> g</li>
-</ul>
-
-<hr>
-
-<% grouped_meals = today_meals.group_by(&:meal_type) %>
-<% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
-
-<h2>Today's Meals</h2>
-  <td>
-    <a href="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Meals</a>
-  </td>
-<% desired_order.each do |type| %>
-  <% meals = grouped_meals[type] %>
-  <% if meals.present? %>
-    <h3><%= type.capitalize %></h3>
-    <ul>
-      <% meals.each do |meal| %>
-        <li>
-          <strong><%= meal.food_name.titleize %></strong>
-          Calories: <%= meal.calories %>kcal,
-          Protein: <%= meal.protein %>g,
-          Carbs: <%= meal.carbs %>g,
-          Fat: <%= meal.fats %>g,
-          Fiber: <%= meal.fiber %>g
-          <strong> <br> Rating: <%= meal.rating %></strong>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
-<% end %>
-
-<hr>
-
-<h2>Today's Activity</h2>
-  <td>
-    <a href="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
-  </td>
-
-<% today_workouts = current_user.workouts.where(workout_datetime: Date.current.all_day) %>
-  <% if today_workouts.present? %>
-      <% today_workouts.each do |workout| %>
-        <h3><%= workout.workout_type.capitalize %></h3>
-          Calories: <%= workout.calories_burned %> kcal,
-          Rating: <%= workout.rating %>
-      <% end %>
-  <% end %>
-
-<hr>
-
-<h1>Past Week Summary</h1>
-<h2>Macros</h2>
-<form action="/week_nutrition_rating" method="post">
-    <input type="submit" value="Review Past Week" />
-</form>
-<% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
-
-<table border="1">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Total Calories (kcal)</th>
-      <th>Total Protein (g)</th>
-      <th>Total Fats (g)</th>
-      <th>Total Carbs (g)</th>
-      <th>Total Fiber (g)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% grouped_meals.sort_by { |date, _| -date.to_time.to_i }.each do |date, meals| %>
-      <% daily_totals = {
-        calories: meals.sum(&:calories),
-        protein:  meals.sum(&:protein),
-        fats:     meals.sum(&:fats),
-        carbs:    meals.sum(&:carbs),
-        fiber:    meals.sum(&:fiber)
-      } %>
-
-      <tr>
-        <td><%= date.strftime("%B %e, %Y") %></td>
-        <td><%= daily_totals[:calories] %></td>
-        <td><%= daily_totals[:protein] %></td>
-        <td><%= daily_totals[:fats] %></td>
-        <td><%= daily_totals[:carbs] %></td>
-        <td><%= daily_totals[:fiber] %></td>
-        <td>
-          <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
-        </td>
-      </tr>
+      <!-- Modal HTML -->
+      <div class="modal fade" id="recommendationModal" tabindex="-1" aria-labelledby="recommendationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+              <h5 class="modal-title" id="recommendationModalLabel">Today's Recommendation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <%= simple_format(recommendation) %>
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
 
-<h2>Activity</h2>
-<form action="/week_activity_rating" method="post">
-    <input type="submit" value="Review Past Week" />
-</form>
+<div class="text-center mb-3">
+  <div class="btn-group mb-3 gap-2" role="group">
+    <form action="/meals" class="d-inline">
+      <button class="btn btn-primary mb-2" type="submit">Log Food</button>
+    </form>
 
-<% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
-  .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
+    <form action="/workouts" class="d-inline">
+      <button class="btn btn-primary mb-2" type="submit">Log Activity</button>
+    </form>
 
-<div>
-  <div>
-    <table border="1">
+    <form action="/new_workout" method="post" class="d-inline">
+      <button class="btn btn-primary mb-2" type="submit">New Gym Workout</button>
+    </form>
+
+    <form action="/day_recommend" method="post" class="d-inline">
+      <button class="btn btn-primary mb-2" type="submit">Recommend Rest of Day</button>
+    </form>
+  </div>
+  
+  <h1 class="mb-4"><%= Date.current.strftime("%B %e, %Y") %></h1>
+
+  <% user = current_user %>
+  <% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
+  <% totals = {calories: today_meals.sum(:calories), protein: today_meals.sum(:protein), carbs: today_meals.sum(:carbs), fats: today_meals.sum(:fats), fiber: today_meals.sum(:fiber)} %>
+
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <h2>Daily Nutrition Targets</h2>
+      <ul class="list-unstyled">
+        <li>Calories: <%= user.target_calories %> kcal</li>
+        <li>Protein: <%= user.target_protein %> g</li>
+        <li>Carbs: <%= user.target_carbs %> g</li>
+        <li>Fats: <%= user.target_fat %> g</li>
+        <li>Fiber: <%= user.target_fiber %> g</li>
+      </ul>
+    </div>
+    <div class="col-md-5">
+      <h2>Today's Macros</h2>
+      <ul class="list-unstyled">
+        <li>Calories Left: <%= user.target_calories - totals[:calories] %> kcal</li>
+        <li>Protein Left: <%= user.target_protein - totals[:protein] %> g</li>
+        <li>Carbs Left: <%= user.target_carbs - totals[:carbs] %> g</li>
+        <li>Fats Left: <%= user.target_fat - totals[:fats] %> g</li>
+        <li>Fiber Left: <%= user.target_fiber - totals[:fiber] %> g</li>
+      </ul>
+    </div>
+  </div>
+</div>
+  <hr class="my-4">
+
+  <% grouped_meals = today_meals.group_by(&:meal_type) %>
+  <% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Today's Meals</h2>
+    <form action="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
+      <button class="btn btn-primary" type="submit">Edit Meals</button>
+    </form>
+  </div>
+  <% desired_order.each do |type| %>
+    <% meals = grouped_meals[type] %>
+    <% if meals.present? %>
+      <h3><%= type.capitalize %></h3>
+      <ul>
+        <% meals.each do |meal| %>
+          <li>
+            <strong><%= meal.food_name.titleize %></strong>
+            Calories: <%= meal.calories %>kcal,
+            Protein: <%= meal.protein %>g,
+            Carbs: <%= meal.carbs %>g,
+            Fat: <%= meal.fats %>g,
+            Fiber: <%= meal.fiber %>g
+            <strong> <br> Rating: <%= meal.rating %></strong>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <hr class="my-4">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Today's Activity</h2>
+    <form action="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
+      <button class="btn btn-primary" type="submit">Edit Activities</button>
+    </form>
+  </div>
+
+  <% today_workouts = current_user.workouts.where(workout_datetime: Date.current.all_day) %>
+    <% if today_workouts.present? %>
+        <% today_workouts.each do |workout| %>
+          <h3><%= workout.workout_type.capitalize %></h3>
+            Calories: <%= workout.calories_burned %> kcal,
+            Rating: <%= workout.rating %>
+        <% end %>
+    <% end %>
+
+  <hr class="my-4">
+
+  <div class="text-center mb-3">
+    <h1>Past Week Summary</h1>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Macros</h2>
+    <form action="/week_nutrition_rating" method="post">
+      <button class="btn btn-primary" type="submit">Review Past Week</button>
+    </form>
+  </div>
+  <% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
+
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
       <tr>
         <th>Date</th>
-        <th>Primary Workout Type</th>
-        <th>Total Calories Burned</th>
+        <th>Total Calories (kcal)</th>
+        <th>Total Protein (g)</th>
+        <th>Total Fats (g)</th>
+        <th>Total Carbs (g)</th>
+        <th>Total Fiber (g)</th>
       </tr>
-
-      <% past_week_activity.each do |date, workouts| %>
-        <% total_calories = workouts.sum(&:calories_burned) %>
-        
-        <% workout_type_by_calories = workouts
-          .group_by(&:workout_type)
-          .transform_values { |w| w.sum(&:calories_burned) }
-          .max_by { |_, calories| calories }
-          &.first%>
+    </thead>
+    <tbody>
+      <% grouped_meals.sort_by { |date, _| -date.to_time.to_i }.each do |date, meals| %>
+        <% daily_totals = {
+          calories: meals.sum(&:calories),
+          protein:  meals.sum(&:protein),
+          fats:     meals.sum(&:fats),
+          carbs:    meals.sum(&:carbs),
+          fiber:    meals.sum(&:fiber)
+        } %>
 
         <tr>
           <td><%= date.strftime("%B %e, %Y") %></td>
-          <td><%= workout_type_by_calories %></td>
-          <td><%= number_with_precision(total_calories, precision: 2) %></td>
+          <td><%= daily_totals[:calories] %></td>
+          <td><%= daily_totals[:protein] %></td>
+          <td><%= daily_totals[:fats] %></td>
+          <td><%= daily_totals[:carbs] %></td>
+          <td><%= daily_totals[:fiber] %></td>
           <td>
-          <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
+            <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
           </td>
         </tr>
       <% end %>
-    </table>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Activity</h2>
+    <form action="/week_activity_rating" method="post">
+      <button class="btn btn-primary" type="submit">Review Past Week</button>
+    </form>
+  </div>
+
+  <% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
+    .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
+
+  <div>
+    <div>
+      <table class="table table-striped table-bordered table-hover">
+        <tr>
+          <th>Date</th>
+          <th>Primary Workout Type</th>
+          <th>Total Calories Burned</th>
+        </tr>
+
+        <% past_week_activity.each do |date, workouts| %>
+          <% total_calories = workouts.sum(&:calories_burned) %>
+          
+          <% workout_type_by_calories = workouts
+            .group_by(&:workout_type)
+            .transform_values { |w| w.sum(&:calories_burned) }
+            .max_by { |_, calories| calories }
+            &.first%>
+
+          <tr>
+            <td><%= date.strftime("%B %e, %Y") %></td>
+            <td><%= workout_type_by_calories %></td>
+            <td><%= number_with_precision(total_calories, precision: 2) %></td>
+            <td>
+            <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
   </div>
 </div>
-
-<hr>
