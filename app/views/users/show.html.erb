@@ -46,7 +46,7 @@
     </form>
   </div>
   
-  <h1 class="mb-4"><%= Date.current.strftime("%B %e, %Y") %></h1>
+  <h1 class="mb-4"><strong><%= Date.current.strftime("%B %e, %Y") %></strong></h1>
 
   <% user = current_user %>
   <% today_meals = current_user.meals.where(date_consumed: Date.current.all_day) %>
@@ -81,10 +81,10 @@
   <% grouped_meals = today_meals.group_by(&:meal_type) %>
   <% desired_order = ["Breakfast", "Lunch", "Dinner", "Snack"] %>
 
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Meals</h2>
     <form action="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
-      <button class="btn btn-primary" type="submit">Edit Meals</button>
+      <button class="btn btn-secondary" type="submit">Edit Meals</button>
     </form>
   </div>
   <% desired_order.each do |type| %>
@@ -109,10 +109,10 @@
 
   <hr class="my-4">
 
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Activity</h2>
     <form action="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
-      <button class="btn btn-primary" type="submit">Edit Activities</button>
+      <button class="btn btn-secondary" type="submit">Edit Activities</button>
     </form>
   </div>
 
@@ -120,9 +120,11 @@
     <% if today_workouts.present? %>
         <% today_workouts.each do |workout| %>
           <h4><%= workout.workout_type.capitalize %></h4>
-          <li>
-            <strong>Calories:</strong> <%= workout.calories_burned %> kcal, <strong>Rating:</strong> <%= workout.rating %>
-          </li>
+          <ul>
+            <li>
+              <strong>Calories:</strong> <%= workout.calories_burned %> kcal, <strong>Rating:</strong> <%= workout.rating %>
+            </li>
+          </ul>
         <% end %>
     <% end %>
 
@@ -132,7 +134,7 @@
     <h1>Past Week Summary</h1>
   </div>
 
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Macros</h2>
     <form action="/week_nutrition_rating" method="post">
       <button class="btn btn-primary" type="submit">Review Past Week</button>
@@ -149,6 +151,7 @@
         <th>Total Fats (g)</th>
         <th>Total Carbs (g)</th>
         <th>Total Fiber (g)</th>
+        <th>Edit</th>
       </tr>
     </thead>
     <tbody>
@@ -169,14 +172,14 @@
           <td><%= daily_totals[:carbs] %></td>
           <td><%= daily_totals[:fiber] %></td>
           <td>
-            <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>">Edit Meals</a>
+            <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">Edit Meals</a>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Activity</h2>
     <form action="/week_activity_rating" method="post">
       <button class="btn btn-primary" type="submit">Review Past Week</button>
@@ -193,6 +196,7 @@
           <th>Date</th>
           <th>Primary Workout Type</th>
           <th>Total Calories Burned</th>
+          <th>Edit</th>
         </tr>
 
         <% past_week_activity.each do |date, workouts| %>
@@ -209,7 +213,9 @@
             <td><%= workout_type_by_calories %></td>
             <td><%= number_with_precision(total_calories, precision: 2) %></td>
             <td>
-            <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>">Edit Workouts</a>
+              <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">
+                Edit Workouts
+              </a>
             </td>
           </tr>
         <% end %>
