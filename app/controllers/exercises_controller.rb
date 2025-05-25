@@ -61,7 +61,7 @@ def ai_process
             "tertiary_muscle_group": {
             "type": "string",
             "description": "Tertiary muscle group the exercise works, if applicable."
-          },
+          }
         },
         "required": [
           "name",
@@ -96,19 +96,11 @@ def ai_process
     the_exercise.user_id = current_user.id
 
     if the_exercise.valid?
-          if the_exercise.valid?.save
+      the_exercise.save
       redirect_to("/exercises", { :notice => "Exercise created successfully." })
     else
       redirect_to("/exercises", { :alert => the_exercise.errors.full_messages.to_sentence })
     end
-  end
-
-    the_workout.calories_burned = result.fetch("calories")
-    the_workout.rating = result.fetch("rating")
-
-    the_workout.save
-
-    redirect_to("/users/#{current_user.id}", { :notice => "Workout completed successfully." })
   end
 
   def update

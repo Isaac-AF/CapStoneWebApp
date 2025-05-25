@@ -6,7 +6,7 @@
 
 <p>Send us an image and/or a description of an exercise or machine and we'll determine what muscles the exercise works.</p>
 
-    <form action="/process_exercise" method="post">
+    <form action="/process_exercise" method="post" enctype="multipart/form-data">
     <input type="hidden" name="user_id" value="<%= current_user.id%>">
       <div>
         <label for="exercise_name_box">
