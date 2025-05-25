@@ -90,7 +90,7 @@
   <% desired_order.each do |type| %>
     <% meals = grouped_meals[type] %>
     <% if meals.present? %>
-      <h3><%= type.capitalize %></h3>
+      <h4><%= type.capitalize %></h4>
       <ul>
         <% meals.each do |meal| %>
           <li>
@@ -119,9 +119,10 @@
   <% today_workouts = current_user.workouts.where(workout_datetime: Date.current.all_day) %>
     <% if today_workouts.present? %>
         <% today_workouts.each do |workout| %>
-          <h3><%= workout.workout_type.capitalize %></h3>
-            Calories: <%= workout.calories_burned %> kcal,
-            Rating: <%= workout.rating %>
+          <h4><%= workout.workout_type.capitalize %></h4>
+          <li>
+            <strong>Calories:</strong> <%= workout.calories_burned %> kcal, <strong>Rating:</strong> <%= workout.rating %>
+          </li>
         <% end %>
     <% end %>
 
