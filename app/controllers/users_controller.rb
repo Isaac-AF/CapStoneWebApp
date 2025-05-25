@@ -52,6 +52,10 @@ class UsersController < ApplicationController
 
     chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their height is #{current_user.height} inches, their weight is #{current_user.weight} pounds, their sex is #{current_user.sex}, their birthday is #{current_user.birthday}, and their self-described activity level is #{current_user.activity_level}. Their daily nutrition targets are #{current_user.target_calories} kcal calories, #{current_user.target_protein} g protein, #{current_user.target_carbs} g carbohydrates, #{current_user.target_fat} g fats, and #{current_user.target_fiber} g fiber.")
 
+    if !current_user.dietary_restrictions.blank?
+      chat.user("The user's dietary restrictions are: #{current_user.dietary_restrictions}.")
+    end
+
     result = chat.assistant!
 
     recommendation = result.fetch("recommendation")
@@ -93,6 +97,10 @@ class UsersController < ApplicationController
     chat.user("Here is a log of the user's meals from the past week: #{formatted_data}")
 
     chat.user("The user's goals are #{current_user.primary_goal}, #{current_user.secondary_goal}, and #{current_user.tertiary_goal}. Their height is #{current_user.height} inches, their weight is #{current_user.weight} pounds, their sex is #{current_user.sex}, their birthday is #{current_user.birthday}, and their self-described activity level is #{current_user.activity_level}. Their daily nutrition targets are #{current_user.target_calories} kcal calories, #{current_user.target_protein} g protein, #{current_user.target_carbs} g carbohydrates, #{current_user.target_fat} g fats, and #{current_user.target_fiber} g fiber.")
+
+    if !current_user.dietary_restrictions.blank?
+      chat.user("The user's dietary restrictions are: #{current_user.dietary_restrictions}.")
+    end
 
     result = chat.assistant!
 
