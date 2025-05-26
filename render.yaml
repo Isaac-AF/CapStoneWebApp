@@ -9,6 +9,5 @@ services:
       - key: SECRET_KEY_BASE
         generateValue: true
       - key: DATABASE_URL
-          sync: false
       - key: WEB_CONCURRENCY
         value: 2
