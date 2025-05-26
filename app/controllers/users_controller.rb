@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def recommend
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'o3'
     chat.system("You are an expert nutritionist. Given a list of meals a user has already eaten and their personal goals, recommend some food ideas that they could use to meet their goal for the day.")
     chat.schema = '{
       "name": "food_recommend",
