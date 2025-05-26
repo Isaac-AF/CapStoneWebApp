@@ -5,4 +5,9 @@ set -o errexit
 bundle install
 bundle exec rake assets:precompile
 bundle exec rake assets:clean
+
+ # run migrations in production with trace
+ bundle exec rake db:migrate RAILS_ENV=production --trace
+
+
 bundle exec rake db:migrate
