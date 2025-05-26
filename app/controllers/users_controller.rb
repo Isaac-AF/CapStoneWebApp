@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def recommend
     chat = OpenAI::Chat.new
-    chat.model = 'o3'
+    chat.model = 'o3-mini'
     chat.system("You are an expert nutritionist. Given a list of meals a user has already eaten and their personal goals, recommend some food ideas that they could use to meet their goal for the day.")
     chat.schema = '{
       "name": "food_recommend",
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     if !current_user.dietary_restrictions.blank?
       chat.user("The user's dietary restrictions are: #{current_user.dietary_restrictions}.")
     end
-
+    
     result = chat.assistant!
 
     recommendation = result.fetch("recommendation")
