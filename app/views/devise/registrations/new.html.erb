@@ -47,10 +47,10 @@
     <div class="mb-3">
       <%= f.label :activity_level, "Activity Level", class: "form-label fw-bold" %>
       <%= f.select :activity_level, [
-          ["Sedentary (Little or no exercise; desk job, minimal movement during the day)", "Sedentary"],
-          ["Light (Light exercise/sports 1–3 days/week OR a job that involves some walking or standing (e.g., teacher, retail).)", "Light"],
-          ["Moderate (Moderate exercise 3–5 days/week OR active job with some lifting/walking (e.g., server, mail carrier).)", "Moderate"],
-          ["Active (Hard exercise 6–7 days/week OR a physically demanding job (e.g., construction, full-time athlete).)", "Active"]
+          ["Sedentary - Little or no exercise; desk job, minimal movement during the day", "Sedentary"],
+          ["Light - Exercise 1–3 days/week OR a job that involves some walking or standing like a teacher or retail", "Light"],
+          ["Moderate - Exercise 3–5 days/week OR active job with some lifting/walking like a server or mail carrier", "Moderate"],
+          ["Active - Exercise 6–7 days/week OR a physically demanding job like construction or a full-time athlete", "Active"]
         ],
         { include_blank: true },
         class: "form-select" %>
