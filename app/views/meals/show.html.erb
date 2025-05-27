@@ -45,7 +45,11 @@
                 <input type="text" name="query_food_name" value="<%= a_meal.food_name %>" class="form-control">
               </td>
               <td>
-                <input type="text" name="query_meal_type" value="<%= a_meal.meal_type %>" class="form-control">
+                <select name="query_meal_type" class="form-control">
+                  <% ["Breakfast", "Lunch", "Dinner", "Snack"].each do |option| %>
+                    <option value="<%= option %>" <%= "selected" if a_meal.meal_type == option %>><%= option %></option>
+                  <% end %>
+                </select>
               </td>
               <td>
                 <input type="text" name="query_rating" value="<%= a_meal.rating %>" class="form-control">
