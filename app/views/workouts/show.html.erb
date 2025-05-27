@@ -1,3 +1,31 @@
+<style>
+@media (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+  .table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+  }
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    flex-basis: 50%;
+    text-align: left;
+  }
+}
+</style>
+
 <div class="container my-5">
   <div class="position-relative mb-4" style="min-height: 2.5rem;">
     <a href="/users/<%= current_user.id %>" 
@@ -35,19 +63,19 @@
         <% @matching_workouts.each do |a_workout| %>
           <tr>
             <form action="/modify_workout/<%= a_workout.id %>" method="post">
-              <td>
+              <td data-label="Date & Time">
                 <input type="datetime-local" class="form-control" name="query_date_time" value="<%= a_workout.workout_datetime.strftime('%Y-%m-%dT%H:%M') %>">
               </td>
-              <td>
+              <td data-label="Workout Type">
                 <input type="text" class="form-control" name="query_workout_type" value="<%= a_workout.workout_type %>">
               </td>
-              <td>
+              <td data-label="Calories Burned">
                 <input type="text" class="form-control" name="query_calories" value="<%= a_workout.calories_burned %>">
               </td>
-              <td>
+              <td data-label="Rating">
                 <input type="text" class="form-control" name="query_rating" value="<%= a_workout.rating %>">
               </td>
-              <td>
+              <td data-label="Actions">
                 <input type="hidden" name="user_id" value="<%= a_workout.user_id %>">
                 <div class="d-flex flex-column gap-2">
                   <button type="submit" class="btn btn-success btn-sm w-100">Save</button>
