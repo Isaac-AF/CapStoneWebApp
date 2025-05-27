@@ -1,23 +1,60 @@
+<style>
+@media (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+  .table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+  }
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    gap: 0.25rem;
+    align-items: center;
+  }
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    flex-basis: 35%;
+    text-align: left;
+  }
+}
+</style>
+
 <div class="container my-5">
-  <div class="position-relative text-center mb-4">
-    <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary position-absolute start-0 top-0">&larr; Back</a>
-    <h1 class="mb-0">Daily Meal Log</h1>
+  <div class="row align-items-center mb-4">
+    <div class="col-12 col-md-2 text-start mb-3 mb-md-0">
+      <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary">
+        &larr; Back
+      </a>
+    </div>
+    <div class="col-12 col-md-8 text-center">
+      <h1 class="mb-0">Daily Meals Log</h1>
+    </div>
+    <div class="col-12 col-md-2"></div>
   </div>
 
-  <!-- Navigation Links -->
-  <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
-    <a href="/meals/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>" class="btn btn-outline-primary me-3">
+  <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap">
+    <a href="/meals/<%= (Date.parse(params.fetch("date")) - 1) %>/<%= current_user.id %>" class="btn btn-outline-primary me-3 mb-2">
       ⬅️ Previous Day
     </a>
 
-    <strong class="fs-5 mb-2"><%= Date.parse(params.fetch("date")).strftime("%B %-d") %></strong>
+    <strong class="fs-5 mb-2">
+      <%= Date.parse(params.fetch("date")).strftime("%B %-d") %>
+    </strong>
 
-    <a href="/meals/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>" class="btn btn-outline-primary ms-3">
+    <a href="/meals/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>" class="btn btn-outline-primary ms-3 mb-2">
       Next Day ➡️
     </a>
   </div>
 
-  <!-- Meal Table -->
   <div class="table-responsive">
     <table class="table table-bordered align-middle text-center">
       <thead class="table-light">
@@ -37,45 +74,47 @@
       <tbody>
         <% @matching_meals.each do |a_meal| %>
           <tr>
-            <form action="/modify_meal/<%= a_meal.id %>" method="post" class="row g-0">
-              <td>
-                <input type="date" name="query_date_consumed" value="<%= a_meal.date_consumed %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_food_name" value="<%= a_meal.food_name %>" class="form-control">
-              </td>
-              <td>
-                <select name="query_meal_type" class="form-control">
-                  <% ["Breakfast", "Lunch", "Dinner", "Snack"].each do |option| %>
-                    <option value="<%= option %>" <%= "selected" if a_meal.meal_type == option %>><%= option %></option>
-                  <% end %>
-                </select>
-              </td>
-              <td>
-                <input type="text" name="query_rating" value="<%= a_meal.rating %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_calories" value="<%= a_meal.calories %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_protein" value="<%= a_meal.protein %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_fats" value="<%= a_meal.fats %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_carbs" value="<%= a_meal.carbs %>" class="form-control">
-              </td>
-              <td>
-                <input type="text" name="query_fiber" value="<%= a_meal.fiber %>" class="form-control">
-              </td>
-              <td class="d-flex flex-column gap-2">
-                <input type="hidden" name="date" value="<%= a_meal.date_consumed.to_time.to_i %>">
+            <td data-label="Date">
+              <input type="date" name="query_date_consumed" value="<%= a_meal.date_consumed %>" class="form-control">
+            </td>
+            <td data-label="Food">
+              <input type="text" name="query_food_name" value="<%= a_meal.food_name %>" class="form-control">
+            </td>
+            <td data-label="Meal Type">
+              <select name="query_meal_type" class="form-control">
+                <% ["Breakfast", "Lunch", "Dinner", "Snack"].each do |option| %>
+                  <option value="<%= option %>" <%= "selected" if a_meal.meal_type == option %>><%= option %></option>
+                <% end %>
+              </select>
+            </td>
+            <td data-label="Rating">
+              <input type="text" name="query_rating" value="<%= a_meal.rating %>" class="form-control">
+            </td>
+            <td data-label="Calories">
+              <input type="text" name="query_calories" value="<%= a_meal.calories %>" class="form-control">
+            </td>
+            <td data-label="Protein">
+              <input type="text" name="query_protein" value="<%= a_meal.protein %>" class="form-control">
+            </td>
+            <td data-label="Fats">
+              <input type="text" name="query_fats" value="<%= a_meal.fats %>" class="form-control">
+            </td>
+            <td data-label="Carbs">
+              <input type="text" name="query_carbs" value="<%= a_meal.carbs %>" class="form-control">
+            </td>
+            <td data-label="Fiber">
+              <input type="text" name="query_fiber" value="<%= a_meal.fiber %>" class="form-control">
+            </td>
+            <td data-label="Actions">
+              <form action="/modify_meal/<%= a_meal.id %>" method="post">
                 <input type="hidden" name="user_id" value="<%= a_meal.user_id %>">
-                <button type="submit" class="btn btn-success btn-sm w-100">Save</button>
-                <a href="/delete_meal/<%= a_meal.id %>" class="btn btn-sm btn-danger">Delete</a>
-              </td>
-            </form>
+                <input type="hidden" name="date" value="<%= a_meal.date_consumed.to_time.to_i %>">
+                <div class="d-flex flex-row flex-md-column gap-2">
+                  <button type="submit" class="btn btn-success btn-sm flex-fill">Save</button>
+                  <a href="/delete_meal/<%= a_meal.id %>" class="btn btn-danger btn-sm flex-fill flex-md-grow-0">Delete</a>
+                </div>
+              </form>
+            </td>
           </tr>
         <% end %>
       </tbody>
