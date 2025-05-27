@@ -148,7 +148,10 @@
             Carbs: <%= meal.carbs %>g,
             Fat: <%= meal.fats %>g,
             Fiber: <%= meal.fiber %>g
-            <strong> <br> Rating: <%= meal.rating %></strong>
+            <% rating_class = case meal.rating.to_i when 7..10 then "text-success" when 4..6  then "text-warning" when 1..3  then "text-danger" else "" end %>
+            <strong class="<%= rating_class %>">
+              <br> Rating: <%= meal.rating %>
+            </strong>
           </li>
         <% end %>
       </ul>
@@ -171,7 +174,11 @@
           <h4><%= workout.workout_type.capitalize %></h4>
           <ul>
             <li>
-              <strong>Calories:</strong> <%= workout.calories_burned %> kcal, <strong>Rating:</strong> <%= workout.rating %>
+              <strong>Calories:</strong> <%= workout.calories_burned %> kcal
+              <% rating_class = case workout.rating.to_i when 7..10 then "text-success" when 4..6  then "text-warning" when 1..3  then "text-danger" else "" end %>
+              <strong class="<%= rating_class %>">
+                <br> Rating: <%= workout.rating %>
+              </strong>
             </li>
           </ul>
         <% end %>

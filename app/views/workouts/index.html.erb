@@ -4,7 +4,7 @@
     <h1 class="mb-0">Add an Activity</h1>
   </div>
 
-  <p class="text-center mb-4">Describe the activity you did, how long you did it for, how far (if applicable), and how hard you feel you worked.</p>
+  <p class="text-center mb-4">Describe the activity you did, how long you did it for, and how far (if applicable) and we'll use AI to estimate the calories burned.</p>
 
   <div class="container" style="max-width: 600px;">
     <form action="/process_activity" method="post" enctype="multipart/form-data" class="border rounded p-4 shadow-sm my-4 bg-light">
@@ -15,7 +15,7 @@
         <label for="activity_type_box" class="form-label">Activity Type</label>
         <select class="form-select" name="query_activity_type" id="activity_type_box" required>
           <option value="" selected disabled hidden>Choose...</option>
-          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates"].each do |activity| %>
+          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates", "Other"].each do |activity| %>
             <option value="<%= activity %>"><%= activity %></option>
           <% end %>
         </select>
@@ -44,7 +44,7 @@
         <label for="manual_activity_type" class="form-label">Activity Type</label>
         <select class="form-select" name="query_activity_type" id="manual_activity_type" required>
           <option value="" selected disabled hidden>Choose...</option>
-          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates"].each do |activity| %>
+          <% ["Outdoor Run", "Indoor Run", "Outdoor Cycle", "Indoor Cycle", "Elliptical", "Stair Stepper", "Strength Training", "Hiking", "Walking", "Pool Swim", "Tennis", "Golf (walking)", "Pickleball", "Basketball", "Volleyball", "Badminton", "Yoga", "Dance", "Pilates", "Other"].each do |activity| %>
             <option value="<%= activity %>"><%= activity %></option>
           <% end %>
         </select>
