@@ -10,7 +10,7 @@
       ⬅️ Previous Day
     </a>
 
-    <strong class="fs-5"><%= params.fetch("date") %></strong>
+    <strong class="fs-5 mb-2"><%= Date.parse(params.fetch("date")).strftime("%B %-d") %></strong>
 
     <a href="/meals/<%= (Date.parse(params.fetch("date")) + 1) %>/<%= current_user.id %>" class="btn btn-outline-primary ms-3">
       Next Day ➡️
