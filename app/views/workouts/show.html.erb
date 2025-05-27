@@ -1,15 +1,11 @@
 <div class="container my-5">
-  <div class="row mb-4 align-items-center">
+  <div class="position-relative mb-4" style="min-height: 2.5rem;">
+    <a href="/users/<%= current_user.id %>" 
+       class="btn btn-outline-secondary position-absolute start-0 top-0">
+      &larr; Back
+    </a>
 
-    <div class="col-12 col-md-2 mb-2 mb-md-0">
-      <a href="/users/<%= current_user.id %>" class="btn btn-outline-secondary w-100 w-md-auto">
-        &larr; Back
-      </a>
-    </div>
-
-    <div class="col-12 col-md-10 text-center text-md-start">
-      <h1 class="mb-0">Daily Workout Log</h1>
-    </div>
+    <h1 class="mb-0 text-center px-5">Daily Workout Log</h1>
   </div>
 
   <div class="d-flex justify-content-center align-items-center mb-4 flex-wrap">
