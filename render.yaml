@@ -12,3 +12,4 @@ services:
         value: postgresql://kpm136:xau_r7ZrvdeIPuTS21cvwCeDqx9i5NA0V3nL7@us-east-1.sql.xata.sh/SmartMacrosDB:main?sslmode=require
       - key: WEB_CONCURRENCY
         value: 2
+    postDeployCommand: "bundle exec rails db:migrate && bundle exec rails db:seed"
