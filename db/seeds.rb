@@ -30,10 +30,17 @@ exercises = [
 ]
 
 exercises.each do |attrs|
-  Exercise.find_or_create_by(exercise_name: attrs[:exercise_name]) do |exercise|
-    exercise.primary_muscle = attrs[:primary_muscle]
-    exercise.secondary_muscle = attrs[:secondary_muscle]
-    exercise.tertiary_muscle = attrs[:tertiary_muscle]
+  exercise = Exercise.find_or_initialize_by(exercise_name: attrs[:exercise_name])
+  exercise.assign_attributes(
+    primary_muscle: attrs[:primary_muscle],
+    secondary_muscle: attrs[:secondary_muscle],
+    tertiary_muscle: attrs[:tertiary_muscle]
+  )
+  if exercise.new_record?
+    exercise.save!
+    puts "Created: #{exercise.exercise_name}"
+  else
+    puts "Skipped (already exists): #{exercise.exercise_name}"
   end
 end
 
