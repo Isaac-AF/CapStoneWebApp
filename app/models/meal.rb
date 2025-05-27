@@ -18,6 +18,7 @@
 #
 class Meal < ApplicationRecord
   validates(:food_name, presence: true)
+  validates(:meal_type, presence: true)
   validates(:user_id, presence: true)
 
   belongs_to :user, required: true, class_name: "User", foreign_key: "user_id", counter_cache: true
