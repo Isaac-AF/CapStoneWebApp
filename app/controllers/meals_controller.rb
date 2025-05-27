@@ -171,6 +171,7 @@ class MealsController < ApplicationController
     the_meal.fats = params.fetch("query_fats")
     the_meal.carbs = params.fetch("query_carbs")
     the_meal.fiber = params.fetch("query_fiber")
+    the_meal.meal_type = params.fetch("query_meal_type")
 
     user_id = current_user.id
     date = the_meal.date_consumed
