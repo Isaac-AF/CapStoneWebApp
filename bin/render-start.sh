@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
-# exit on error
-set -o errexit
+#!/usr/bin/env bash set -o errexit
 
-# Ruby on Rails
-bundle exec rails server
+export RAILS_ENV=production
+
+bundle exec rake db:migrate bundle exec rake db:seed
+
+exec bundle exec puma -C config/puma.rb
