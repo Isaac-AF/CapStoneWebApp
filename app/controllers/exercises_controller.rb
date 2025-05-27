@@ -37,7 +37,7 @@ class ExercisesController < ApplicationController
 
 def ai_process
   the_name = params.fetch("query_exercise_name")
-  the_image = params.fetch("image_param")
+  the_image = params.fetch("image_param","")
   the_description = params.fetch("description_param")
   
   chat = OpenAI::Chat.new

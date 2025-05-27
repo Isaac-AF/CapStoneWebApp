@@ -60,6 +60,6 @@ class WorkoutSetsController < ApplicationController
 
     the_workout_set.destroy
 
-    redirect_to("/workout_sets/#{the_workout_set.id}", { :notice => "Workout set deleted successfully."} )
+    redirect_to("/workout_sets/#{the_workout_set.workout_id}", { :notice => "Workout set deleted successfully."} )
   end
 end
