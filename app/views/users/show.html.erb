@@ -121,11 +121,11 @@
     <div class="col-md-5">
       <h2>Today's Macros</h2>
       <ul class="list-unstyled">
-        <li>Calories Left: <%= (user.target_calories - totals[:calories]).round(1) %> kcal</li>
-        <li>Protein Left: <%= (user.target_protein - totals[:protein]).round(1) %> g</li>
-        <li>Carbs Left: <%= (user.target_carbs - totals[:carbs]).round(1) %> g</li>
-        <li>Fats Left: <%= (user.target_fat - totals[:fats]).round(1) %> g</li>
-        <li>Fiber Left: <%= (user.target_fiber - totals[:fiber]).round(1) %> g</li>
+        <li>Calories Left: <%= (user.target_calories - totals[:calories]).round(0) %> kcal</li>
+        <li>Protein Left: <%= (user.target_protein - totals[:protein]).round(0) %> g</li>
+        <li>Carbs Left: <%= (user.target_carbs - totals[:carbs]).round(0) %> g</li>
+        <li>Fats Left: <%= (user.target_fat - totals[:fats]).round(0) %> g</li>
+        <li>Fiber Left: <%= (user.target_fiber - totals[:fiber]).round(0) %> g</li>
       </ul>
     </div>
   </div>
@@ -210,31 +210,31 @@
     <thead>
       <tr>
         <th>Date</th>
-        <th>Total Calories (kcal)</th>
-        <th>Total Protein (g)</th>
-        <th>Total Fats (g)</th>
-        <th>Total Carbs (g)</th>
-        <th>Total Fiber (g)</th>
+        <th>Total Calories</th>
+        <th>Total Protein</th>
+        <th>Total Fats</th>
+        <th>Total Carbs</th>
+        <th>Total Fiber</th>
         <th>Edit</th>
       </tr>
     </thead>
     <tbody>
       <% grouped_meals.sort_by { |date, _| -date.to_time.to_i }.each do |date, meals| %>
         <% daily_totals = {
-          calories: meals.sum(&:calories),
-          protein:  meals.sum(&:protein),
-          fats:     meals.sum(&:fats),
-          carbs:    meals.sum(&:carbs),
-          fiber:    meals.sum(&:fiber)
+          calories: meals.sum(&:calories).round(0),
+          protein:  meals.sum(&:protein).round(0),
+          fats:     meals.sum(&:fats).round(0),
+          carbs:    meals.sum(&:carbs).round(0),
+          fiber:    meals.sum(&:fiber).round(0)
         } %>
 
         <tr>
-          <td><%= date.strftime("%B %e, %Y") %></td>
-          <td><%= daily_totals[:calories] %></td>
-          <td><%= daily_totals[:protein] %></td>
-          <td><%= daily_totals[:fats] %></td>
-          <td><%= daily_totals[:carbs] %></td>
-          <td><%= daily_totals[:fiber] %></td>
+          <td><%= date.strftime("%B %e") %></td>
+          <td><%= daily_totals[:calories] %>kcal</td>
+          <td><%= daily_totals[:protein] %>g</td>
+          <td><%= daily_totals[:fats] %>g</td>
+          <td><%= daily_totals[:carbs] %>g</td>
+          <td><%= daily_totals[:fiber] %>g</td>
           <td>
             <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">Edit Meals</a>
           </td>
@@ -251,7 +251,7 @@
     </form>
   </div>
 
-  <% past_week_activity = current_user.workouts.where("DATE(workout_datetime) BETWEEN ? AND ?", 8.days.ago.to_date, (Date.current - 1))
+  <% past_week_activity = current_user.workouts.where("workout_datetime BETWEEN ? AND ?", 8.days.ago.to_date.beginning_of_day, (Date.current - 1).end_of_day)
     .group_by { |w| w.workout_datetime.to_date }.sort_by { |date, _| -date.to_time.to_i } %>
 
   <div>
@@ -274,9 +274,9 @@
             &.first%>
 
           <tr>
-            <td><%= date.strftime("%B %e, %Y") %></td>
+            <td><%= date.strftime("%B %e") %></td>
             <td><%= workout_type_by_calories %></td>
-            <td><%= number_with_precision(total_calories, precision: 2) %></td>
+            <td><%= total_calories.round(0) %></td>
             <td>
               <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">
                 Edit Workouts
