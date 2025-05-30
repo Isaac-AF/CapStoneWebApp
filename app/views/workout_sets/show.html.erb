@@ -20,6 +20,9 @@
         <dt class="col-sm-4">Reps</dt>
         <dd class="col-sm-8"><%= @the_workout_set.workout_reps_count %></dd>
 
+        <dt class="col-sm-4">Weight</dt>
+        <dd class="col-sm-8"><%= @the_workout_set.weight %></dd>
+
         <dt class="col-sm-4">Created</dt>
         <dd class="col-sm-8"><%= time_ago_in_words(@the_workout_set.created_at) %> ago</dd>
 
@@ -54,6 +57,11 @@
         <div class="mb-3">
           <label for="workout_reps_count_box" class="form-label">Reps</label>
           <input type="text" class="form-control" id="workout_reps_count_box" name="query_workout_reps_count" value="<%= @the_workout_set.workout_reps_count %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="workout_weight_box" class="form-label">Weight</label>
+          <input type="text" class="form-control" id="workout_weight_box" name="query_workout_weight" value="<%= @the_workout_set.weight %>">
         </div>
 
         <button type="submit" class="btn btn-primary">Update Workout Set</button>

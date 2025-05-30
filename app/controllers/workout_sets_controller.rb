@@ -45,6 +45,7 @@ class WorkoutSetsController < ApplicationController
     the_workout_set.workout_id = params.fetch("query_workout_id")
     the_workout_set.exercise_id = params.fetch("query_exercise_id")
     the_workout_set.workout_reps_count = params.fetch("query_workout_reps_count")
+    the_workout_set.weight = params.fetch("query_workout_weight")
 
     if the_workout_set.valid?
       the_workout_set.save
