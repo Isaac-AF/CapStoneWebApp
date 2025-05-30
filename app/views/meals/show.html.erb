@@ -74,47 +74,47 @@
       <tbody>
         <% @matching_meals.each do |a_meal| %>
           <tr>
-            <td data-label="Date">
-              <input type="date" name="query_date_consumed" value="<%= a_meal.date_consumed %>" class="form-control">
-            </td>
-            <td data-label="Food">
-              <input type="text" name="query_food_name" value="<%= a_meal.food_name %>" class="form-control">
-            </td>
-            <td data-label="Meal Type">
-              <select name="query_meal_type" class="form-control">
-                <% ["Breakfast", "Lunch", "Dinner", "Snack"].each do |option| %>
-                  <option value="<%= option %>" <%= "selected" if a_meal.meal_type == option %>><%= option %></option>
-                <% end %>
-              </select>
-            </td>
-            <td data-label="Rating">
-              <input type="text" name="query_rating" value="<%= a_meal.rating %>" class="form-control">
-            </td>
-            <td data-label="Calories">
-              <input type="text" name="query_calories" value="<%= a_meal.calories %>" class="form-control">
-            </td>
-            <td data-label="Protein">
-              <input type="text" name="query_protein" value="<%= a_meal.protein %>" class="form-control">
-            </td>
-            <td data-label="Fats">
-              <input type="text" name="query_fats" value="<%= a_meal.fats %>" class="form-control">
-            </td>
-            <td data-label="Carbs">
-              <input type="text" name="query_carbs" value="<%= a_meal.carbs %>" class="form-control">
-            </td>
-            <td data-label="Fiber">
-              <input type="text" name="query_fiber" value="<%= a_meal.fiber %>" class="form-control">
-            </td>
-            <td data-label="Actions">
-              <form action="/modify_meal/<%= a_meal.id %>" method="post">
+            <form action="/modify_meal/<%= a_meal.id %>" method="post">
+              <td data-label="Date">
+                <input type="date" name="query_date_consumed" value="<%= a_meal.date_consumed %>" class="form-control">
+              </td>
+              <td data-label="Food">
+                <input type="text" name="query_food_name" value="<%= a_meal.food_name %>" class="form-control">
+              </td>
+              <td data-label="Meal Type">
+                <select name="query_meal_type" class="form-control">
+                  <% ["Breakfast", "Lunch", "Dinner", "Snack"].each do |option| %>
+                    <option value="<%= option %>" <%= "selected" if a_meal.meal_type == option %>><%= option %></option>
+                  <% end %>
+                </select>
+              </td>
+              <td data-label="Rating">
+                <input type="text" name="query_rating" value="<%= a_meal.rating %>" class="form-control">
+              </td>
+              <td data-label="Calories">
+                <input type="text" name="query_calories" value="<%= a_meal.calories %>" class="form-control">
+              </td>
+              <td data-label="Protein">
+                <input type="text" name="query_protein" value="<%= a_meal.protein %>" class="form-control">
+              </td>
+              <td data-label="Fats">
+                <input type="text" name="query_fats" value="<%= a_meal.fats %>" class="form-control">
+              </td>
+              <td data-label="Carbs">
+                <input type="text" name="query_carbs" value="<%= a_meal.carbs %>" class="form-control">
+              </td>
+              <td data-label="Fiber">
+                <input type="text" name="query_fiber" value="<%= a_meal.fiber %>" class="form-control">
+              </td>
+              <td data-label="Actions">
                 <input type="hidden" name="user_id" value="<%= a_meal.user_id %>">
-                <input type="hidden" name="date" value="<%= a_meal.date_consumed.to_time.to_i %>">
+                <input type="hidden" name="meal_id" value="<%= a_meal.id %>">
                 <div class="d-flex flex-row flex-md-column gap-2">
                   <button type="submit" class="btn btn-success btn-sm flex-fill">Save</button>
                   <a href="/delete_meal/<%= a_meal.id %>" class="btn btn-danger btn-sm flex-fill flex-md-grow-0">Delete</a>
                 </div>
-              </form>
-            </td>
+              </td>
+            </form>
           </tr>
         <% end %>
       </tbody>
