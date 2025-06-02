@@ -1,10 +1,14 @@
 <script>
   function showEstimateLoading() {
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     document.getElementById('EstimateBtnText').textContent = 'Loading...';
     document.getElementById('EstimateBtnSpinner').classList.remove('d-none');
   }
 
   function showManualAddLoading() {
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     document.getElementById('ManualAddBtnText').textContent = 'Loading...';
     document.getElementById('ManualAddBtnSpinner').classList.remove('d-none');
   }

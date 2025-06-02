@@ -1,5 +1,7 @@
 <script>
   function showLoading() {
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     document.getElementById('btnText').textContent = 'Loading...';
     document.getElementById('btnSpinner').classList.remove('d-none');
   }

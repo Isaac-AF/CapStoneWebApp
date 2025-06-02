@@ -5,13 +5,19 @@
 </style>
 <script>
   function ShowRecommendLoadingSpinner() {
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     document.getElementById('RecommendText').textContent = 'Loading...';
     document.getElementById('RecommendSpinner').classList.remove('d-none');
   }
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     function ShowMealReviewLoadingSpinner() {
     document.getElementById('MealReviewText').textContent = 'Loading...';
     document.getElementById('MealReviewSpinner').classList.remove('d-none');
   }
+    const button = document.querySelector("button[type='submit']");
+    button.disabled = true;
     function ShowActivityReviewLoadingSpinner() {
     document.getElementById('ActivityReviewText').textContent = 'Loading...';
     document.getElementById('ActivityReviewSpinner').classList.remove('d-none');
