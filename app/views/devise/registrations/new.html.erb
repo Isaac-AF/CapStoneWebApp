@@ -1,16 +1,7 @@
-<script>
-function showSignupLoading() {
-  const button = document.querySelector("button[type='submit']");
-  button.disabled = true;
-  document.getElementById('SignupBtnText').textContent = 'Signing up...';
-  document.getElementById('SignupBtnSpinner').classList.remove('d-none');
-}
-</script>
-
 <div class="container mt-3">
   <h2 class="mb-4 text-center">Create a new Account</h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation", novalidate: true, id: "signupForm" }) do |f| %>
     <%= devise_error_messages! %>
 
     <div class="mb-3">
@@ -90,7 +81,7 @@ function showSignupLoading() {
     </div>
 
     <div class="d-grid">
-      <button type="submit" class="btn btn-primary btn-lg" onclick="showSignupLoading()">
+      <button id="SignupBtn" type="submit" class="btn btn-primary btn-lg d-flex justify-content-center align-items-center gap-2">
         <span id="SignupBtnText">Sign up</span>
         <span id="SignupBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
       </button>
@@ -99,3 +90,18 @@ function showSignupLoading() {
 </div>
 
 <div class="mb-5"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const signupForm = document.getElementById("signupForm");
+
+    if (signupForm) {
+      signupForm.addEventListener("submit", function () {
+        const button = document.getElementById("SignupBtn");
+        button.disabled = true;
+        document.getElementById("SignupBtnText").textContent = "Signing up...";
+        document.getElementById("SignupBtnSpinner").classList.remove("d-none");
+      });
+    }
+  });
+</script>
