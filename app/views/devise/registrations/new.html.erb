@@ -1,3 +1,12 @@
+<script>
+function showSignupLoading() {
+  const button = document.querySelector("button[type='submit']");
+  button.disabled = true;
+  document.getElementById('SignupBtnText').textContent = 'Signing up...';
+  document.getElementById('SignupBtnSpinner').classList.remove('d-none');
+}
+</script>
+
 <div class="container mt-3">
   <h2 class="mb-4 text-center">Create a new Account</h2>
 
@@ -75,15 +84,16 @@
       </div>
     </fieldset>
 
-    <!-- JavaScript omitted for brevity -->
-
     <div class="mb-4">
       <%= f.label :dietary_restrictions, "Dietary Restrictions (Optional)", class: "form-label fw-bold" %>
       <%= f.text_field :dietary_restrictions, class: "form-control" %>
     </div>
 
     <div class="d-grid">
-      <%= f.submit "Sign up", class: "btn btn-primary btn-lg" %>
+      <button type="submit" class="btn btn-primary btn-lg" onclick="showSignupLoading()">
+        <span id="SignupBtnText">Sign up</span>
+        <span id="SignupBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+      </button>
     </div>
   <% end %>
 </div>
