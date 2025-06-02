@@ -1,4 +1,11 @@
 
+<script>
+  function showLoading() {
+    document.getElementById('btnText').textContent = 'Loading...';
+    document.getElementById('btnSpinner').classList.remove('d-none');
+  }
+</script>
+
 <div class="container py-4">
   <div class="container my-4">
     <div class="d-flex align-items-center justify-content-between">
@@ -38,7 +45,10 @@
                 <textarea class="form-control" id="description_field" name="description_param" rows="3"></textarea>
               </div>
 
-              <button type="submit" class="btn btn-primary">Create Exercise</button>
+              <button type="submit" class="btn btn-primary" id="estimateBtn" onclick="showLoading()">
+                <span id="btnText">Create Exercise</span>
+                <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              </button>
             </form>
           </div>
         </div>

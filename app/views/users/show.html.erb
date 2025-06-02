@@ -3,6 +3,20 @@
   background-color: #dfe7f5;
   }
 </style>
+<script>
+  function ShowRecommendLoadingSpinner() {
+    document.getElementById('RecommendText').textContent = 'Loading...';
+    document.getElementById('RecommendSpinner').classList.remove('d-none');
+  }
+    function ShowMealReviewLoadingSpinner() {
+    document.getElementById('MealReviewText').textContent = 'Loading...';
+    document.getElementById('MealReviewSpinner').classList.remove('d-none');
+  }
+    function ShowActivityReviewLoadingSpinner() {
+    document.getElementById('ActivityReviewText').textContent = 'Loading...';
+    document.getElementById('ActivityReviewSpinner').classList.remove('d-none');
+  }
+</script>
 
 
 <div class="container mt-3">
@@ -92,8 +106,11 @@
         <button class="btn btn-primary mb-2" type="submit">New Gym Workout</button>
       </form>
 
-      <form action="/day_recommend" method="post" class="d-inline">
-        <button class="btn btn-primary mb-2" type="submit">Recommend Rest of Day</button>
+      <form action="/day_recommend" method="post" class="d-inline" onsubmit="ShowRecommendLoadingSpinner()">
+        <button class="btn btn-primary mb-2" type="submit" id="RecommendButton">
+          <span id="RecommendText">Recommend Rest of Day</span>
+          <span id="RecommendSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
       </form>
     </div>
   </div>
@@ -138,7 +155,7 @@
   <!-- Display meals from current day -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Meals</h2>
-    <form action="/meals/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
+    <form action="/meals/<%= Date.current.strftime("%Y-%m-%d") %>/<%= current_user.id %>">
       <button class="btn btn-secondary" type="submit">Edit Meals</button>
     </form>
   </div>
@@ -200,9 +217,12 @@
   <!-- Display meals from past week (excluding today) -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Macros</h2>
-    <form action="/week_nutrition_rating" method="post">
-      <button class="btn btn-primary" type="submit">Review Past Week</button>
-    </form>
+      <form action="/week_nutrition_rating" method="post" onsubmit="ShowMealReviewLoadingSpinner()">
+        <button class="btn btn-primary" type="submit" id="MealReviewButton">
+          <span id="MealReviewText">Review Past Week</span>
+          <span id="MealReviewSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
+      </form>
   </div>
   <% grouped_meals = current_user.meals.where(date_consumed: 8.days.ago.to_date..(Date.current - 1)).group_by(&:date_consumed) %>
 
@@ -246,8 +266,11 @@
   <!-- Display activity from past week (excluding today) -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Activity</h2>
-    <form action="/week_activity_rating" method="post">
-      <button class="btn btn-primary" type="submit">Review Past Week</button>
+    <form action="/week_activity_rating" method="post" onsubmit="ShowActivityReviewLoadingSpinner()">
+      <button class="btn btn-primary" type="submit" id="ActivityReviewButton">
+        <span id="ActivityReviewText">Review Past Week</span>
+        <span id="ActivityReviewSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+      </button>
     </form>
   </div>
 
