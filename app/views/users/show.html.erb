@@ -172,7 +172,7 @@
   <!-- Display activity from current day -->
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2>Today's Activity</h2>
-    <form action="/workouts/<%= Date.current.strftime("%Y-%m-%e") %>/<%= current_user.id %>">
+    <form action="/workouts/<%= Date.current.strftime("%Y-%m-%d") %>/<%= current_user.id %>">
       <button class="btn btn-secondary" type="submit">Edit Activities</button>
     </form>
   </div>
@@ -241,7 +241,7 @@
           <td><%= daily_totals[:carbs] %>g</td>
           <td><%= daily_totals[:fiber] %>g</td>
           <td>
-            <a href="/meals/<%= date.strftime("%Y-%B-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">Edit Meals</a>
+            <a href="/meals/<%= date.strftime("%Y-%m-%d") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">Edit Meals</a>
           </td>
         </tr>
       <% end %>
@@ -286,7 +286,7 @@
             <td><%= workout_type_by_calories %></td>
             <td><%= total_calories.round(0) %></td>
             <td>
-              <a href="/workouts/<%= date.strftime("%Y-%m-%e") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">
+              <a href="/workouts/<%= date.strftime("%Y-%m-%d") %>/<%= current_user.id %>" class="btn btn-sm btn-outline-primary">
                 Edit Workouts
               </a>
             </td>
