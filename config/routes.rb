@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get("/workout_sets/:workout_id", { :controller => "workout_sets", :action => "index" })
   
   get("/workout_sets/:workout_id/:set_id", { :controller => "workout_sets", :action => "show" })
+
+  get "/next_set_number", to: "workout_sets#next_set_number"
+  get "/max_weight_and_reps", to: "workout_sets#max_weight_and_reps"
   
   # UPDATE
   
@@ -88,10 +91,6 @@ Rails.application.routes.draw do
 
   #------------------------------
 
-
-  # This is a blank app! Pick your first screen, build out the RCAV, and go from there. E.g.:
-
-  # get "/your_first_screen" => "pages#first"
 
   get("/", { :controller => "users", :action => "index"})
 

@@ -29,26 +29,28 @@
 
         <div class="mb-3">
           <label for="exercise_id_box" class="form-label">Exercise</label>
-          <select class="form-select" id="exercise_id_box" name="query_exercise_id">
-            <% Exercise.all.each do |exercise| %>
-              <option value="<%= exercise.id %>"><%= exercise.exercise_name %></option>
-            <% end %>
-          </select>
+            <select class="form-select" id="exercise_id_box" name="query_exercise_id">
+              <% Exercise.order(:exercise_name).each do |exercise| %>
+                <option value="<%= exercise.id %>" <%= 'selected="selected"' if exercise.id == @last_exercise_id %>>
+                  <%= exercise.exercise_name %>
+                </option>
+              <% end %>
+            </select>
         </div>
 
         <div class="mb-3">
           <label for="workout_set_number" class="form-label">Set Number</label>
-          <input type="text" class="form-control" id="workout_set_number" name="query_workout_set_number">
+          <input type="text" class="form-control" id="workout_set_number" name="query_workout_set_number" value="1">
         </div>
 
         <div class="mb-3">
           <label for="workout_reps_count_box" class="form-label">Reps</label>
-          <input type="text" class="form-control" id="workout_reps_count_box" name="query_workout_reps_count">
+          <input type="text" class="form-control" id="workout_reps_count_box" name="query_workout_reps_count" value="">
         </div>
 
         <div class="mb-4">
           <label for="weight_box" class="form-label">Weight</label>
-          <input type="text" class="form-control" id="weight_box" name="query_weight">
+          <input type="text" class="form-control" id="weight_box" name="query_weight" value="">
         </div>
 
         <div class="text-center">
@@ -90,3 +92,36 @@
   </div>
 
 </div>
+
+
+<!-- JavaScript to dynamically update set number-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const exerciseSelect = document.getElementById("exercise_id_box");
+    const setNumberInput = document.getElementById("workout_set_number");
+    const repsInput = document.getElementById("workout_reps_count_box");
+    const weightInput = document.getElementById("weight_box");
+    const workoutId = "<%= params.fetch("workout_id") %>";
+    const userId = "<%= @workout.user_id %>";
+
+    function updateSetNumberAndDefaults() {
+      const exerciseId = exerciseSelect.value;
+
+      fetch(`/next_set_number?workout_id=${workoutId}&exercise_id=${exerciseId}`)
+        .then(response => response.json())
+        .then(data => {
+          setNumberInput.value = data.next_set_number;
+        });
+
+      fetch(`/max_weight_and_reps?user_id=${userId}&exercise_id=${exerciseId}`)
+        .then(response => response.json())
+        .then(data => {
+          weightInput.value = data.weight;
+          repsInput.value = data.reps;
+        });
+    }
+
+      exerciseSelect.addEventListener("change", updateSetNumberAndDefaults);
+      exerciseSelect.dispatchEvent(new Event('change'));
+  });
+</script>
