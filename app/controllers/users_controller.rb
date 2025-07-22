@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def recommend
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'o4-mini'
     chat.system("You are an expert nutritionist. Given a list of meals a user has already eaten and their personal goals, recommend some food ideas that they could use to meet their goal for the day.")
     chat.schema = '{
       "name": "food_recommend",
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
 
   def rate_nutrition
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'o4-mini'
     chat.system("You are an expert nutritionist. Given a list of meals a user has eaten over the past week and their personal goals, give some encouragement for what they're doing well, and provide some recommendations for how they can improve.")
     chat.schema = '{
       "name": "diet_recommend",
@@ -114,7 +114,7 @@ class UsersController < ApplicationController
 
 def rate_activity
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'o4-mini'
     chat.system("You are an expert personal trainer. Given a list of activities a user has completed over the past week and specifics of their workouts, give some encouragement for what they're doing well, and provide some recommendations for how they can improve. For strength training workouts, recommend changes to the workouts themselves (such as different exercises) if needed.")
     chat.schema = '{
       "name": "activity_recommend",

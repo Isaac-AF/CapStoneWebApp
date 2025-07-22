@@ -14,7 +14,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super do |user|
       if user.persisted?
             chat = OpenAI::Chat.new
-            chat.model = 'o3'
+            chat.model = 'o4-mini'
             chat.system("You are an expert nutritionist. Your job is to give a precise estimate of the daily macros (calories, carbohydrates, protein, fiber, fat) that someone should try to hit in order to attain their selected goals, provided information about the person.")
             chat.schema = '{
               "name": "nutrition_info",
