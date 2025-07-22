@@ -1,6 +1,6 @@
 class WorkoutSetsController < ApplicationController
   def index
-    @list_of_workout_sets = WorkoutSet.where(workout_id: params[:workout_id]).includes(:exercise)
+    @list_of_workout_sets = WorkoutSet.includes(:exercise).where(workout_id: params[:workout_id])
 
       workout_id = params[:workout_id]
       @workout = Workout.find(params[:workout_id])
@@ -80,23 +80,27 @@ class WorkoutSetsController < ApplicationController
     render json: {next_set_number: next_set_number}
   end
 
-  def max_weight_and_reps
-    user_id = params[:user_id]
-    exercise_id = params[:exercise_id]
+def max_weight_and_reps
+  user_id = params[:user_id]
+  exercise_id = params[:exercise_id]
 
-    max_weight_record = WorkoutSet.joins(:workout)
-      .where(workouts: { user_id: user_id }, exercise_id: exercise_id)
-      .order(weight: :desc)
-      .first
+  max_weight = WorkoutSet.joins(:workout)
+    .where(workouts: { user_id: user_id }, exercise_id: exercise_id)
+    .maximum(:weight)
 
-    if max_weight_record
-      render json: {
-        weight: max_weight_record.weight,
-        reps: max_weight_record.workout_reps_count
-      }
-    else
-      render json: { weight: "", reps: "" }
-    end
+  max_weight_record = WorkoutSet.joins(:workout)
+    .where(workouts: { user_id: user_id }, exercise_id: exercise_id, weight: max_weight)
+    .order(created_at: :desc)
+    .first
+
+  if max_weight_record
+    render json: {
+      weight: max_weight_record.weight,
+      reps: max_weight_record.workout_reps_count
+    }
+  else
+    render json: { weight: "", reps: "" }
   end
+end
 
 end

@@ -46,7 +46,7 @@
         <div class="mb-3">
           <label for="exercise_id_box" class="form-label">Exercise</label>
           <select class="form-select" id="exercise_id_box" name="query_exercise_id">
-            <% Exercise.all.each do |exercise| %>
+            <% Exercise.find_each do |exercise| %>
               <option value="<%= exercise.id %>" <%= "selected" if exercise.id == @the_workout_set.exercise_id %>>
                 <%= exercise.exercise_name %>
               </option>
