@@ -87,12 +87,12 @@ Rails.application.configure do
 
   # Allow POST authenticity on Codespaces in dev
   config.action_controller.forgery_protection_origin_check = false
-end
 
-config.after_initialize do
-  Bullet.enable = true
-  Bullet.alert = true
-  Bullet.bullet_logger = true
-  Bullet.console = true
-  Bullet.rails_logger = true
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
 end
