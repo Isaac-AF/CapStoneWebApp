@@ -11,6 +11,10 @@
 #  updated_at       :datetime         not null
 #  user_id          :integer
 #
+# Indexes
+#
+#  index_exercises_on_exercise_name  (exercise_name)
+#
 class Exercise < ApplicationRecord
   validates(:exercise_name, presence: true)
 

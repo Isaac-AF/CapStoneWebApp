@@ -11,6 +11,11 @@
 #  exercise_id        :integer
 #  workout_id         :integer
 #
+# Indexes
+#
+#  index_workout_sets_on_exercise_id  (exercise_id)
+#  index_workout_sets_on_workout_id   (workout_id)
+#
 class WorkoutSet < ApplicationRecord
   validates(:exercise_id, presence: true)
   validates(:workout_id, presence: true)
