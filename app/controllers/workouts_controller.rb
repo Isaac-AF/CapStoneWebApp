@@ -32,7 +32,7 @@ class WorkoutsController < ApplicationController
     the_description = params.fetch("description_param", "")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'o3-mini'
     chat.system("You are an expert personal trainer. Your job is to estimate the calories that the user burned based on the activity they did, the duration, and information about the user such as their height and weight. Please also give a rating on a scale of 1-10 how good the activity was at helping the user accomplish their goals.")
     chat.schema = '{
       "name": "activity_info",
@@ -91,7 +91,7 @@ class WorkoutsController < ApplicationController
     new_activity.calories_burned = params.fetch("query_calories")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'o3-mini'
     chat.system("You are an expert personal trainer. Given an activity, duration and calories burned, your job is to give a rating on a scale of 1-10 how good the activity was at helping the user accomplish their goals using information about the user such as their height and weight.")
     chat.schema = '{
       "name": "activity_info",
@@ -155,7 +155,7 @@ def finish
     the_workout = Workout.where({ :id => workout_id }).at(0)
 
     chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'o3-mini'
     chat.system("You are an expert personal trainer. Your job is to estimate the calories that the user burned based on the workout they completed, the duration, and information about the user such as their height and weight. Please also give a rating on a scale of 1-10 how good the activity was at helping the user accomplish their goals.")
     chat.schema = '{
       "name": "activity_info",

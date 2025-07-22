@@ -123,7 +123,7 @@ class MealsController < ApplicationController
     the_description = params.fetch("description_param", "")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'o3-mini'
     chat.system("You are an expert nutritionist. Please give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
     chat.schema = '{
       "name": "nutrition_info",
