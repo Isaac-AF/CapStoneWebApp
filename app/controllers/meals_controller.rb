@@ -18,7 +18,7 @@ class MealsController < ApplicationController
 
     chat = OpenAI::Chat.new
     chat.model = 'o4-mini'
-    chat.system("You are an expert nutritionist. Your job is to estimate how many grams of carbohydrates, grams of protein, grams of fat, grams of fiber, and total calories are in a meal. The user will provide either a photo or two, a description, or both. The photo may be an image of the food itself, a recipe that was used to prepare the food, a picture of a menu, or a barcode that should be used to look up the nutrition facts of the item. If necessary, search the web for nutrition information for specific menu items (like a McDonald's cheeseburger or the barcode from a granola bar). Please also give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
+    chat.system("You are an expert nutritionist. Your job is to estimate how many grams of carbohydrates, grams of protein, grams of fat, grams of fiber, and total calories are in a meal. The user will provide either photos, a description, or both. The photos may be an image of the food itself, a recipe that was used to prepare the food, a picture of a menu, or a barcode that should be used to look up the nutrition facts of the item. If necessary, search the web for nutrition information for specific menu items (like a McDonald's cheeseburger or the barcode from a granola bar). Please also give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
     chat.schema = '{
       "name": "nutrition_info",
       "schema": {
@@ -161,7 +161,7 @@ class MealsController < ApplicationController
 
   def update
     the_id = params.fetch("meal_id")
-    the_meal = Meal.where({ :id => the_id }).at(0)
+    the_meal = Meal.find_by(id: the_id)
 
     the_meal.date_consumed = params.fetch("query_date_consumed")
     the_meal.food_name = params.fetch("query_food_name")
@@ -186,7 +186,7 @@ class MealsController < ApplicationController
 
   def destroy
     the_id = params.fetch("meal_id")
-    the_meal = Meal.where({ :id => the_id }).at(0)
+    the_meal = Meal.find_by(id: the_id)
 
     user_id = current_user.id
     date = the_meal.date_consumed

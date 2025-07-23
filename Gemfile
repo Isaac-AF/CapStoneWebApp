@@ -80,14 +80,10 @@ end
 # ===========
 gem "active_link_to"
 gem "appdev_support"
-gem "awesome_print"
 gem "devise"
-gem "dotenv"
 gem "faker"
 gem "htmlbeautifier"
 gem "http"
-gem "sqlite3", "~> 1.4"
-gem "table_print"
 gem "simple_form"
 gem "carrierwave"
 
@@ -107,6 +103,7 @@ end
 group :development, :test do
   gem "rspec-rails", "~> 6.0.0"
   gem "grade_runner", "~> 0.0.13"
+  gem "dotenv"
 end
 
 group :test do
