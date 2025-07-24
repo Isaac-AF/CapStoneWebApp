@@ -13,4 +13,6 @@ services:
       - key: WEB_CONCURRENCY
         value: 1
       - key: RAILS_MAX_THREADS
+        value: 1
+      - key: DB_POOL
         value: 2
