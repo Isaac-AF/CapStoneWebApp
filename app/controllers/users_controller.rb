@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:index]
   def index
     render({ :template => "users/index" })
   end
