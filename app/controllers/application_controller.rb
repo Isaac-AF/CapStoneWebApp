@@ -1,16 +1,11 @@
 class ApplicationController < ActionController::Base
-  # Enable CSRF protection
-  protect_from_forgery with: :exception
-
-  # Require auth for everything by default; skip in public controllers/actions as needed
-  before_action :authenticate_user!
+  skip_forgery_protection
 
   helper ApplicationHelper
-  before_action :configure_permitted_parameters, if: :devise_controller?
 
-  # If a user leaves a page open, their session/CSRF token can expire.
-  # Catch that and send them to sign in gracefully.
-  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_session_expired
+  # Require a logged-in user for everything by default
+  before_action :require_login
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
@@ -27,25 +22,29 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def handle_session_expired
-    # Optionally remember where they were going
+  def require_login
+    return if user_signed_in?
+
+    # Remember where they were trying to go (best for GETs)
     store_location_for(:user, request.fullpath) if request.get?
 
     respond_to do |format|
       format.html do
-        redirect_to new_user_session_path, alert: "Your session expired. Please sign in again."
+        redirect_to new_user_session_path, alert: "Please sign in to continue."
       end
       format.turbo_stream do
-        # Turbo treats redirect like HTML; keep the same message
-        redirect_to new_user_session_path, alert: "Your session expired. Please sign in again."
+        redirect_to new_user_session_path, alert: "Please sign in to continue."
       end
       format.json do
-        render json: { error: "session_expired", redirect_to: new_user_session_url }, status: :unauthorized
+        render json: { error: "unauthenticated", redirect_to: new_user_session_url }, status: :unauthorized
       end
       format.js do
-        # For legacy rails-ujs requests
         render js: "window.location = #{view_context.javascript_escape(new_user_session_path).inspect};",
                status: :unauthorized
+      end
+      # Fallback for anything else
+      format.any do
+        redirect_to new_user_session_path, alert: "Please sign in to continue."
       end
     end
   end
