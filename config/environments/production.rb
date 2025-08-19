@@ -94,4 +94,10 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  host = ENV.fetch("APP_HOST") { ENV["RENDER_EXTERNAL_URL"] || "SmartMacros.OnRender.com" }
+
+  Rails.application.routes.default_url_options[:host] = host
+  config.action_controller.default_url_options = { host: host }
+  config.action_mailer.default_url_options = { host: host, protocol: "https" }
 end
