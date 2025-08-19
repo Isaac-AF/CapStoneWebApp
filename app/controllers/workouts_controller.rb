@@ -32,7 +32,7 @@ class WorkoutsController < ApplicationController
     the_description = params.fetch("description_param", "")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'gpt-5-mini'
     chat.system("You are an expert personal trainer. Your job is to estimate the calories that the user burned based on the activity they did, the duration, and information about the user such as their height and weight. Please also give a rating on a scale of 1-10 how good the activity was at helping the user accomplish their goals.")
     chat.schema = '{
       "name": "activity_info",

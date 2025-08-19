@@ -17,7 +17,7 @@ class MealsController < ApplicationController
     the_description = params.fetch("description_param", "")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'gpt-5-mini'
     chat.system("You are an expert nutritionist. Your job is to estimate how many grams of carbohydrates, grams of protein, grams of fat, grams of fiber, and total calories are in a meal. The user will provide either photos, a description, or both. The photos may be an image of the food itself, a recipe that was used to prepare the food, a picture of a menu, or a barcode that should be used to look up the nutrition facts of the item. If necessary, search the web for nutrition information for specific menu items (like a McDonald's cheeseburger or the barcode from a granola bar). Please also give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
     chat.schema = '{
       "name": "nutrition_info",
@@ -123,7 +123,7 @@ class MealsController < ApplicationController
     the_description = params.fetch("description_param", "")
 
     chat = OpenAI::Chat.new
-    chat.model = 'o3-mini'
+    chat.model = 'gpt-5-nano'
     chat.system("You are an expert nutritionist. Please give a rating on a scale of 1-10 how healthy the meal is given the macros provided and the user's goals.")
     chat.schema = '{
       "name": "nutrition_info",

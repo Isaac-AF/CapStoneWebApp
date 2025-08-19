@@ -41,7 +41,7 @@ def ai_process
   the_description = params.fetch("description_param")
   
   chat = OpenAI::Chat.new
-    chat.model = 'o4-mini'
+    chat.model = 'gpt-5-mini'
     chat.system("You are an expert personal trainer. Your job is to determine the common name and muscles worked of an exercise given a description and images from the user. Provide primary, secondary, and tertiary muscle groups worked. If no secondary or tertiary muscle groups are relevant for a given exercise, return a blank value.")
     chat.schema = '{
       "name": "exercise_info",
