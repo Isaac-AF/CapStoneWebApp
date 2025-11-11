@@ -18,14 +18,15 @@
     </div>
 
     <div class="mb-3">
-      <label for="meal_type_box" class="form-label">Meal Type</label>
-      <select name="query_meal_type" id="meal_type_box" class="form-select">
+      <label for="estimate_meal_type_box" class="form-label">Meal Type</label>
+      <select name="query_meal_type" id="estimate_meal_type_box" class="form-select" required>
         <option value="" selected disabled hidden>Select a meal type</option>
         <option value="Breakfast">Breakfast</option>
         <option value="Lunch">Lunch</option>
         <option value="Dinner">Dinner</option>
         <option value="Snack">Snack</option>
       </select>
+      <div class="invalid-feedback">Please choose a meal type.</div>
     </div>
 
     <div class="mb-3">
@@ -60,14 +61,15 @@
       </div>
 
       <div class="col-md-6">
-        <label for="meal_type_box" class="form-label">Meal Type</label>
-        <select name="query_meal_type" id="meal_type_box" class="form-select">
+        <label for="manual_meal_type_box" class="form-label">Meal Type</label>
+        <select name="query_meal_type" id="manual_meal_type_box" class="form-select" required>
           <option value="" selected disabled hidden>Select a meal type</option>
           <option value="Breakfast">Breakfast</option>
           <option value="Lunch">Lunch</option>
           <option value="Dinner">Dinner</option>
           <option value="Snack">Snack</option>
         </select>
+        <div class="invalid-feedback">Please choose a meal type.</div>
       </div>
 
       <div class="col-md-4">
@@ -112,18 +114,25 @@
     const estimateForm = document.getElementById("estimateForm");
     const manualForm = document.getElementById("manualForm");
 
-    estimateForm.addEventListener("submit", function () {
-      const button = document.getElementById("EstimateBtn");
+    function handleSubmit(form, btnId, btnTextId, spinnerId) {
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return; // prevent submit if invalid
+      }
+      const button = document.getElementById(btnId);
       button.disabled = true;
-      document.getElementById('EstimateBtnText').textContent = 'Loading...';
-      document.getElementById('EstimateBtnSpinner').classList.remove('d-none');
+      document.getElementById(btnTextId).textContent = 'Loading...';
+      document.getElementById(spinnerId).classList.remove('d-none');
+    }
+
+    estimateForm.addEventListener("submit", function (e) {
+      if (!estimateForm.checkValidity()) e.preventDefault();
+      handleSubmit(estimateForm, "EstimateBtn", "EstimateBtnText", "EstimateBtnSpinner");
     });
 
-    manualForm.addEventListener("submit", function () {
-      const button = document.getElementById("ManualAddBtn");
-      button.disabled = true;
-      document.getElementById('ManualAddBtnText').textContent = 'Loading...';
-      document.getElementById('ManualAddBtnSpinner').classList.remove('d-none');
+    manualForm.addEventListener("submit", function (e) {
+      if (!manualForm.checkValidity()) e.preventDefault();
+      handleSubmit(manualForm, "ManualAddBtn", "ManualAddBtnText", "ManualAddBtnSpinner");
     });
   });
 </script>
