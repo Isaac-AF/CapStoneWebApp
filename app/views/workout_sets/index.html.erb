@@ -53,6 +53,16 @@
           <input type="text" class="form-control" id="weight_box" name="query_weight" value="">
         </div>
 
+        <div id="recent-sets-wrapper" class="mb-4 d-none">
+          <label class="form-label">Last Time You Did This Exercise:</label>
+          <div class="border rounded p-3">
+            <div class="small text-muted mb-2">
+              Date: <span id="recent-date"></span>
+            </div>
+            <ul id="recent-sets-list" class="list-group list-group-flush"></ul>
+          </div>
+        </div>
+
         <div class="text-center">
           <button type="submit" class="btn btn-primary">Create Workout Set</button>
         </div>
@@ -101,27 +111,110 @@
     const setNumberInput = document.getElementById("workout_set_number");
     const repsInput = document.getElementById("workout_reps_count_box");
     const weightInput = document.getElementById("weight_box");
+
+    const recentWrap = document.getElementById("recent-sets-wrapper");
+    const recentDateEl = document.getElementById("recent-date");
+    const recentListEl = document.getElementById("recent-sets-list");
+
     const workoutId = "<%= params.fetch("workout_id") %>";
     const userId = "<%= @workout.user_id %>";
 
-    function updateSetNumberAndDefaults() {
-      const exerciseId = exerciseSelect.value;
+    // Holds the most-recent-day's sets for the currently selected exercise
+    // keyed by set_number: { "1": {reps, weight}, ... }
+    let recentBySetNumber = {};
 
-      fetch(`/next_set_number?workout_id=${workoutId}&exercise_id=${exerciseId}`)
+    function refreshNextSetNumber(exerciseId) {
+      return fetch(`/next_set_number?workout_id=${workoutId}&exercise_id=${exerciseId}`)
         .then(response => response.json())
         .then(data => {
           setNumberInput.value = data.next_set_number;
         });
+    }
 
-      fetch(`/max_weight_and_reps?user_id=${userId}&exercise_id=${exerciseId}`)
-        .then(response => response.json())
-        .then(data => {
-          weightInput.value = data.weight;
-          repsInput.value = data.reps;
+    function applyDefaultsFromRecent() {
+      const key = String(setNumberInput.value || "");
+      const item = recentBySetNumber[key];
+      if (item) {
+        // Only override if inputs are empty (keeps user edits)
+        if (!repsInput.value)   repsInput.value = item.reps;
+        if (!weightInput.value) weightInput.value = item.weight;
+      }
+    }
+
+    function renderRecentSets(data) {
+      // Reset UI + map
+      recentBySetNumber = {};
+      recentListEl.innerHTML = "";
+
+      if (!data || !data.sets || data.sets.length === 0) {
+        recentWrap.classList.add("d-none");
+        return;
+      }
+
+      recentWrap.classList.remove("d-none");
+      recentDateEl.textContent = data.date;
+
+      data.sets.forEach(s => {
+        recentBySetNumber[String(s.set_number)] = { reps: s.reps, weight: s.weight };
+
+        const li = document.createElement("li");
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        li.innerHTML = `
+          <span><strong>Set ${s.set_number}</strong></span>
+          <span>${s.reps} reps @ ${s.weight}</span>
+        `;
+        recentListEl.appendChild(li);
+      });
+
+      // Try to fill current inputs based on the (possibly updated) set number
+      applyDefaultsFromRecent();
+    }
+
+    function refreshRecentSets(exerciseId) {
+      if (!userId) {
+        showRecentBox(`<li class="list-group-item text-danger">Missing user ID.</li>`);
+        return Promise.resolve();
+      }
+      // Add exclude_workout_id so the server ignores the current session
+      return fetch(`/recent_sets?user_id=${userId}&exercise_id=${exerciseId}&exclude_workout_id=${workoutId}`)
+        .then(async r => {
+          if (!r.ok) {
+            const text = await r.text();
+            throw new Error(`recent_sets ${r.status}: ${text}`);
+          }
+          return r.json();
+        })
+        .then(renderRecentSets)
+        .catch(err => {
+          console.error(err);
+          showRecentBox(`<li class="list-group-item text-danger">Error loading recent sets.</li>`);
         });
     }
 
-      exerciseSelect.addEventListener("change", updateSetNumberAndDefaults);
-      exerciseSelect.dispatchEvent(new Event('change'));
+    async function onExerciseChange() {
+      const exerciseId = exerciseSelect.value;
+
+      // Clear current defaults so the fresh values can populate
+      repsInput.value = "";
+      weightInput.value = "";
+
+      await refreshNextSetNumber(exerciseId);
+      await refreshRecentSets(exerciseId);
+
+      // After both calls, try to apply defaults again (covers when next_set_number changed)
+      applyDefaultsFromRecent();
+    }
+
+    function onSetNumberChange() {
+      // When user changes the set number, update defaults from recent map
+      // (does not override if the fields already have values)
+      applyDefaultsFromRecent();
+    }
+
+    exerciseSelect.addEventListener("change", onExerciseChange);
+    setNumberInput.addEventListener("input", onSetNumberChange);
+
+    // Initial load
+    exerciseSelect.dispatchEvent(new Event('change'));
   });
 </script>

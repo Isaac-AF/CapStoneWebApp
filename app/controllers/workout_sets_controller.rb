@@ -80,27 +80,40 @@ class WorkoutSetsController < ApplicationController
     render json: {next_set_number: next_set_number}
   end
 
-def max_weight_and_reps
-  user_id = params[:user_id]
-  exercise_id = params[:exercise_id]
+  # If you use protect_from_forgery, GET JSON may need:
+  # skip_before_action :verify_authenticity_token, only: [:recent_sets]
+  def recent_sets
+    user_id     = params.require(:user_id)
+    exercise_id = params.require(:exercise_id)
 
-  max_weight = WorkoutSet.joins(:workout)
-    .where(workouts: { user_id: user_id }, exercise_id: exercise_id)
-    .maximum(:weight)
+    recent_date = Workout.joins(:workout_sets)
+      .where(user_id: user_id, workout_sets: { exercise_id: exercise_id })
+      .maximum(:workout_datetime).to_date
 
-  max_weight_record = WorkoutSet.joins(:workout)
-    .where(workouts: { user_id: user_id }, exercise_id: exercise_id, weight: max_weight)
-    .order(created_at: :desc)
-    .first
+    sets = WorkoutSet.joins(:workout)
+      .where(exercise_id: exercise_id, workouts: { user_id: user_id, workout_datetime: recent_date })
+      .select(:set_number, :workout_reps_count, :weight)
+      .order(:set_number)
 
-  if max_weight_record
+    if recent_date.present?
+      sets = WorkoutSet
+        .joins(:workout)
+        .where(exercise_id: exercise_id, workouts: { user_id: user_id })
+        .where("DATE(workouts.created_at) = ?", recent_date)
+        .select(:set_number, :workout_reps_count, :weight)
+        .order(:set_number)
+    end
+
     render json: {
-      weight: max_weight_record.weight,
-      reps: max_weight_record.workout_reps_count
+      date: recent_date,
+      sets: sets.map { |s|
+        {
+          set_number: s.set_number,
+          reps: s.workout_reps_count,
+          weight: s.weight
+        }
+      }
     }
-  else
-    render json: { weight: "", reps: "" }
-  end
 end
 
 end
