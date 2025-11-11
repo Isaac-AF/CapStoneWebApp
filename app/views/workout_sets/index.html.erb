@@ -131,6 +131,12 @@
         });
     }
 
+    function showRecentBox(innerHTML) {
+    recentWrap.classList.remove("d-none");
+    recentDateEl.textContent = "";
+    recentListEl.innerHTML = innerHTML;
+    }
+
     function applyDefaultsFromRecent() {
       const key = String(setNumberInput.value || "");
       const item = recentBySetNumber[key];
@@ -172,22 +178,30 @@
 
     function refreshRecentSets(exerciseId) {
       if (!userId) {
-        showRecentBox(`<li class="list-group-item text-danger">Missing user ID.</li>`);
+        recentWrap.classList.add("d-none");
         return Promise.resolve();
       }
-      // Add exclude_workout_id so the server ignores the current session
-      return fetch(`/recent_sets?user_id=${userId}&exercise_id=${exerciseId}&exclude_workout_id=${workoutId}`)
+
+      const url = `/recent_sets?user_id=${encodeURIComponent(userId)}&exercise_id=${encodeURIComponent(exerciseId)}&exclude_workout_id=${encodeURIComponent(workoutId)}`;
+
+      return fetch(url, { headers: { "Accept": "application/json" }})
         .then(async r => {
+          // Non-2xx → throw with body text for console
           if (!r.ok) {
             const text = await r.text();
             throw new Error(`recent_sets ${r.status}: ${text}`);
+          }
+          const ct = r.headers.get("content-type") || "";
+          if (!ct.includes("application/json")) {
+            throw new Error(`recent_sets: unexpected content-type ${ct}`);
           }
           return r.json();
         })
         .then(renderRecentSets)
         .catch(err => {
           console.error(err);
-          showRecentBox(`<li class="list-group-item text-danger">Error loading recent sets.</li>`);
+          // Hide the entire box on error
+          recentWrap.classList.add("d-none");
         });
     }
 

@@ -80,40 +80,47 @@ class WorkoutSetsController < ApplicationController
     render json: {next_set_number: next_set_number}
   end
 
-  # If you use protect_from_forgery, GET JSON may need:
-  # skip_before_action :verify_authenticity_token, only: [:recent_sets]
   def recent_sets
-    user_id     = params.require(:user_id)
-    exercise_id = params.require(:exercise_id)
+    user_id            = params.require(:user_id)
+    exercise_id        = params.require(:exercise_id)
+    exclude_workout_id = params[:exclude_workout_id].presence
 
-    recent_date = Workout.joins(:workout_sets)
+    # Base scope: user's workouts that include this exercise
+    base = Workout
+      .joins(:workout_sets)
       .where(user_id: user_id, workout_sets: { exercise_id: exercise_id })
-      .maximum(:workout_datetime).to_date
+      .distinct
 
-    sets = WorkoutSet.joins(:workout)
-      .where(exercise_id: exercise_id, workouts: { user_id: user_id, workout_datetime: recent_date })
-      .select(:set_number, :workout_reps_count, :weight)
-      .order(:set_number)
+    base = base.where.not(id: exclude_workout_id) if exclude_workout_id
 
-    if recent_date.present?
-      sets = WorkoutSet
-        .joins(:workout)
-        .where(exercise_id: exercise_id, workouts: { user_id: user_id })
-        .where("DATE(workouts.created_at) = ?", recent_date)
-        .select(:set_number, :workout_reps_count, :weight)
-        .order(:set_number)
+    # Order by effective workout time (prefer workout_datetime, fallback created_at)
+    order_sql = "COALESCE(workouts.workout_datetime, workouts.created_at) DESC"
+
+    last_workout = base.order(Arel.sql(order_sql)).first
+
+    # No prior workout found → return empty JSON (client hides the box)
+    if last_workout.nil?
+      render json: { date: nil, sets: [] }
+      return
     end
 
+    effective_dt = last_workout.workout_datetime || last_workout.created_at
+
+    sets = WorkoutSet
+      .where(workout_id: last_workout.id, exercise_id: exercise_id)
+      .order(:set_number)
+      .select(:set_number, :workout_reps_count, :weight)
+
     render json: {
-      date: recent_date,
+      date: effective_dt&.to_date, # e.g. "2025-11-11"
       sets: sets.map { |s|
         {
           set_number: s.set_number,
-          reps: s.workout_reps_count,
-          weight: s.weight
+          reps:       s.workout_reps_count,
+          weight:     s.weight
         }
       }
     }
-end
+  end
 
 end
