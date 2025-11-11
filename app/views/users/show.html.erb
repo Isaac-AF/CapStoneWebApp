@@ -226,11 +226,11 @@
     <tbody>
       <% grouped_meals.sort_by { |date, _| -date.to_time.to_i }.each do |date, meals| %>
         <% daily_totals = {
-          calories: meals.sum(&:calories).round(0),
-          protein:  meals.sum(&:protein).round(0),
-          fats:     meals.sum(&:fats).round(0),
-          carbs:    meals.sum(&:carbs).round(0),
-          fiber:    meals.sum(&:fiber).round(0)
+          calories: meals.sum { |m| m.calories.to_f }.round(0)
+          protein:  meals.sum { |m| m.protein.to_f }.round(0)
+          fats:     meals.sum { |m| m.fats.to_f }.round(0)
+          carbs:    meals.sum { |m| m.carbs.to_f }.round(0)
+          fiber:    meals.sum { |m| m.fiber.to_f }.round(0)
         } %>
 
         <tr>
