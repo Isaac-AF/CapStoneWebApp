@@ -273,13 +273,13 @@
         </tr>
 
         <% past_week_activity.each do |date, workouts| %>
-          <% total_calories = workouts.sum(&:calories_burned) %>
-          
+          <% total_calories = workouts.sum { |w| w.calories_burned.to_i } %>
+
           <% workout_type_by_calories = workouts
             .group_by(&:workout_type)
-            .transform_values { |w| w.sum(&:calories_burned) }
+            .transform_values { |ws| ws.sum { |w| w.calories_burned.to_i } }
             .max_by { |_, calories| calories }
-            &.first%>
+            &.first %>
 
           <tr>
             <td><%= date.strftime("%B %e") %></td>
