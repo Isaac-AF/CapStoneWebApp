@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get("/workout_sets/:workout_id/:set_id", { :controller => "workout_sets", :action => "show" })
 
   get "/next_set_number", to: "workout_sets#next_set_number"
-  get "recent_sets", to: "workout_sets#recent_sets"
+  get "/recent_sets", to: "workout_sets#recent_sets"
   
   # UPDATE
   

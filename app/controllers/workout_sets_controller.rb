@@ -85,42 +85,40 @@ class WorkoutSetsController < ApplicationController
     exercise_id        = params.require(:exercise_id)
     exclude_workout_id = params[:exclude_workout_id].presence
 
-    # Base scope: user's workouts that include this exercise
-    base = Workout
-      .joins(:workout_sets)
-      .where(user_id: user_id, workout_sets: { exercise_id: exercise_id })
-      .distinct
+    order_expr = "MAX(COALESCE(workouts.workout_datetime, workouts.created_at))"
 
+    base = Workout
+            .joins(:workout_sets)
+            .where(user_id: user_id, workout_sets: { exercise_id: exercise_id })
     base = base.where.not(id: exclude_workout_id) if exclude_workout_id
 
-    # Order by effective workout time (prefer workout_datetime, fallback created_at)
-    order_sql = "COALESCE(workouts.workout_datetime, workouts.created_at) DESC"
+    last_workout_id = base
+      .group("workouts.id")
+      .order(Arel.sql("#{order_expr} DESC"))
+      .limit(1)
+      .pluck("workouts.id")
+      .first
 
-    last_workout = base.order(Arel.sql(order_sql)).first
-
-    # No prior workout found → return empty JSON (client hides the box)
-    if last_workout.nil?
-      render json: { date: nil, sets: [] }
-      return
+    if last_workout_id.nil?
+      render json: { date: nil, sets: [] } and return
     end
 
-    effective_dt = last_workout.workout_datetime || last_workout.created_at
+    effective_dt = Workout.where(id: last_workout_id)
+      .pick(Arel.sql("COALESCE(workouts.workout_datetime, workouts.created_at)"))
 
     sets = WorkoutSet
-      .where(workout_id: last_workout.id, exercise_id: exercise_id)
-      .order(:set_number)
-      .select(:set_number, :workout_reps_count, :weight)
+            .where(workout_id: last_workout_id, exercise_id: exercise_id)
+            .order(:set_number)
+            .pluck(:set_number, :workout_reps_count, :weight)
 
     render json: {
-      date: effective_dt&.to_date, # e.g. "2025-11-11"
-      sets: sets.map { |s|
-        {
-          set_number: s.set_number,
-          reps:       s.workout_reps_count,
-          weight:     s.weight
-        }
+      date: effective_dt&.to_date,
+      sets: sets.map { |set_number, reps, weight|
+        { set_number: set_number, reps: reps, weight: weight }
       }
     }
+  rescue ActionController::ParameterMissing => e
+    render json: { error: e.message }, status: :bad_request
   end
 
 end
